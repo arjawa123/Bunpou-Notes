@@ -1,0 +1,1672 @@
+[
+  {
+    "num": 1,
+    "title": "がんばらなくちゃ！",
+    "titleId": "Harus semangat!",
+    "days": [
+      {
+        "day": 1,
+        "title": "ぼくにもやらせて",
+        "titleId": "Biarkan aku juga melakukannya",
+        "grammar": [
+          {
+            "pattern": "〜られている / 〜れている",
+            "badge": "V受身形",
+            "meaning": "（誰かが）〜する",
+            "meaningId": "Bentuk pasif — sesuatu dilakukan/dikatakan (tanpa subjek jelas)",
+            "examples": [
+              {
+                "ja": "この本には、くわしい説明が<strong>書かれていません</strong>。",
+                "id": "Dalam buku ini tidak ada penjelasan yang detail."
+              },
+              {
+                "ja": "入学式は、このホールで<strong>行われます</strong>。",
+                "id": "Upacara penerimaan mahasiswa baru akan diadakan di aula ini."
+              },
+              {
+                "ja": "これは世界でいちばん大きいダイヤモンドだと<strong>言われています</strong>。",
+                "id": "Ini dipercaya sebagai berlian terbesar di dunia."
+              }
+            ]
+          },
+          {
+            "pattern": "〜に〜られた（迷惑の受身）",
+            "badge": "N に V受身",
+            "meaning": "（誰か）に（迷惑なことを）される",
+            "meaningId": "Pasif tidak langsung — kerugian akibat tindakan orang lain",
+            "examples": [
+              {
+                "ja": "友達の赤ちゃんを抱っこしたら、<strong>泣かれて</strong>しまった。",
+                "id": "Ketika menggendong bayi teman, bayi itu menangis (dan aku kewalahan)."
+              },
+              {
+                "ja": "雨に<strong>降られて</strong>、服がぬれてしまった。",
+                "id": "Hujan turun (merepotkanku) dan pakaianku basah."
+              }
+            ]
+          },
+          {
+            "pattern": "〜させてください",
+            "badge": "V使役形＋ください",
+            "meaning": "〜することを許してください",
+            "meaningId": "Tolong izinkan saya melakukan... (meminta izin dengan sopan)",
+            "examples": [
+              {
+                "ja": "気分が悪いので、早く<strong>帰らせてください</strong>。",
+                "id": "Karena saya tidak enak badan, tolong izinkan saya pulang lebih awal."
+              },
+              {
+                "ja": "あなたの会社のお話を<strong>聞かせてください</strong>。",
+                "id": "Tolong ceritakan tentang perusahaan Anda."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "day": 2,
+        "title": "そこに置いといて",
+        "titleId": "Taruh saja di sana",
+        "grammar": [
+          {
+            "pattern": "〜ないと / 〜なくちゃ",
+            "badge": "Vない形＋と",
+            "meaning": "〜しなければならない",
+            "meaningId": "Harus... (kewajiban, dipakai dalam percakapan sehari-hari)",
+            "examples": [
+              {
+                "ja": "明日は早く出かけるから、もう<strong>寝ないと</strong>。",
+                "id": "Karena besok harus berangkat pagi, aku harus tidur sekarang."
+              },
+              {
+                "ja": "田中さんにメールの返信を<strong>しなくちゃ</strong>。",
+                "id": "Aku harus membalas email Tanaka-san."
+              }
+            ]
+          },
+          {
+            "pattern": "〜ちゃった / 〜じゃった",
+            "badge": "Vてしまう→口語",
+            "meaning": "〜してしまった（後悔・意外）",
+            "meaningId": "Sudah terlanjur... / Tidak sengaja... (menyesal atau kaget)",
+            "examples": [
+              {
+                "ja": "「あれ？ここにあったチョコレートは？」「あ、<strong>食べちゃった</strong>。」",
+                "id": "'Eh, cokelat yang ada di sini mana?' 'Ah, sudah aku makan.'"
+              },
+              {
+                "ja": "試験が終わった！今日は<strong>飲んじゃおう</strong>！",
+                "id": "Ujian sudah selesai! Hari ini ayo minum-minum!"
+              }
+            ]
+          },
+          {
+            "pattern": "〜とく / 〜ておく（口語）",
+            "badge": "Vておく→口語",
+            "meaning": "あらかじめ〜する／〜したままにする",
+            "meaningId": "Melakukan sesuatu terlebih dahulu untuk persiapan",
+            "examples": [
+              {
+                "ja": "明日、<strong>出しとく</strong>から。（＝出しておく）",
+                "id": "Besok akan aku keluarkan terlebih dahulu."
+              },
+              {
+                "ja": "手帳に<strong>書いとこう</strong>。",
+                "id": "Aku catat dulu di agenda."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "day": 3,
+        "title": "女らしい",
+        "titleId": "Seperti wanita",
+        "grammar": [
+          {
+            "pattern": "〜みたいだ",
+            "badge": "N/V/A みたいだ",
+            "meaning": "〜のようだ（比喩・推測）",
+            "meaningId": "Seperti... / Kelihatannya... (perbandingan atau dugaan, gaya percakapan)",
+            "examples": [
+              {
+                "ja": "彼の話し方は、<strong>女みたいだ</strong>。",
+                "id": "Cara berbicara dia seperti perempuan."
+              },
+              {
+                "ja": "明日は雨<strong>みたいね</strong>。",
+                "id": "Sepertinya besok hujan ya."
+              }
+            ]
+          },
+          {
+            "pattern": "〜らしい",
+            "badge": "N/V/A らしい",
+            "meaning": "①いかにも〜だ　②〜そうだ（伝聞）",
+            "meaningId": "① Benar-benar khas... ② Katanya... (informasi dari orang lain)",
+            "examples": [
+              {
+                "ja": "今日は、春<strong>らしい</strong>暖かい日でした。",
+                "id": "Hari ini hangat, benar-benar seperti musim semi."
+              },
+              {
+                "ja": "田中さんは来ない<strong>らしい</strong>。",
+                "id": "Katanya Tanaka-san tidak datang."
+              }
+            ]
+          },
+          {
+            "pattern": "〜っぽい",
+            "badge": "N/V っぽい",
+            "meaning": "〜のような感じがする",
+            "meaningId": "Terasa seperti... / berkesan... (nuansa informal)",
+            "examples": [
+              {
+                "ja": "彼女、<strong>大人っぽい</strong>ね。",
+                "id": "Dia terlihat dewasa ya."
+              },
+              {
+                "ja": "この料理、<strong>水っぽい</strong>な。",
+                "id": "Masakan ini terasa encer ya."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "day": 4,
+        "title": "できるようになった！",
+        "titleId": "Sudah bisa!",
+        "grammar": [
+          {
+            "pattern": "〜ないようにする",
+            "badge": "Vない＋ようにする",
+            "meaning": "〜しないように努力する",
+            "meaningId": "Berusaha agar tidak... (menunjukkan usaha atau niat)",
+            "examples": [
+              {
+                "ja": "忘れ物を<strong>しないようにしましょう</strong>。",
+                "id": "Mari berusaha agar tidak lupa membawa barang."
+              },
+              {
+                "ja": "毎食後、歯をみがく<strong>ようにしています</strong>。",
+                "id": "Saya berusaha menyikat gigi setiap setelah makan."
+              }
+            ]
+          },
+          {
+            "pattern": "〜ように〔目的〕",
+            "badge": "V る/ない＋ように",
+            "meaning": "〜という状態になるために",
+            "meaningId": "Agar bisa... / Supaya... (menyatakan tujuan dari suatu tindakan)",
+            "examples": [
+              {
+                "ja": "みんなに<strong>聞こえるように</strong>もっと大きな声で話してください。",
+                "id": "Tolong bicara lebih keras agar semua orang bisa mendengar."
+              },
+              {
+                "ja": "忘れないように、手帳に書いておこう。",
+                "id": "Agar tidak lupa, aku tulis di agenda."
+              }
+            ]
+          },
+          {
+            "pattern": "〜ようになる",
+            "badge": "V る/ない＋ようになる",
+            "meaning": "（以前はできなかったが）〜できる状態になる",
+            "meaningId": "Menjadi bisa... / Akhirnya bisa... (perubahan kemampuan)",
+            "examples": [
+              {
+                "ja": "日本語が<strong>使えるようになった</strong>。",
+                "id": "Aku sudah bisa menggunakan bahasa Jepang."
+              },
+              {
+                "ja": "練習して、自転車に乗れる<strong>ようになりました</strong>。",
+                "id": "Setelah berlatih, saya jadi bisa naik sepeda."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "day": 5,
+        "title": "言ったように",
+        "titleId": "Seperti yang sudah kubilang",
+        "grammar": [
+          {
+            "pattern": "〜のように〔引用〕",
+            "badge": "N の/V＋ように",
+            "meaning": "〜と同じように（例示・引用）",
+            "meaningId": "Seperti yang... / Sebagaimana... (mengutip atau memberi contoh)",
+            "examples": [
+              {
+                "ja": "皆さん<strong>ご存じのように</strong>、試験の内容が変わります。",
+                "id": "Seperti yang Anda semua ketahui, isi ujian akan berubah."
+              },
+              {
+                "ja": "前にお話した<strong>ように</strong>、来年から授業料が値上がりします。",
+                "id": "Seperti yang telah saya sampaikan, uang kuliah akan naik mulai tahun depan."
+              }
+            ]
+          },
+          {
+            "pattern": "〜ように〔指示〕",
+            "badge": "V る/ない＋ように",
+            "meaning": "〜してください（間接的な指示）",
+            "meaningId": "Tolong... (perintah tidak langsung)",
+            "examples": [
+              {
+                "ja": "「明日はもっと早く来る<strong>ように</strong>。」「わかりました。」",
+                "id": "'Besok tolong datang lebih awal.' 'Baik.'"
+              },
+              {
+                "ja": "ここで、たばこを吸わない<strong>ように</strong>。",
+                "id": "Tolong jangan merokok di sini."
+              }
+            ]
+          },
+          {
+            "pattern": "〜ように。〔願望〕",
+            "badge": "V＋ように。",
+            "meaning": "〜してほしいと願う",
+            "meaningId": "Semoga... / Mudah-mudahan... (harapan atau doa)",
+            "examples": [
+              {
+                "ja": "試験に<strong>合格しますように</strong>。",
+                "id": "Semoga lulus ujian."
+              },
+              {
+                "ja": "早く元気になります<strong>ように</strong>。",
+                "id": "Semoga cepat sembuh."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "day": 6,
+        "title": "話を聞こうとしない",
+        "titleId": "Tidak mau mendengarkan",
+        "grammar": [
+          {
+            "pattern": "〜ようと思う",
+            "badge": "V意向形＋と思う",
+            "meaning": "〜するつもりだ（意志）",
+            "meaningId": "Berniat untuk... / Berencana untuk...",
+            "examples": [
+              {
+                "ja": "会社を<strong>やめようと思っている</strong>。",
+                "id": "Aku berniat untuk berhenti dari perusahaan."
+              },
+              {
+                "ja": "来年、国に帰ろうと<strong>思っています</strong>。",
+                "id": "Saya berencana pulang ke negara asal tahun depan."
+              }
+            ]
+          },
+          {
+            "pattern": "〜ようとする",
+            "badge": "V意向形＋とする",
+            "meaning": "〜しようとする動作を始める",
+            "meaningId": "Mencoba untuk... / Hendak... (tepat sebelum melakukan sesuatu)",
+            "examples": [
+              {
+                "ja": "電車に<strong>乗ろうとしたときに</strong>、ドアが閉まって乗れなかった。",
+                "id": "Tepat saat hendak naik kereta, pintunya tertutup."
+              },
+              {
+                "ja": "ポチは、ぼくが出かけ<strong>ようとすると</strong>、ほえる。",
+                "id": "Pochi selalu menggonggong setiap kali aku hendak pergi."
+              }
+            ]
+          },
+          {
+            "pattern": "〜ようとしない",
+            "badge": "V意向形＋としない",
+            "meaning": "〜しようとする気持ちがない",
+            "meaningId": "Tidak mau mencoba... / Tidak berusaha untuk...",
+            "examples": [
+              {
+                "ja": "留学しようと思っているが、父は私の話を聞こう<strong>としない</strong>。",
+                "id": "Aku ingin belajar ke luar negeri, tapi ayah tidak mau mendengarkan."
+              },
+              {
+                "ja": "彼は全然<strong>食べようとしない</strong>。",
+                "id": "Dia sama sekali tidak mau mencoba makan."
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "num": 2,
+    "title": "がんばってごらん！",
+    "titleId": "Coba saja!",
+    "days": [
+      {
+        "day": 1,
+        "title": "明日こそ",
+        "titleId": "Pasti besok!",
+        "grammar": [
+          {
+            "pattern": "〜ばかり / 〜てばかりいる",
+            "badge": "N/Vて＋ばかり",
+            "meaning": "〜だけ・〜しすぎる",
+            "meaningId": "Hanya... saja / Terus-terusan...",
+            "examples": [
+              {
+                "ja": "このクラスは<strong>女性ばかり</strong>です。",
+                "id": "Di kelas ini hanya ada perempuan saja."
+              },
+              {
+                "ja": "彼はゲームを<strong>してばかりいる</strong>。",
+                "id": "Dia terus-terusan main game saja."
+              }
+            ]
+          },
+          {
+            "pattern": "〜さえ / 〜さえ〜ば",
+            "badge": "N さえ",
+            "meaning": "〜でも・〜だけで十分",
+            "meaningId": "Bahkan... / Asal... saja sudah cukup",
+            "examples": [
+              {
+                "ja": "彼は<strong>ひらがなさえ</strong>読めない。",
+                "id": "Bahkan hiragana pun dia tidak bisa baca."
+              },
+              {
+                "ja": "お金<strong>さえあれば</strong>、何でもできる。",
+                "id": "Asal ada uang, apapun bisa dilakukan."
+              }
+            ]
+          },
+          {
+            "pattern": "〜こそ",
+            "badge": "N こそ",
+            "meaning": "強調「まさに〜」",
+            "meaningId": "Justru... / Pasti... (penekanan kuat)",
+            "examples": [
+              {
+                "ja": "<strong>明日こそ</strong>勉強するぞ！",
+                "id": "Besok aku pasti belajar!"
+              },
+              {
+                "ja": "今年<strong>こそ</strong>、ダイエットに成功する。",
+                "id": "Tahun ini pasti berhasil diet."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "day": 2,
+        "title": "努力によって",
+        "titleId": "Berkat usaha keras",
+        "grammar": [
+          {
+            "pattern": "〜に関して / 〜に関する",
+            "badge": "N に関して",
+            "meaning": "〜について（硬い表現）",
+            "meaningId": "Mengenai... / Berkaitan dengan... (lebih formal dari について)",
+            "examples": [
+              {
+                "ja": "この問題<strong>に関して</strong>、話し合いをしたい。",
+                "id": "Saya ingin berdiskusi mengenai masalah ini."
+              },
+              {
+                "ja": "日本文化<strong>に関する</strong>本を読んでいる。",
+                "id": "Saya sedang membaca buku tentang budaya Jepang."
+              }
+            ]
+          },
+          {
+            "pattern": "〜によれば / 〜によると",
+            "badge": "N によれば",
+            "meaning": "〜という情報では",
+            "meaningId": "Menurut... (menyampaikan informasi dari sumber tertentu)",
+            "examples": [
+              {
+                "ja": "<strong>天気予報によれば</strong>、明日は雪が降るそうだ。",
+                "id": "Menurut prakiraan cuaca, besok katanya akan turun salju."
+              },
+              {
+                "ja": "ニュース<strong>によると</strong>、大きな地震があったらしい。",
+                "id": "Menurut berita, sepertinya ada gempa besar."
+              }
+            ]
+          },
+          {
+            "pattern": "〜によって / 〜により",
+            "badge": "N によって",
+            "meaning": "〜を手段・原因・行為者として",
+            "meaningId": "Melalui... / Karena... / Oleh... (cara, sebab, atau pelaku pasif)",
+            "examples": [
+              {
+                "ja": "彼は<strong>努力によって</strong>病気を克服した。",
+                "id": "Dia berhasil mengatasi penyakitnya berkat kerja keras."
+              },
+              {
+                "ja": "この小説はシェークスピア<strong>によって</strong>書かれた。",
+                "id": "Novel ini ditulis oleh Shakespeare."
+              },
+              {
+                "ja": "人<strong>によって</strong>考え方が違います。",
+                "id": "Cara berpikir berbeda-beda tergantung orangnya."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "day": 3,
+        "title": "電話するのを忘れた",
+        "titleId": "Lupa menelepon",
+        "grammar": [
+          {
+            "pattern": "〜のを / 〜のが / 〜のは（名詞化）",
+            "badge": "V/A の＋助詞",
+            "meaning": "動詞や文を名詞化する",
+            "meaningId": "Nominalisasi kata kerja — menjadikan kata kerja sebagai subjek/objek kalimat",
+            "examples": [
+              {
+                "ja": "田中さんに電話する<strong>のを</strong>すっかり忘れていました。",
+                "id": "Saya benar-benar lupa menelepon Tanaka-san."
+              },
+              {
+                "ja": "日曜日に混んだところへ行く<strong>のは</strong>、あまり好きじゃない。",
+                "id": "Aku tidak terlalu suka pergi ke tempat ramai pada hari Minggu."
+              },
+              {
+                "ja": "ピアノを弾く<strong>のが</strong>好きです。",
+                "id": "Saya suka bermain piano."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "day": 4,
+        "title": "帰国するというのは本当ですか",
+        "titleId": "Benarkah kamu akan pulang?",
+        "grammar": [
+          {
+            "pattern": "〜という〜",
+            "badge": "N という N",
+            "meaning": "〜と呼ばれる〜（名前・定義）",
+            "meaningId": "... yang disebut... / yang bernama... (mendefinisikan atau memperkenalkan nama)",
+            "examples": [
+              {
+                "ja": "<strong>木村さんという人</strong>から電話がありました。",
+                "id": "Ada telepon dari seseorang yang bernama Kimura-san."
+              },
+              {
+                "ja": "<strong>デジカメというのは</strong>、デジタルカメラのことです。",
+                "id": "Yang dimaksud 'digikame' adalah kamera digital."
+              }
+            ]
+          },
+          {
+            "pattern": "〜ということ / 〜というのは",
+            "badge": "S というのは",
+            "meaning": "〜ということは（内容の確認・説明）",
+            "meaningId": "Apakah benar bahwa...? / Yang dimaksud dengan... (mengkonfirmasi atau menjelaskan informasi)",
+            "examples": [
+              {
+                "ja": "リンさんが<strong>帰国するというのは本当ですか</strong>。",
+                "id": "Apakah benar bahwa Lin-san akan pulang ke negaranya?"
+              },
+              {
+                "ja": "田中さんが医者だ<strong>というのを</strong>知らなかった。",
+                "id": "Saya tidak tahu bahwa Tanaka-san adalah dokter."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "day": 5,
+        "title": "旅行といっても",
+        "titleId": "Meski dibilang wisata",
+        "grammar": [
+          {
+            "pattern": "〜というより",
+            "badge": "S というより",
+            "meaning": "〜と言うのは正確ではなく、むしろ〜",
+            "meaningId": "Lebih tepat dikatakan... daripada... (koreksi atau klarifikasi)",
+            "examples": [
+              {
+                "ja": "彼女は歌が上手い<strong>というより</strong>、プロ級だ。",
+                "id": "Dia bukan sekadar pandai menyanyi, lebih tepatnya sudah sekelas profesional."
+              },
+              {
+                "ja": "走る<strong>というより</strong>飛んでいるようだ。",
+                "id": "Lebih seperti terbang daripada berlari."
+              }
+            ]
+          },
+          {
+            "pattern": "〜というと / 〜といえば",
+            "badge": "N というと",
+            "meaning": "〜の話題が出たら思い浮かぶのは",
+            "meaningId": "Kalau bicara soal... / Ngomong-ngomong tentang...",
+            "examples": [
+              {
+                "ja": "日本の食べ物<strong>というと</strong>、すしが有名ですね。",
+                "id": "Kalau bicara soal makanan Jepang, sushi paling terkenal ya."
+              },
+              {
+                "ja": "京都<strong>といえば</strong>、お寺や神社ですね。",
+                "id": "Ngomong-ngomong soal Kyoto, kuil dan kuil Shinto ya."
+              }
+            ]
+          },
+          {
+            "pattern": "〜といっても",
+            "badge": "N/S といっても",
+            "meaning": "〜と言っているが、実際は〜",
+            "meaningId": "Meski dikatakan... tapi sebenarnya... (membatasi atau mengoreksi pernyataan)",
+            "examples": [
+              {
+                "ja": "旅行<strong>といっても</strong>、近くの温泉に行くだけです。",
+                "id": "Meski dibilang wisata, hanya pergi ke pemandian air panas di dekat sini."
+              },
+              {
+                "ja": "料理ができる<strong>といっても</strong>、カレーくらいしか作れない。",
+                "id": "Meski katanya bisa masak, paling cuma bisa buat kari saja."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "day": 6,
+        "title": "教えてくれと頼まれた",
+        "titleId": "Diminta untuk mengajari",
+        "grammar": [
+          {
+            "pattern": "〜てごらん",
+            "badge": "Vて＋ごらん",
+            "meaning": "試しに〜してみてください",
+            "meaningId": "Coba saja... (saran lembut agar mencoba sesuatu)",
+            "examples": [
+              {
+                "ja": "難しくないから、<strong>やってごらん</strong>。",
+                "id": "Tidak susah kok, coba saja."
+              },
+              {
+                "ja": "この歌、<strong>聞いてごらん</strong>。いい歌だよ。",
+                "id": "Coba dengarkan lagu ini. Lagunya bagus."
+              }
+            ]
+          },
+          {
+            "pattern": "〜ように言う / 〜ように頼む",
+            "badge": "V＋ように言う",
+            "meaning": "〜してほしいと伝える（間接話法）",
+            "meaningId": "Menyuruh / meminta seseorang agar... (perintah tidak langsung)",
+            "examples": [
+              {
+                "ja": "先生は早く<strong>来るように言いました</strong>。",
+                "id": "Guru menyuruh agar datang lebih awal."
+              },
+              {
+                "ja": "母に野菜を食べる<strong>ように言われた</strong>。",
+                "id": "Ibu menyuruhku agar makan sayuran."
+              }
+            ]
+          },
+          {
+            "pattern": "〜てくれと頼まれた",
+            "badge": "Vて＋くれと",
+            "meaning": "「〜てくれ」と言われた（依頼の引用）",
+            "meaningId": "Diminta untuk... (mengutip permintaan orang lain)",
+            "examples": [
+              {
+                "ja": "友達に、田中さんの電話番号を<strong>教えてくれと頼まれた</strong>。",
+                "id": "Teman memintaku untuk memberitahu nomor telepon Tanaka-san."
+              },
+              {
+                "ja": "大家に、玄関の前に自転車を置かない<strong>でくれと言われた</strong>。",
+                "id": "Pemilik kos memintaku agar tidak meletakkan sepeda di depan pintu masuk."
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "num": 3,
+    "title": "もっとがんばってほしい！",
+    "titleId": "Ingin kamu lebih semangat!",
+    "days": [
+      {
+        "day": 1,
+        "title": "辞書を使わずに",
+        "titleId": "Tanpa menggunakan kamus",
+        "grammar": [
+          {
+            "pattern": "〜ても / どんなに〜ても",
+            "badge": "V/A て＋も",
+            "meaning": "〜という条件でも、結果は変わらない",
+            "meaningId": "Meski... / Seberapa pun... tetap... (kontras atau kondisi yang tidak mengubah hasil)",
+            "examples": [
+              {
+                "ja": "いくら<strong>調べても</strong>わからなかった。",
+                "id": "Meski sudah mencari, tetap tidak tahu."
+              },
+              {
+                "ja": "<strong>どんなに練習しても</strong>、うまくならない。",
+                "id": "Seberapa pun berlatih, tetap tidak mahir."
+              }
+            ]
+          },
+          {
+            "pattern": "〜ずに / 〜ないで",
+            "badge": "Vない形＋ずに",
+            "meaning": "〜しないで（状態・方法）",
+            "meaningId": "Tanpa melakukan... (keadaan atau cara tanpa melakukan sesuatu)",
+            "examples": [
+              {
+                "ja": "辞書を<strong>使わずに</strong>書いたので、自信がありません。",
+                "id": "Karena ditulis tanpa menggunakan kamus, saya tidak yakin."
+              },
+              {
+                "ja": "昨日、歯を<strong>みがかずに</strong>寝てしまった。",
+                "id": "Kemarin aku tidur tanpa menyikat gigi."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "day": 2,
+        "title": "100円にしても",
+        "titleId": "Bahkan untuk 100 yen",
+        "grammar": [
+          {
+            "pattern": "〜として / 〜としては",
+            "badge": "N として",
+            "meaning": "〜という立場・役割で",
+            "meaningId": "Sebagai... / Dalam kapasitas sebagai... (menyatakan peran atau kedudukan)",
+            "examples": [
+              {
+                "ja": "<strong>日本代表として</strong>、試合に出ます。",
+                "id": "Saya akan bertanding sebagai wakil Jepang."
+              },
+              {
+                "ja": "先生<strong>として</strong>は、学生に頑張ってほしい。",
+                "id": "Sebagai guru, saya ingin para siswa bersemangat."
+              }
+            ]
+          },
+          {
+            "pattern": "〜にしては",
+            "badge": "N/V にしては",
+            "meaning": "〜を考えると、予想外だ",
+            "meaningId": "Untuk seorang... / Mengingat..., ternyata... (hasil di luar ekspektasi)",
+            "examples": [
+              {
+                "ja": "<strong>外国人にしては</strong>、日本語が上手ですね。",
+                "id": "Untuk orang asing, bahasa Jepangnya bagus ya."
+              },
+              {
+                "ja": "値段<strong>にしては</strong>、品質がいい。",
+                "id": "Mengingat harganya, kualitasnya bagus."
+              }
+            ]
+          },
+          {
+            "pattern": "〜にしても",
+            "badge": "N/S にしても",
+            "meaning": "〜であっても（譲歩）",
+            "meaningId": "Bahkan kalau... / Sekalipun... (mengakui suatu kondisi tapi ada kelanjutan)",
+            "examples": [
+              {
+                "ja": "<strong>100円にしても</strong>、無駄遣いはよくない。",
+                "id": "Bahkan untuk 100 yen pun, memboroskan uang itu tidak baik."
+              },
+              {
+                "ja": "冗談<strong>にしても</strong>、言っていいことと悪いことがある。",
+                "id": "Sekalipun bercanda, ada hal yang boleh dan tidak boleh dikatakan."
+              }
+            ]
+          },
+          {
+            "pattern": "〜としたら / 〜とすれば",
+            "badge": "S としたら",
+            "meaning": "もし〜という状況なら",
+            "meaningId": "Kalau memang... / Jika seandainya... (kondisi hipotetis)",
+            "examples": [
+              {
+                "ja": "それが<strong>本当だとしたら</strong>、大変なことだ。",
+                "id": "Kalau itu memang benar, itu masalah besar."
+              },
+              {
+                "ja": "あなたが私の立場<strong>だとしたら</strong>、どうしますか？",
+                "id": "Jika kamu berada di posisi saya, apa yang akan kamu lakukan?"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "day": 3,
+        "title": "勉強するつもりでしたが…",
+        "titleId": "Tadinya berniat belajar, tapi…",
+        "grammar": [
+          {
+            "pattern": "〜つもりだ / 〜つもりだった",
+            "badge": "V る/ない＋つもり",
+            "meaning": "〜する意図（意図・計画）",
+            "meaningId": "Berniat untuk... / Tadinya berencana untuk...",
+            "examples": [
+              {
+                "ja": "昨日は買い物に行く<strong>つもりでしたが</strong>、頭が痛かったので家にいました。",
+                "id": "Kemarin tadinya berniat pergi belanja, tapi karena kepala sakit, akhirnya di rumah."
+              },
+              {
+                "ja": "お菓子を食べない<strong>つもりでいましたが</strong>、つい食べてしまいました。",
+                "id": "Tadinya berniat tidak makan kue, tapi tanpa sadar sudah termakan juga."
+              }
+            ]
+          },
+          {
+            "pattern": "〜はずだ / 〜はずがない",
+            "badge": "V/A/N はずだ",
+            "meaning": "当然〜だと思う（根拠のある推測）",
+            "meaningId": "Seharusnya... / Pasti... (dugaan berdasarkan alasan logis)",
+            "examples": [
+              {
+                "ja": "田中さんは今、旅行中だから、<strong>家にいないはずだ</strong>。",
+                "id": "Karena Tanaka-san sedang dalam perjalanan, seharusnya tidak ada di rumah."
+              },
+              {
+                "ja": "まじめな田中さんが、無断で休む<strong>はずがない</strong>。",
+                "id": "Tidak mungkin Tanaka-san yang serius absen tanpa memberi tahu."
+              }
+            ]
+          },
+          {
+            "pattern": "〜べきだ / 〜べきではない",
+            "badge": "V る＋べきだ",
+            "meaning": "〜する義務・責任がある",
+            "meaningId": "Seharusnya... / Wajib... (kewajiban moral atau saran kuat)",
+            "examples": [
+              {
+                "ja": "約束は<strong>守るべきだ</strong>。",
+                "id": "Janji harus ditepati."
+              },
+              {
+                "ja": "おもちゃは、まず安全<strong>であるべきだ</strong>。",
+                "id": "Mainan seharusnya pertama-tama aman."
+              }
+            ]
+          },
+          {
+            "pattern": "〜たものだ",
+            "badge": "Vた＋ものだ",
+            "meaning": "昔よく〜した（懐かしい思い出）",
+            "meaningId": "Dulu sering... (mengenang kebiasaan masa lalu)",
+            "examples": [
+              {
+                "ja": "子どものころ、よくこの公園で<strong>遊んだものだ</strong>。",
+                "id": "Waktu kecil, dulu sering bermain di taman ini."
+              },
+              {
+                "ja": "昔はここによく<strong>来たものだ</strong>。",
+                "id": "Dulu sering datang ke sini."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "day": 4,
+        "title": "会うたびに",
+        "titleId": "Setiap kali bertemu",
+        "grammar": [
+          {
+            "pattern": "〜ついでに",
+            "badge": "V る/た・N の＋ついでに",
+            "meaning": "〜するとき、ついでに〜もする",
+            "meaningId": "Sambil... / Sekalian... (melakukan sesuatu lain saat kesempatan ada)",
+            "examples": [
+              {
+                "ja": "<strong>散歩のついでに</strong>、この手紙を出しておいてくれませんか。",
+                "id": "Kalau memang mau jalan-jalan, sekalian tolong kirimin surat ini."
+              },
+              {
+                "ja": "郵便局へ行った<strong>ついでに</strong>、はがきを買ってきた。",
+                "id": "Karena kebetulan pergi ke kantor pos, sekalian beli kartu pos."
+              }
+            ]
+          },
+          {
+            "pattern": "〜たびに / 〜のたびに",
+            "badge": "V る・N の＋たびに",
+            "meaning": "〜するときはいつも",
+            "meaningId": "Setiap kali... selalu... (berulang setiap kali terjadi)",
+            "examples": [
+              {
+                "ja": "買い物の<strong>たびに</strong>、袋をたくさんもらう。",
+                "id": "Setiap kali belanja, selalu dapat banyak kantong."
+              },
+              {
+                "ja": "この曲を聞く<strong>たびに</strong>、故郷を思い出す。",
+                "id": "Setiap kali mendengar lagu ini, selalu teringat kampung halaman."
+              }
+            ]
+          },
+          {
+            "pattern": "〜たとたん（に）",
+            "badge": "Vた＋とたんに",
+            "meaning": "〜した瞬間に、すぐに〜",
+            "meaningId": "Tepat saat... / Begitu... langsung... (sesuatu terjadi tepat setelah tindakan)",
+            "examples": [
+              {
+                "ja": "窓を<strong>開けたとたん</strong>、強い風が入ってきた。",
+                "id": "Tepat saat membuka jendela, angin kencang masuk."
+              },
+              {
+                "ja": "お酒を飲んだ<strong>とたんに</strong>、顔が赤くなった。",
+                "id": "Begitu minum sake, wajahnya langsung memerah."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "day": 5,
+        "title": "テレビをつけたまま",
+        "titleId": "Dengan TV yang dibiarkan menyala",
+        "grammar": [
+          {
+            "pattern": "〜とおりに / 〜のとおりに",
+            "badge": "V る/た・N の＋とおりに",
+            "meaning": "〜と同じように・〜に従って",
+            "meaningId": "Sesuai dengan... / Seperti yang... (mengikuti petunjuk atau keadaan)",
+            "examples": [
+              {
+                "ja": "地図の<strong>とおりに</strong>来たら、ここに着いた。",
+                "id": "Mengikuti peta, akhirnya sampai di sini."
+              },
+              {
+                "ja": "先生に言われた<strong>とおりに</strong>練習しました。",
+                "id": "Saya berlatih sesuai yang diajarkan guru."
+              }
+            ]
+          },
+          {
+            "pattern": "〜たまま / 〜ないまま",
+            "badge": "Vた/ない＋まま",
+            "meaning": "〜した状態が続いている",
+            "meaningId": "Dibiarkan... / Tetap dalam keadaan... (keadaan tidak berubah)",
+            "examples": [
+              {
+                "ja": "テレビを<strong>つけたまま</strong>、寝てしまった。",
+                "id": "Tertidur dengan TV yang dibiarkan menyala."
+              },
+              {
+                "ja": "宿題を<strong>しないまま</strong>、学校へ行った。",
+                "id": "Pergi ke sekolah dengan PR yang belum dikerjakan."
+              }
+            ]
+          },
+          {
+            "pattern": "〜っぱなし",
+            "badge": "Vます形＋っぱなし",
+            "meaning": "〜した状態のままにしている（否定的）",
+            "meaningId": "Terus dibiarkan... / Ditinggal begitu saja... (keadaan yang seharusnya diubah tapi tidak)",
+            "examples": [
+              {
+                "ja": "電気を<strong>つけっぱなし</strong>にしないでください。",
+                "id": "Tolong jangan biarkan lampu terus menyala."
+              },
+              {
+                "ja": "ドアを<strong>開けっぱなし</strong>にしないで。",
+                "id": "Jangan biarkan pintu terus terbuka."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "day": 6,
+        "title": "知っているふりをする",
+        "titleId": "Berpura-pura tahu",
+        "grammar": [
+          {
+            "pattern": "〜てほしい / 〜てもらいたい",
+            "badge": "Vて＋ほしい",
+            "meaning": "〜してくれることを望む",
+            "meaningId": "Ingin agar (kamu)... / Minta tolong... (keinginan atas tindakan orang lain)",
+            "examples": [
+              {
+                "ja": "その資料を<strong>見せてほしい</strong>。",
+                "id": "Aku ingin kamu perlihatkan dokumen itu."
+              },
+              {
+                "ja": "もっとゆっくり<strong>話してほしい</strong>んですが。",
+                "id": "Saya minta tolong bicaranya lebih pelan."
+              }
+            ]
+          },
+          {
+            "pattern": "〜がる / 〜たがる",
+            "badge": "A/V＋がる",
+            "meaning": "第三者が〜という感情を持っているようだ",
+            "meaningId": "Kelihatannya (orang lain) merasa... / ingin... (perasaan orang ketiga yang terlihat dari luar)",
+            "examples": [
+              {
+                "ja": "子どもは暗いところを<strong>こわがる</strong>。",
+                "id": "Anak-anak takut tempat gelap."
+              },
+              {
+                "ja": "弟は新しいゲームを<strong>ほしがっている</strong>。",
+                "id": "Adik laki-lakiku kelihatannya ingin game baru."
+              }
+            ]
+          },
+          {
+            "pattern": "〜ふりをする",
+            "badge": "V/N の＋ふりをする",
+            "meaning": "〜であるように見せかける",
+            "meaningId": "Berpura-pura... (seolah-olah melakukan atau mengetahui sesuatu padahal tidak)",
+            "examples": [
+              {
+                "ja": "知っている<strong>ふりをする</strong>。",
+                "id": "Berpura-pura tahu."
+              },
+              {
+                "ja": "寝ている<strong>ふりをして</strong>、話を聞いていた。",
+                "id": "Sambil berpura-pura tidur, aku mendengarkan pembicaraan mereka."
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "num": 4,
+    "title": "がんばるしかない！",
+    "titleId": "Tidak ada pilihan selain semangat!",
+    "days": [
+      {
+        "day": 1,
+        "title": "何だっけ？",
+        "titleId": "Apa ya tadi?",
+        "grammar": [
+          {
+            "pattern": "〜だっけ？ / 〜っけ？",
+            "badge": "S＋っけ",
+            "meaning": "忘れたことを思い出そうとする",
+            "meaningId": "... ya? / ... tadi? (mencoba mengingat sesuatu yang terlupakan)",
+            "examples": [
+              {
+                "ja": "国へ帰るのは、来週<strong>だっけ</strong>？",
+                "id": "Pulang ke negaranya minggu depan ya?"
+              },
+              {
+                "ja": "明日のパーティーのこと、話し<strong>たっけ</strong>？",
+                "id": "Soal pesta besok, sudah aku ceritakan belum ya?"
+              }
+            ]
+          },
+          {
+            "pattern": "〜しかない / 〜するしかない",
+            "badge": "V る＋しかない",
+            "meaning": "それ以外の方法がない",
+            "meaningId": "Tidak ada pilihan selain... / Terpaksa harus... (tidak ada cara lain)",
+            "examples": [
+              {
+                "ja": "できるまで、<strong>やるしかない</strong>。",
+                "id": "Tidak ada pilihan selain terus mencoba sampai bisa."
+              },
+              {
+                "ja": "直せないから、新しいのを<strong>買うしかなかった</strong>。",
+                "id": "Karena tidak bisa diperbaiki, terpaksa harus beli yang baru."
+              }
+            ]
+          },
+          {
+            "pattern": "〜んだって / 〜だって",
+            "badge": "S＋んだって",
+            "meaning": "〜そうだ（人から聞いた情報・口語）",
+            "meaningId": "Katanya... / Dengar-dengar... (informasi dari orang lain, informal)",
+            "examples": [
+              {
+                "ja": "「田中さん、<strong>結婚してるんだって</strong>。」「へえ、知らなかった。」",
+                "id": "'Katanya Tanaka-san sudah menikah.' 'Wah, aku tidak tahu.'"
+              },
+              {
+                "ja": "明日、休み<strong>なんだって</strong>。",
+                "id": "Katanya besok libur."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "day": 2,
+        "title": "ずいぶん待たされた",
+        "titleId": "Disuruh menunggu cukup lama",
+        "grammar": [
+          {
+            "pattern": "〜させられる（使役受身）",
+            "badge": "V使役受身形",
+            "meaning": "〜することを強制される",
+            "meaningId": "Dipaksa untuk... / Terpaksa harus... (dipaksa orang lain melakukan sesuatu)",
+            "examples": [
+              {
+                "ja": "ずいぶん<strong>待たされた</strong>。",
+                "id": "Aku disuruh menunggu cukup lama."
+              },
+              {
+                "ja": "子どものころ、毎日ピアノを<strong>練習させられた</strong>。",
+                "id": "Waktu kecil, setiap hari dipaksa berlatih piano."
+              },
+              {
+                "ja": "上司に残業を<strong>させられた</strong>。",
+                "id": "Dipaksa lembur oleh atasan."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "day": 3,
+        "title": "最近慣れてきた",
+        "titleId": "Belakangan ini mulai terbiasa",
+        "grammar": [
+          {
+            "pattern": "〜てくる / 〜ていく",
+            "badge": "Vて＋くる/いく",
+            "meaning": "①移動の方向　②変化の方向",
+            "meaningId": "① Arah gerakan (datang/pergi sambil melakukan) ② Perubahan yang terus berlanjut",
+            "examples": [
+              {
+                "ja": "コンビニに行って、お弁当を<strong>買ってきた</strong>。",
+                "id": "Pergi ke konbini dan kembali setelah membeli bento."
+              },
+              {
+                "ja": "これからも日本語を<strong>勉強していく</strong>つもりです。",
+                "id": "Saya berencana untuk terus belajar bahasa Jepang ke depannya."
+              },
+              {
+                "ja": "最近、物価が上がって<strong>きた</strong>。",
+                "id": "Belakangan ini harga-harga mulai naik."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "day": 4,
+        "title": "うれしくてたまらない",
+        "titleId": "Tidak tertahankan senangnya",
+        "grammar": [
+          {
+            "pattern": "〜てたまらない / 〜でたまらない",
+            "badge": "Vて/A くて＋たまらない",
+            "meaning": "非常に〜で、我慢できない",
+            "meaningId": "Tidak tertahankan... / Sangat... sampai tidak bisa ditahan (perasaan yang sangat kuat)",
+            "examples": [
+              {
+                "ja": "合格の知らせを聞いて、<strong>うれしくてたまらない</strong>。",
+                "id": "Setelah mendengar kabar kelulusan, senangnya tidak tertahankan."
+              },
+              {
+                "ja": "昨日から歯が<strong>痛くてたまらない</strong>。",
+                "id": "Dari kemarin gigi sakit sekali, tidak tertahankan."
+              }
+            ]
+          },
+          {
+            "pattern": "〜てならない",
+            "badge": "Vて/A くて＋ならない",
+            "meaning": "自然に〜という気持ちになる",
+            "meaningId": "Tidak bisa tidak merasa... (perasaan yang muncul secara alami)",
+            "examples": [
+              {
+                "ja": "故郷のことが<strong>思い出されてならない</strong>。",
+                "id": "Kampung halaman terus-terusan terbayang, tidak bisa tidak."
+              },
+              {
+                "ja": "彼が心配で<strong>ならない</strong>。",
+                "id": "Aku tidak bisa tidak khawatir soal dia."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "day": 5,
+        "title": "お金さえあれば",
+        "titleId": "Asal ada uang",
+        "grammar": [
+          {
+            "pattern": "〜さえ〜ば / 〜さえ〜たら",
+            "badge": "N さえ＋V ば",
+            "meaning": "〜という条件だけで十分",
+            "meaningId": "Asal... saja sudah cukup / Kalau hanya... (kondisi minimal yang cukup)",
+            "examples": [
+              {
+                "ja": "お金<strong>さえあれば</strong>、大丈夫です。",
+                "id": "Asal ada uang, tidak masalah."
+              },
+              {
+                "ja": "あなた<strong>さえいれば</strong>、他には何もいらない。",
+                "id": "Asal ada kamu, tidak perlu yang lain."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "day": 6,
+        "title": "どうせ無理だと思っていた",
+        "titleId": "Toh memang kupikir mustahil",
+        "grammar": [
+          {
+            "pattern": "どうせ〜",
+            "badge": "どうせ＋S",
+            "meaning": "結果がわかっていて、あきらめている",
+            "meaningId": "Toh... / Memang sudah... (pasrah atau pesimis karena sudah tahu hasilnya)",
+            "examples": [
+              {
+                "ja": "<strong>どうせ</strong>、うまくいかないよ。",
+                "id": "Toh pasti tidak berhasil kok."
+              },
+              {
+                "ja": "<strong>どうせ</strong>なら、もっといいものを買おう。",
+                "id": "Kalau memang begitu, lebih baik beli yang lebih bagus sekalian."
+              }
+            ]
+          },
+          {
+            "pattern": "〜わけだ / 〜わけがない",
+            "badge": "S わけだ",
+            "meaning": "〜という理由・結論になる",
+            "meaningId": "Pantas saja... / Berarti... / Tidak mungkin... (menyimpulkan alasan atau menyangkal kemungkinan)",
+            "examples": [
+              {
+                "ja": "10年日本に住んでいるから、日本語が上手な<strong>わけだ</strong>。",
+                "id": "Pantas saja bahasa Jepangnya bagus, karena sudah tinggal di Jepang 10 tahun."
+              },
+              {
+                "ja": "そんなことが信じられる<strong>わけがない</strong>。",
+                "id": "Tidak mungkin percaya hal seperti itu."
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "num": 5,
+    "title": "もっとがんばればよかった！",
+    "titleId": "Seharusnya lebih semangat!",
+    "days": [
+      {
+        "day": 1,
+        "title": "どうりでおかしいと思った",
+        "titleId": "Pantas saja aku merasa aneh",
+        "grammar": [
+          {
+            "pattern": "〜ばよかった",
+            "badge": "V ば＋よかった",
+            "meaning": "〜すればよかった（後悔）",
+            "meaningId": "Seharusnya dulu... (menyesal tidak melakukan sesuatu di masa lalu)",
+            "examples": [
+              {
+                "ja": "もっと<strong>勉強すればよかった</strong>。",
+                "id": "Seharusnya dulu lebih giat belajar."
+              },
+              {
+                "ja": "あのとき、正直に<strong>言えばよかった</strong>。",
+                "id": "Seharusnya waktu itu jujur saja."
+              }
+            ]
+          },
+          {
+            "pattern": "どうりで〜",
+            "badge": "どうりで＋S",
+            "meaning": "なるほど〜のはずだ（納得）",
+            "meaningId": "Pantas saja... / Makanya... (menyadari alasan mengapa sesuatu terjadi)",
+            "examples": [
+              {
+                "ja": "<strong>どうりで</strong>おかしいと思った。彼、昨日から熱があったんだ。",
+                "id": "Pantas saja aku merasa aneh. Ternyata dia sudah demam dari kemarin."
+              },
+              {
+                "ja": "<strong>どうりで</strong>静かだと思ったら、みんな出かけていたんだ。",
+                "id": "Pantas saja terasa sepi, ternyata semua sudah pergi."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "day": 2,
+        "title": "やっと慣れてきた",
+        "titleId": "Akhirnya mulai terbiasa",
+        "grammar": [
+          {
+            "pattern": "やっと〜 / ようやく〜",
+            "badge": "副詞",
+            "meaning": "長い時間や努力の後に、ついに〜",
+            "meaningId": "Akhirnya... / Dengan susah payah akhirnya... (setelah usaha atau waktu yang lama)",
+            "examples": [
+              {
+                "ja": "<strong>やっと</strong>日本語に慣れてきました。",
+                "id": "Akhirnya mulai terbiasa dengan bahasa Jepang."
+              },
+              {
+                "ja": "<strong>ようやく</strong>合格できた。",
+                "id": "Dengan susah payah akhirnya berhasil lulus."
+              }
+            ]
+          },
+          {
+            "pattern": "なかなか〜ない",
+            "badge": "なかなか＋Vない",
+            "meaning": "期待しているのに、なかなか〜しない",
+            "meaningId": "Tidak kunjung... / Susah sekali untuk... (sesuatu yang diharapkan belum terjadi juga)",
+            "examples": [
+              {
+                "ja": "日本語が<strong>なかなか</strong>上手に<strong>なれない</strong>。",
+                "id": "Bahasa Jepang tidak kunjung bisa bagus juga."
+              },
+              {
+                "ja": "バスが<strong>なかなか来ない</strong>。",
+                "id": "Bus tidak kunjung datang."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "day": 3,
+        "title": "映画が始まるまで",
+        "titleId": "Sampai film mulai",
+        "grammar": [
+          {
+            "pattern": "〜まで / 〜までに",
+            "badge": "N/V る＋まで(に)",
+            "meaning": "まで：〜が続く時点　までに：〜する期限",
+            "meaningId": "まで: sampai (titik berakhir) ／ までに: paling lambat sampai (batas waktu)",
+            "examples": [
+              {
+                "ja": "映画が<strong>始まるまで</strong>、30分あります。",
+                "id": "Masih ada 30 menit sampai film mulai."
+              },
+              {
+                "ja": "3時<strong>までに</strong>来てください。",
+                "id": "Tolong datang paling lambat jam 3."
+              }
+            ]
+          },
+          {
+            "pattern": "〜にかけて / 〜から〜にかけて",
+            "badge": "N から N にかけて",
+            "meaning": "〜の期間・範囲にわたって",
+            "meaningId": "Dari... hingga... (rentang waktu atau tempat yang bertahap)",
+            "examples": [
+              {
+                "ja": "今晩から<strong>明日の朝にかけて</strong>、雪が降るんだって。",
+                "id": "Katanya akan turun salju dari malam ini hingga besok pagi."
+              },
+              {
+                "ja": "九州から本州<strong>にかけて</strong>梅雨に入りました。",
+                "id": "Musim hujan telah tiba dari Kyushu hingga Honshu."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "day": 4,
+        "title": "あまりにも高すぎる",
+        "titleId": "Terlalu mahal",
+        "grammar": [
+          {
+            "pattern": "〜すぎる",
+            "badge": "V/A＋すぎる",
+            "meaning": "程度が必要以上に大きい",
+            "meaningId": "Terlalu... (melampaui batas yang wajar atau diinginkan)",
+            "examples": [
+              {
+                "ja": "食べ<strong>すぎて</strong>、おなかが痛い。",
+                "id": "Terlalu banyak makan sampai sakit perut."
+              },
+              {
+                "ja": "この問題は難し<strong>すぎる</strong>。",
+                "id": "Soal ini terlalu sulit."
+              }
+            ]
+          },
+          {
+            "pattern": "あまりにも〜",
+            "badge": "あまりにも",
+            "meaning": "程度が非常に大きい（否定的）",
+            "meaningId": "Terlalu... / Sangat berlebihan... (derajat yang melampaui batas normal)",
+            "examples": [
+              {
+                "ja": "この服は<strong>あまりにも</strong>高すぎる。",
+                "id": "Baju ini terlalu mahal."
+              },
+              {
+                "ja": "<strong>あまりにも</strong>暑くて、外に出られない。",
+                "id": "Terlalu panas sehingga tidak bisa keluar."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "day": 5,
+        "title": "読めば読むほど面白い",
+        "titleId": "Semakin dibaca semakin menarik",
+        "grammar": [
+          {
+            "pattern": "〜ば〜ほど",
+            "badge": "V ば＋V ほど",
+            "meaning": "〜すればするほど、さらに〜",
+            "meaningId": "Semakin... semakin... (peningkatan berbanding lurus)",
+            "examples": [
+              {
+                "ja": "<strong>読めば読むほど</strong>、面白くなる。",
+                "id": "Semakin banyak dibaca, semakin menarik."
+              },
+              {
+                "ja": "練習すれ<strong>ばするほど</strong>、上手になります。",
+                "id": "Semakin banyak berlatih, semakin mahir."
+              }
+            ]
+          },
+          {
+            "pattern": "〜まで（も）〔強調〕",
+            "badge": "N まで(も)",
+            "meaning": "意外なものも含めて〜だ",
+            "meaningId": "Bahkan... pun... (penekanan — sesuatu yang tidak terduga juga termasuk)",
+            "examples": [
+              {
+                "ja": "ネコ<strong>まで</strong>喜んでいる。",
+                "id": "Bahkan kucingnya pun ikut senang."
+              },
+              {
+                "ja": "あなた<strong>まで</strong>そんなことを言うの？",
+                "id": "Bahkan kamu pun bilang hal seperti itu?"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "day": 6,
+        "title": "ネコまで喜んでいる",
+        "titleId": "Bahkan kucingnya pun ikut senang",
+        "grammar": [
+          {
+            "pattern": "〜ことにする / 〜ことにした",
+            "badge": "V る/ない＋ことにする",
+            "meaning": "自分の意志で〜と決める",
+            "meaningId": "Memutuskan untuk... (keputusan atas kemauan sendiri)",
+            "examples": [
+              {
+                "ja": "引っ越す<strong>ことにした</strong>。",
+                "id": "Aku memutuskan untuk pindah."
+              },
+              {
+                "ja": "お酒を飲まない<strong>ことにしている</strong>。",
+                "id": "Saya memutuskan untuk tidak minum alkohol."
+              }
+            ]
+          },
+          {
+            "pattern": "〜ことになる / 〜ことになった",
+            "badge": "V る/ない＋ことになる",
+            "meaning": "（状況・決定により）〜という結果になる",
+            "meaningId": "Menjadi keputusan bahwa... / Ternyata harus... (hasil dari situasi atau keputusan eksternal)",
+            "examples": [
+              {
+                "ja": "来月から大阪に転勤する<strong>ことになった</strong>。",
+                "id": "Ternyata mulai bulan depan harus pindah ke Osaka."
+              },
+              {
+                "ja": "会議の日が変わる<strong>ことになりました</strong>。",
+                "id": "Hari pertemuan menjadi berubah."
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "num": 6,
+    "title": "もっとがんばることにした",
+    "titleId": "Memutuskan untuk lebih semangat!",
+    "days": [
+      {
+        "day": 1,
+        "title": "引っ越すことにした",
+        "titleId": "Memutuskan untuk pindah",
+        "grammar": [
+          {
+            "pattern": "〜てからでないと / 〜てからでなければ",
+            "badge": "Vて＋からでないと",
+            "meaning": "〜してからでなければ〜できない",
+            "meaningId": "Harus setelah... dulu baru bisa... (sesuatu tidak bisa dilakukan sebelum hal lain selesai)",
+            "examples": [
+              {
+                "ja": "実物を<strong>見てからでないと</strong>、決められない。",
+                "id": "Tidak bisa memutuskan sebelum melihat barang aslinya dulu."
+              },
+              {
+                "ja": "内容を確認し<strong>てからでなければ</strong>、サインできません。",
+                "id": "Tidak bisa tanda tangan sebelum mengecek isinya dulu."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "day": 2,
+        "title": "見てからでないといけない",
+        "titleId": "Harus setelah melihat dulu",
+        "grammar": [
+          {
+            "pattern": "〜たところ（だ）",
+            "badge": "Vた＋ところ",
+            "meaning": "①〜した直後　②〜してみたら",
+            "meaningId": "① Baru saja selesai... ② Setelah mencoba..., ternyata...",
+            "examples": [
+              {
+                "ja": "先生に今度のテストの範囲を<strong>聞いたところ</strong>、10課までだと言われた。",
+                "id": "Setelah menanyakan cakupan ujian kepada guru, ternyata sampai pelajaran ke-10."
+              },
+              {
+                "ja": "今、帰ってきた<strong>ところです</strong>。",
+                "id": "Saya baru saja pulang."
+              }
+            ]
+          },
+          {
+            "pattern": "もう少しで〜ところだった",
+            "badge": "もう少しで＋V るところだった",
+            "meaning": "あと少しで〜しそうだった（危ない状況）",
+            "meaningId": "Hampir saja... / Nyaris... (situasi berbahaya yang hampir terjadi)",
+            "examples": [
+              {
+                "ja": "もう少しで<strong>遅刻するところだった</strong>。",
+                "id": "Hampir saja terlambat."
+              },
+              {
+                "ja": "もう少しで電車に<strong>乗り遅れるところだった</strong>。",
+                "id": "Hampir saja ketinggalan kereta."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "day": 3,
+        "title": "もう少しで乗り遅れるところだった",
+        "titleId": "Hampir saja ketinggalan",
+        "grammar": [
+          {
+            "pattern": "〜てはじめて",
+            "badge": "Vて＋はじめて",
+            "meaning": "〜して初めて、それが可能・わかる",
+            "meaningId": "Baru setelah... bisa... / Tidak sampai... belum... (sesuatu baru terwujud setelah kondisi terpenuhi)",
+            "examples": [
+              {
+                "ja": "先生に<strong>注意されてはじめて</strong>、漢字の間違いに気が付いた。",
+                "id": "Baru setelah diingatkan guru, aku menyadari kesalahan kanjinya."
+              },
+              {
+                "ja": "歌舞伎を<strong>見てはじめて</strong>、日本文化に興味を持った。",
+                "id": "Baru setelah menonton kabuki, aku mulai tertarik dengan budaya Jepang."
+              }
+            ]
+          },
+          {
+            "pattern": "〜としても / 〜だとしても",
+            "badge": "S としても",
+            "meaning": "〜という条件でも（譲歩）",
+            "meaningId": "Sekalipun... / Meskipun... (mengakui kondisi tapi ada konsekuensi berbeda)",
+            "examples": [
+              {
+                "ja": "合格した<strong>としても</strong>、入学金が払えない。",
+                "id": "Sekalipun lulus, tidak bisa membayar uang masuk."
+              },
+              {
+                "ja": "たとえ失敗した<strong>としても</strong>、後悔しない。",
+                "id": "Sekalipun gagal, aku tidak akan menyesal."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "day": 4,
+        "title": "さんざん迷ったあげく",
+        "titleId": "Ujung-ujungnya setelah lama bingung",
+        "grammar": [
+          {
+            "pattern": "〜あげく（に）",
+            "badge": "V た/N の＋あげく",
+            "meaning": "長い過程の末、（否定的な）結果になった",
+            "meaningId": "Ujung-ujungnya... (hasil negatif setelah proses panjang)",
+            "examples": [
+              {
+                "ja": "さんざん迷った<strong>あげく</strong>、やめることにした。",
+                "id": "Setelah berlama-lama bingung, ujung-ujungnya memutuskan untuk berhenti."
+              },
+              {
+                "ja": "長い議論の<strong>あげく</strong>、結論が出なかった。",
+                "id": "Setelah perdebatan panjang, ujung-ujungnya tidak ada kesimpulan."
+              }
+            ]
+          },
+          {
+            "pattern": "〜にしろ / 〜にせよ / 〜にしても",
+            "badge": "S にしろ",
+            "meaning": "どんな場合でも〜",
+            "meaningId": "Apapun... / Bagaimanapun... (apapun kondisinya, kesimpulan tetap sama)",
+            "examples": [
+              {
+                "ja": "行く<strong>にしろ</strong>行かない<strong>にしろ</strong>、早く決めてください。",
+                "id": "Apakah mau pergi atau tidak, tolong segera putuskan."
+              },
+              {
+                "ja": "冗談<strong>にしろ</strong>、言っていいことと悪いことがある。",
+                "id": "Sekalipun bercanda, ada hal yang boleh dan tidak boleh dikatakan."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "day": 5,
+        "title": "やめるどころか、もっとがんばる",
+        "titleId": "Bukannya berhenti, malah makin semangat",
+        "grammar": [
+          {
+            "pattern": "〜どころか",
+            "badge": "V/A/N どころか",
+            "meaning": "〜は全然なくて、むしろその反対",
+            "meaningId": "Bukannya... malah... / Jangankan... bahkan... (keadaan jauh berbeda dari perkiraan)",
+            "examples": [
+              {
+                "ja": "やめる<strong>どころか</strong>、もっとがんばるつもりだ。",
+                "id": "Bukannya berhenti, malah semakin berniat semangat."
+              },
+              {
+                "ja": "上手になる<strong>どころか</strong>、もっと下手になった。",
+                "id": "Bukannya mahir, malah semakin tidak bisa."
+              }
+            ]
+          },
+          {
+            "pattern": "〜どころではない / 〜どころじゃない",
+            "badge": "V/N どころではない",
+            "meaning": "〜する状況ではまったくない",
+            "meaningId": "Bukan saatnya... / Tidak sempat untuk... (situasi tidak memungkinkan sama sekali)",
+            "examples": [
+              {
+                "ja": "忙しくて、旅行<strong>どころではない</strong>。",
+                "id": "Sangat sibuk, bukan saatnya untuk jalan-jalan."
+              },
+              {
+                "ja": "体調が悪くて、食事<strong>どころじゃない</strong>。",
+                "id": "Kondisi badan sedang buruk, tidak sempat untuk makan."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "day": 6,
+        "title": "もっとがんばることにした！",
+        "titleId": "Sudah memutuskan untuk lebih semangat!",
+        "grammar": [
+          {
+            "pattern": "〜ばよかった",
+            "badge": "V ば＋よかった",
+            "meaning": "〜すればよかった（後悔）",
+            "meaningId": "Seharusnya dulu... (menyesal tidak melakukan sesuatu di masa lalu)",
+            "examples": [
+              {
+                "ja": "もっと<strong>勉強すればよかった</strong>。",
+                "id": "Seharusnya dulu lebih giat belajar."
+              },
+              {
+                "ja": "もっと早く<strong>始めればよかった</strong>。",
+                "id": "Seharusnya dulu mulai lebih awal."
+              }
+            ]
+          },
+          {
+            "pattern": "〜ば〜ほど（復習）",
+            "badge": "V ば＋V ほど",
+            "meaning": "〜すればするほど、さらに〜",
+            "meaningId": "Semakin... semakin... (peningkatan berbanding lurus)",
+            "examples": [
+              {
+                "ja": "勉強すれ<strong>ばするほど</strong>、日本語が楽しくなる。",
+                "id": "Semakin banyak belajar, bahasa Jepang semakin menyenangkan."
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

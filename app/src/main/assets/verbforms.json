@@ -1,0 +1,1607 @@
+{
+  "V受身形": {
+    "title": "受身形の作り方 / Cara Membuat Bentuk Pasif",
+    "rows": [
+      {
+        "label": "グループ1",
+        "body": "語尾をあ段に変えて＋れる",
+        "id": "Ubah akhiran ke baris -a lalu tambah れる",
+        "ex": "書く → 書かれる　飲む → 飲まれる　話す → 話される"
+      },
+      {
+        "label": "グループ2",
+        "body": "語尾のる を取って＋られる",
+        "id": "Hapus る lalu tambah られる",
+        "ex": "食べる → 食べられる　見る → 見られる"
+      },
+      {
+        "label": "不規則",
+        "body": "する → される　くる → こられる",
+        "id": "Tidak beraturan",
+        "ex": "する → される　くる → こられる"
+      }
+    ]
+  },
+  "N に V受身": {
+    "title": "迷惑の受身 / Pasif Tidak Langsung",
+    "rows": [
+      {
+        "label": "形",
+        "body": "N（人）に＋受身形",
+        "id": "N（orang）に＋bentuk pasif",
+        "ex": "友達に笑われた　泥棒に財布を盗まれた"
+      },
+      {
+        "label": "意味",
+        "body": "その行為によって迷惑・被害を受けた",
+        "id": "Menerima kerugian/dampak dari tindakan orang tersebut",
+        "ex": ""
+      }
+    ]
+  },
+  "V使役形＋ください": {
+    "title": "使役形の作り方 / Cara Membuat Bentuk Kausatif",
+    "rows": [
+      {
+        "label": "グループ1",
+        "body": "語尾をあ段に変えて＋せる",
+        "id": "Ubah akhiran ke baris -a lalu tambah せる",
+        "ex": "行く → 行かせる　飲む → 飲ませる"
+      },
+      {
+        "label": "グループ2",
+        "body": "語尾のる を取って＋させる",
+        "id": "Hapus る lalu tambah させる",
+        "ex": "食べる → 食べさせる　見る → 見させる"
+      },
+      {
+        "label": "不規則",
+        "body": "する → させる　くる → こさせる",
+        "id": "Tidak beraturan",
+        "ex": "する → させる"
+      },
+      {
+        "label": "使い方",
+        "body": "使役形（〜せ／させ）＋てください",
+        "id": "Bentuk kausatif + てください = minta izin dengan sopan",
+        "ex": "帰らせてください　休ませてください"
+      }
+    ]
+  },
+  "Vない形＋と": {
+    "title": "ない形の作り方 / Cara Membuat Bentuk ない",
+    "rows": [
+      {
+        "label": "グループ1",
+        "body": "語尾をあ段に変えて＋ない",
+        "id": "Ubah akhiran ke baris -a lalu tambah ない",
+        "ex": "書く → 書かない　飲む → 飲まない"
+      },
+      {
+        "label": "グループ2",
+        "body": "語尾のる を取って＋ない",
+        "id": "Hapus る lalu tambah ない",
+        "ex": "食べる → 食べない　起きる → 起きない"
+      },
+      {
+        "label": "不規則",
+        "body": "する → しない　くる → こない",
+        "id": "Tidak beraturan",
+        "ex": "する → しない　くる → こない"
+      },
+      {
+        "label": "口語形",
+        "body": "〜ないと / 〜なくちゃ（= 〜なければならない）",
+        "id": "Bentuk percakapan sehari-hari",
+        "ex": "行かないと！　早くしなくちゃ！"
+      }
+    ]
+  },
+  "Vてしまう→口語": {
+    "title": "て形の作り方 / Cara Membuat Bentuk て",
+    "rows": [
+      {
+        "label": "く→いて",
+        "body": "書く → 書いて　聞く → 聞いて",
+        "id": "Contoh: く → いて",
+        "ex": "※ 行く → 行って（例外）"
+      },
+      {
+        "label": "ぐ→いで",
+        "body": "泳ぐ → 泳いで",
+        "id": "Contoh: ぐ → いで",
+        "ex": ""
+      },
+      {
+        "label": "す→して",
+        "body": "話す → 話して",
+        "id": "Contoh: す → して",
+        "ex": ""
+      },
+      {
+        "label": "む・ぬ・ぶ→んで",
+        "body": "飲む → 飲んで　死ぬ → 死んで　飛ぶ → 飛んで",
+        "id": "む・ぬ・ぶ → んで",
+        "ex": ""
+      },
+      {
+        "label": "る・う・つ→って",
+        "body": "乗る → 乗って　買う → 買って　待つ → 待って",
+        "id": "る・う・つ → って",
+        "ex": ""
+      },
+      {
+        "label": "グループ2",
+        "body": "語尾のる を取って＋て",
+        "id": "Hapus る lalu tambah て",
+        "ex": "食べる → 食べて　起きる → 起きて"
+      },
+      {
+        "label": "口語変化",
+        "body": "〜てしまった → 〜ちゃった　〜でしまった → 〜じゃった",
+        "id": "Perubahan dalam percakapan sehari-hari",
+        "ex": "食べちゃった　飲んじゃった"
+      }
+    ]
+  },
+  "Vておく→口語": {
+    "title": "〜ておく / 〜とく / 〜とおく",
+    "rows": [
+      {
+        "label": "形",
+        "body": "V て形＋おく",
+        "id": "Bentuk て + おく",
+        "ex": "書いておく　買っておく"
+      },
+      {
+        "label": "口語",
+        "body": "〜ておく → 〜とく　〜ておこう → 〜とこう",
+        "id": "Dalam percakapan, ておく dipersingkat menjadi とく",
+        "ex": "書いとく　買っとく　調べとこう"
+      }
+    ]
+  },
+  "N/V/A みたいだ": {
+    "title": "みたいだ の接続 / Cara Menyambungkan みたいだ",
+    "rows": [
+      {
+        "label": "動詞",
+        "body": "V 普通形＋みたいだ",
+        "id": "Bentuk biasa kata kerja + みたいだ",
+        "ex": "行くみたいだ　食べたみたいだ"
+      },
+      {
+        "label": "い形容詞",
+        "body": "A い＋みたいだ",
+        "id": "Kata sifat -i + みたいだ",
+        "ex": "暑いみたいだ"
+      },
+      {
+        "label": "な形容詞",
+        "body": "A な（だ→）みたいだ",
+        "id": "Kata sifat -na (tanpa だ) + みたいだ",
+        "ex": "元気みたいだ"
+      },
+      {
+        "label": "名詞",
+        "body": "N（だ→）みたいだ",
+        "id": "Kata benda (tanpa だ) + みたいだ",
+        "ex": "子どもみたいだ　雨みたいだ"
+      }
+    ]
+  },
+  "N/V/A らしい": {
+    "title": "らしい の接続 / Cara Menyambungkan らしい",
+    "rows": [
+      {
+        "label": "動詞",
+        "body": "V 普通形＋らしい",
+        "id": "Bentuk biasa kata kerja + らしい",
+        "ex": "来るらしい　行ったらしい"
+      },
+      {
+        "label": "い形容詞",
+        "body": "A い＋らしい",
+        "id": "Kata sifat -i + らしい",
+        "ex": "寒いらしい"
+      },
+      {
+        "label": "な形容詞",
+        "body": "A な だ＋らしい",
+        "id": "Kata sifat -na + だ + らしい",
+        "ex": "元気だらしい"
+      },
+      {
+        "label": "名詞",
+        "body": "N だ＋らしい",
+        "id": "Kata benda + だ + らしい",
+        "ex": "休みだらしい"
+      },
+      {
+        "label": "①②の違い",
+        "body": "①〜らしい（いかにも）= 本当に〜の特徴がある\n②〜らしい（伝聞）= 誰かから聞いた情報",
+        "id": "① Benar-benar khas ② Informasi dari orang lain",
+        "ex": ""
+      }
+    ]
+  },
+  "N/V っぽい": {
+    "title": "っぽい の接続",
+    "rows": [
+      {
+        "label": "形",
+        "body": "N・動詞ます形＋っぽい（い形容詞として活用）",
+        "id": "N atau bentuk ます kata kerja + っぽい (berperilaku seperti kata sifat -i)",
+        "ex": "子どもっぽい　怒りっぽい　水っぽい"
+      },
+      {
+        "label": "ニュアンス",
+        "body": "やや否定的・非公式な表現",
+        "id": "Nuansa agak negatif atau informal",
+        "ex": "大人っぽい（ほめ言葉にもなる）"
+      }
+    ]
+  },
+  "Vない＋ようにする": {
+    "title": "〜ようにする / 〜ようになる の接続",
+    "rows": [
+      {
+        "label": "ようにする",
+        "body": "V る形／V ない形＋ようにする",
+        "id": "Bentuk kamus / bentuk ない + ようにする (usaha/niat)",
+        "ex": "早く起きるようにする　食べすぎないようにする"
+      },
+      {
+        "label": "ようになる",
+        "body": "V る形／V ない形＋ようになる",
+        "id": "Bentuk kamus / bentuk ない + ようになる (perubahan kemampuan)",
+        "ex": "泳げるようになった　食べられるようになった"
+      },
+      {
+        "label": "違い",
+        "body": "ようにする＝努力・意志\nようになる＝変化・結果",
+        "id": "ようにする = usaha/niat　ようになる = perubahan yang terjadi",
+        "ex": ""
+      }
+    ]
+  },
+  "V る/ない＋ようになる": {
+    "title": "〜ようになる の接続",
+    "rows": [
+      {
+        "label": "形",
+        "body": "V る形／V ない形＋ようになる",
+        "id": "Bentuk kamus / bentuk ない + ようになる",
+        "ex": "話せるようになった　起きられるようになった"
+      },
+      {
+        "label": "意味",
+        "body": "以前は〜できなかったが、今は〜できる（変化）",
+        "id": "Sebelumnya tidak bisa, sekarang sudah bisa (perubahan kemampuan atau kebiasaan)",
+        "ex": ""
+      }
+    ]
+  },
+  "N の/V＋ように": {
+    "title": "〜ように〔引用・例示〕の接続",
+    "rows": [
+      {
+        "label": "動詞",
+        "body": "V 普通形＋ように",
+        "id": "Bentuk biasa kata kerja + ように",
+        "ex": "言ったように　書いてあるように"
+      },
+      {
+        "label": "名詞",
+        "body": "N の＋ように",
+        "id": "Kata benda の + ように",
+        "ex": "ご存じのように　前述のように"
+      }
+    ]
+  },
+  "V る/ない＋ように": {
+    "title": "〜ように〔目的・指示〕の接続",
+    "rows": [
+      {
+        "label": "目的",
+        "body": "V る形／V ない形＋ように＋（行為）",
+        "id": "Bentuk kamus / bentuk ない + ように + (tindakan) = agar...",
+        "ex": "聞こえるように大きな声で話す"
+      },
+      {
+        "label": "指示",
+        "body": "V る形／V ない形＋ように（文末）",
+        "id": "Di akhir kalimat = perintah/instruksi tidak langsung",
+        "ex": "静かにするように　遅刻しないように"
+      }
+    ]
+  },
+  "V＋ように。": {
+    "title": "〜ように〔願望〕の接続",
+    "rows": [
+      {
+        "label": "形",
+        "body": "V る形＋ように。（文末）",
+        "id": "Bentuk kamus + ように di akhir kalimat = doa/harapan",
+        "ex": "合格しますように　元気になりますように"
+      },
+      {
+        "label": "場面",
+        "body": "神社や願い事をするときに使う",
+        "id": "Digunakan saat berdoa atau mengungkapkan harapan",
+        "ex": ""
+      }
+    ]
+  },
+  "V意向形＋と思う": {
+    "title": "意向形の作り方 / Cara Membuat Bentuk Niat (意向形)",
+    "rows": [
+      {
+        "label": "グループ1",
+        "body": "語尾をお段に変えて＋う",
+        "id": "Ubah akhiran ke baris -o lalu tambah う",
+        "ex": "書く → 書こう　飲む → 飲もう　行く → 行こう"
+      },
+      {
+        "label": "グループ2",
+        "body": "語尾のる を取って＋よう",
+        "id": "Hapus る lalu tambah よう",
+        "ex": "食べる → 食べよう　起きる → 起きよう"
+      },
+      {
+        "label": "不規則",
+        "body": "する → しよう　くる → こよう",
+        "id": "Tidak beraturan",
+        "ex": "勉強しよう　一緒に来よう"
+      },
+      {
+        "label": "使い方",
+        "body": "意向形＋と思う／と思っている＝意志・計画",
+        "id": "Bentuk niat + と思う/と思っている = niat atau rencana",
+        "ex": "やめようと思っている　行こうと思う"
+      }
+    ]
+  },
+  "V意向形＋とする": {
+    "title": "〜ようとする の接続",
+    "rows": [
+      {
+        "label": "形",
+        "body": "動詞の意向形＋とする",
+        "id": "Bentuk niat kata kerja + とする",
+        "ex": "食べようとする　帰ろうとする"
+      },
+      {
+        "label": "意味",
+        "body": "〜しようとする動作を始める瞬間",
+        "id": "Momen tepat sebelum / hendak melakukan sesuatu",
+        "ex": "出かけようとしたとき　乗ろうとしたら"
+      }
+    ]
+  },
+  "V意向形＋としない": {
+    "title": "〜ようとしない の接続",
+    "rows": [
+      {
+        "label": "形",
+        "body": "動詞の意向形＋としない",
+        "id": "Bentuk niat kata kerja + としない",
+        "ex": "食べようとしない　聞こうとしない"
+      },
+      {
+        "label": "意味",
+        "body": "〜する気持ちが全くない（強い否定）",
+        "id": "Sama sekali tidak mau / tidak ada niat untuk... (penegasan kuat)",
+        "ex": ""
+      }
+    ]
+  },
+  "N/Vて＋ばかり": {
+    "title": "〜ばかり の接続",
+    "rows": [
+      {
+        "label": "名詞＋ばかり",
+        "body": "N＋ばかり＝〜だけ",
+        "id": "N + ばかり = hanya... saja",
+        "ex": "女性ばかり　野菜ばかり"
+      },
+      {
+        "label": "〜てばかりいる",
+        "body": "V て形＋ばかりいる＝ずっと〜している",
+        "id": "Bentuk て + ばかりいる = terus-terusan melakukan...",
+        "ex": "食べてばかりいる　寝てばかりいる"
+      }
+    ]
+  },
+  "N さえ": {
+    "title": "〜さえ / 〜さえ〜ば の接続",
+    "rows": [
+      {
+        "label": "さえ（強調）",
+        "body": "N＋さえ＝〜でさえも（意外性）",
+        "id": "N + さえ = bahkan... pun (hal yang tidak terduga)",
+        "ex": "ひらがなさえ読めない"
+      },
+      {
+        "label": "さえ〜ば",
+        "body": "N さえ＋V ば形＝〜だけで十分",
+        "id": "N さえ + bentuk -ば = asal... saja sudah cukup",
+        "ex": "お金さえあれば　健康さえあれば"
+      }
+    ]
+  },
+  "N こそ": {
+    "title": "〜こそ の使い方",
+    "rows": [
+      {
+        "label": "形",
+        "body": "N・文節＋こそ＝まさに〜（強調）",
+        "id": "N atau frasa + こそ = justru / pasti (penekanan kuat)",
+        "ex": "明日こそ！　あなたこそ　今年こそ"
+      },
+      {
+        "label": "からこそ",
+        "body": "〜からこそ＝〜だからこそ（理由の強調）",
+        "id": "〜からこそ = justru karena... (penekanan alasan)",
+        "ex": "失敗したからこそ成長できる"
+      }
+    ]
+  },
+  "N に関して": {
+    "title": "〜に関して / に関する の接続",
+    "rows": [
+      {
+        "label": "形",
+        "body": "N＋に関して（副詞的）／N＋に関する＋N（形容詞的）",
+        "id": "N + に関して (sebagai keterangan) / N + に関する + N (sebagai kata sifat)",
+        "ex": "環境問題に関して話す / 環境問題に関する話"
+      },
+      {
+        "label": "フォーマル度",
+        "body": "について よりも硬い・書き言葉・公式な場面向け",
+        "id": "Lebih formal dari について, cocok untuk tulisan atau situasi resmi",
+        "ex": ""
+      }
+    ]
+  },
+  "N によれば": {
+    "title": "〜によれば / によると の接続",
+    "rows": [
+      {
+        "label": "形",
+        "body": "N（情報源）＋によれば／によると＋S（〜そうだ・〜らしい）",
+        "id": "N (sumber informasi) + によれば/によると + kalimat (biasanya diikuti 〜そうだ atau 〜らしい)",
+        "ex": "天気予報によれば、明日は雨らしい"
+      },
+      {
+        "label": "違い",
+        "body": "によれば＝書き言葉寄り　によると＝話し言葉でも使う",
+        "id": "によれば = lebih cocok tulisan　によると = bisa percakapan juga",
+        "ex": ""
+      }
+    ]
+  },
+  "N によって": {
+    "title": "〜によって の3つの意味",
+    "rows": [
+      {
+        "label": "①手段・方法",
+        "body": "〜を使って・〜で",
+        "id": "Dengan cara... / Melalui...",
+        "ex": "努力によって成功した"
+      },
+      {
+        "label": "②受身の行為者",
+        "body": "（受身文で）〜が行った",
+        "id": "Dalam kalimat pasif: dilakukan oleh...",
+        "ex": "シェークスピアによって書かれた"
+      },
+      {
+        "label": "③原因・違い",
+        "body": "〜のせいで・〜に依存して",
+        "id": "Tergantung... / Karena perbedaan...",
+        "ex": "人によって意見が違う"
+      }
+    ]
+  },
+  "V/A の＋助詞": {
+    "title": "〜の（名詞化）の接続",
+    "rows": [
+      {
+        "label": "動詞",
+        "body": "V 普通形＋の＋が／を／は",
+        "id": "Bentuk biasa kata kerja + の + が/を/は",
+        "ex": "泳ぐのが好き　電話するのを忘れた"
+      },
+      {
+        "label": "こと との違い",
+        "body": "の＝より具体的・感覚的\nこと＝より抽象的・形式的",
+        "id": "の = lebih konkret/indrawi　こと = lebih abstrak/formal",
+        "ex": "音楽を聴くのが好き / 読書することが大切だ"
+      }
+    ]
+  },
+  "N という N": {
+    "title": "〜という〜 の接続",
+    "rows": [
+      {
+        "label": "名前",
+        "body": "N（名前）という＋N",
+        "id": "N (nama) + という + N",
+        "ex": "田中という人　さくらという花"
+      },
+      {
+        "label": "内容",
+        "body": "S（文）という＋N",
+        "id": "S (kalimat) + という + N",
+        "ex": "合格したという知らせ　変わるという話"
+      }
+    ]
+  },
+  "S というのは": {
+    "title": "〜というのは / ということ の接続",
+    "rows": [
+      {
+        "label": "定義",
+        "body": "N／S＋というのは＝〜とはどういうことか",
+        "id": "N/S + というのは = apa yang dimaksud dengan...",
+        "ex": "「根性」というのは、強い意志のことだ"
+      },
+      {
+        "label": "確認",
+        "body": "S＋というのは本当ですか＝〜という情報は正しいか",
+        "id": "S + というのは本当ですか = apakah benar bahwa...",
+        "ex": "帰国するというのは本当ですか"
+      }
+    ]
+  },
+  "S というより": {
+    "title": "〜というより の接続",
+    "rows": [
+      {
+        "label": "形",
+        "body": "S1／N1＋というより（も）＋S2／N2",
+        "id": "S1/N1 + というより(も) + S2/N2 = lebih tepat S2 daripada S1",
+        "ex": "上手というよりプロ級だ"
+      }
+    ]
+  },
+  "N というと": {
+    "title": "〜というと / といえば の接続",
+    "rows": [
+      {
+        "label": "形",
+        "body": "N／話題＋というと／といえば",
+        "id": "N / topik + というと/といえば = kalau bicara soal...",
+        "ex": "日本食というと、すしですね"
+      },
+      {
+        "label": "反応",
+        "body": "話題を聞いてすぐ連想するものを言う表現",
+        "id": "Mengungkapkan asosiasi pertama yang muncul saat mendengar topik tersebut",
+        "ex": ""
+      }
+    ]
+  },
+  "N/S といっても": {
+    "title": "〜といっても の接続",
+    "rows": [
+      {
+        "label": "形",
+        "body": "N／S＋といっても＋（実際は〜）",
+        "id": "N/S + といっても + (kenyataannya...) = meski disebut... tapi sebenarnya...",
+        "ex": "料理ができるといっても、簡単なものだけ"
+      }
+    ]
+  },
+  "Vて＋ごらん": {
+    "title": "〜てごらん の接続",
+    "rows": [
+      {
+        "label": "形",
+        "body": "V て形＋ごらん（なさい）",
+        "id": "Bentuk て kata kerja + ごらん(なさい)",
+        "ex": "食べてごらん　やってごらん"
+      },
+      {
+        "label": "敬語レベル",
+        "body": "目上→目下 または 親しい相手への優しい勧め",
+        "id": "Digunakan dari yang lebih tua ke yang lebih muda, atau saran lembut kepada orang yang akrab",
+        "ex": ""
+      }
+    ]
+  },
+  "V＋ように言う": {
+    "title": "〜ように言う / 頼む の接続",
+    "rows": [
+      {
+        "label": "形",
+        "body": "V る形／V ない形＋ように＋言う／頼む／命令する",
+        "id": "Bentuk kamus/ない + ように + 言う/頼む = menyuruh/meminta agar...",
+        "ex": "早く来るように言った　静かにするように頼んだ"
+      },
+      {
+        "label": "間接話法",
+        "body": "「〜してください」という内容を他の人に伝える",
+        "id": "Bentuk tidak langsung untuk meneruskan perintah atau permintaan",
+        "ex": "先生は「静かに」と言った → 先生は静かにするように言った"
+      }
+    ]
+  },
+  "Vて＋くれと": {
+    "title": "〜てくれと頼まれた の接続",
+    "rows": [
+      {
+        "label": "形",
+        "body": "V て形＋くれと頼まれた／V ないで＋くれと言われた",
+        "id": "Bentuk て + くれと頼まれた / ないで + くれと言われた",
+        "ex": "教えてくれと頼まれた　来ないでくれと言われた"
+      },
+      {
+        "label": "意味",
+        "body": "「〜てくれ」という依頼を引用する",
+        "id": "Mengutip permintaan orang lain secara langsung",
+        "ex": ""
+      }
+    ]
+  },
+  "V/A て＋も": {
+    "title": "〜ても / 〜でも の接続",
+    "rows": [
+      {
+        "label": "動詞",
+        "body": "V て形＋も",
+        "id": "Bentuk て kata kerja + も",
+        "ex": "食べても　行っても　飲んでも"
+      },
+      {
+        "label": "い形容詞",
+        "body": "A く＋ても",
+        "id": "Bentuk く kata sifat -i + ても",
+        "ex": "高くても　難しくても"
+      },
+      {
+        "label": "な形容詞・名詞",
+        "body": "A な / N＋でも",
+        "id": "Kata sifat -na / kata benda + でも",
+        "ex": "元気でも　学生でも"
+      },
+      {
+        "label": "意味",
+        "body": "〜という条件でも、結果は変わらない（逆接）",
+        "id": "Meski dalam kondisi..., hasilnya tetap sama (kontras)",
+        "ex": ""
+      }
+    ]
+  },
+  "Vない形＋ずに": {
+    "title": "〜ずに / 〜ないで の接続",
+    "rows": [
+      {
+        "label": "ずに（書き言葉）",
+        "body": "V ない形（ない→ず）＋に",
+        "id": "Bentuk ない (ganti ない dengan ず) + に = lebih formal/tulisan",
+        "ex": "食べずに　行かずに　見ずに"
+      },
+      {
+        "label": "ないで（話し言葉）",
+        "body": "V ない形＋で",
+        "id": "Bentuk ない + で = lebih umum, percakapan",
+        "ex": "食べないで　行かないで"
+      },
+      {
+        "label": "※特殊",
+        "body": "する → せずに　くる → こずに",
+        "id": "Tidak beraturan: する → せずに　くる → こずに",
+        "ex": ""
+      }
+    ]
+  },
+  "N として": {
+    "title": "〜として / としては の接続",
+    "rows": [
+      {
+        "label": "形",
+        "body": "N＋として（＋動詞）",
+        "id": "N + として + kata kerja",
+        "ex": "代表として参加する　ボランティアとして働く"
+      },
+      {
+        "label": "としては",
+        "body": "N＋としては＝〜の立場・観点から見ると",
+        "id": "N + としては = dari sudut pandang sebagai...",
+        "ex": "先生としては、もっと頑張ってほしい"
+      }
+    ]
+  },
+  "N/V にしては": {
+    "title": "〜にしては の接続",
+    "rows": [
+      {
+        "label": "形",
+        "body": "N／V 普通形＋にしては",
+        "id": "N / Bentuk biasa kata kerja + にしては",
+        "ex": "子どもにしては　初めてにしては"
+      },
+      {
+        "label": "意味",
+        "body": "〜を基準として考えたとき、予想と違う結果",
+        "id": "Mengingat standar/kondisi..., hasilnya di luar ekspektasi (biasanya positif)",
+        "ex": ""
+      }
+    ]
+  },
+  "N/S にしても": {
+    "title": "〜にしても の接続",
+    "rows": [
+      {
+        "label": "形",
+        "body": "N／S＋にしても＝〜であっても（譲歩）",
+        "id": "N/S + にしても = sekalipun... / bahkan kalau...",
+        "ex": "冗談にしても　100円にしても"
+      },
+      {
+        "label": "〜にしても〜にしても",
+        "body": "A にしても B にしても＝AでもBでもどちらでも",
+        "id": "A にしても B にしても = apakah A atau B, keduanya...",
+        "ex": "行くにしても行かないにしても"
+      }
+    ]
+  },
+  "S としたら": {
+    "title": "〜としたら / とすれば の接続",
+    "rows": [
+      {
+        "label": "形",
+        "body": "S（普通形）＋としたら／とすれば／とすると",
+        "id": "S (bentuk biasa) + としたら/とすれば = kalau seandainya...",
+        "ex": "本当だとしたら　行くとすれば"
+      },
+      {
+        "label": "意味",
+        "body": "仮定・仮想の状況を設定して話す",
+        "id": "Menetapkan kondisi hipotetis untuk membicarakan sesuatu",
+        "ex": ""
+      }
+    ]
+  },
+  "V る/ない＋つもり": {
+    "title": "〜つもりだ の接続",
+    "rows": [
+      {
+        "label": "形",
+        "body": "V る形／V ない形＋つもりだ",
+        "id": "Bentuk kamus / bentuk ない + つもりだ",
+        "ex": "行くつもりだ　行かないつもりだ"
+      },
+      {
+        "label": "つもりだった",
+        "body": "V る形／V ない形＋つもりだった＝（実際はしなかった）計画",
+        "id": "+ つもりだった = tadinya berniat... (tapi kenyataannya tidak terlaksana)",
+        "ex": "勉強するつもりだったが、寝てしまった"
+      }
+    ]
+  },
+  "V/A/N はずだ": {
+    "title": "〜はずだ の接続",
+    "rows": [
+      {
+        "label": "動詞",
+        "body": "V 普通形＋はずだ",
+        "id": "Bentuk biasa kata kerja + はずだ",
+        "ex": "来るはずだ　行ったはずだ"
+      },
+      {
+        "label": "い形容詞",
+        "body": "A い＋はずだ",
+        "id": "Kata sifat -i + はずだ",
+        "ex": "寒いはずだ"
+      },
+      {
+        "label": "な形容詞・名詞",
+        "body": "A な／N の＋はずだ",
+        "id": "Kata sifat -na / N + の + はずだ",
+        "ex": "元気なはずだ　学生のはずだ"
+      },
+      {
+        "label": "はずがない",
+        "body": "〜はずがない＝絶対〜ではない（強い否定）",
+        "id": "+ はずがない = tidak mungkin... (penyangkalan kuat)",
+        "ex": "そんなはずがない　来るはずがない"
+      }
+    ]
+  },
+  "V る＋べきだ": {
+    "title": "〜べきだ の接続",
+    "rows": [
+      {
+        "label": "形",
+        "body": "V る形＋べきだ（する→すべきだ）",
+        "id": "Bentuk kamus kata kerja + べきだ (する → すべきだ)",
+        "ex": "守るべきだ　努力すべきだ"
+      },
+      {
+        "label": "否定",
+        "body": "V る形＋べきではない",
+        "id": "Bentuk kamus + べきではない = seharusnya tidak...",
+        "ex": "嘘をつくべきではない"
+      },
+      {
+        "label": "ニュアンス",
+        "body": "道徳・義務・強い勧め。目上の人には使いにくい",
+        "id": "Kewajiban moral atau saran kuat. Hindari kepada orang yang lebih tua/berpangkat",
+        "ex": ""
+      }
+    ]
+  },
+  "Vた＋ものだ": {
+    "title": "〜たものだ の接続",
+    "rows": [
+      {
+        "label": "形",
+        "body": "V た形＋ものだ",
+        "id": "Bentuk -た kata kerja + ものだ",
+        "ex": "よく遊んだものだ　泣いたものだ"
+      },
+      {
+        "label": "意味",
+        "body": "昔よくしたことへの懐かしさ・感慨",
+        "id": "Nostalgia atas kebiasaan atau pengalaman masa lalu",
+        "ex": ""
+      }
+    ]
+  },
+  "V る・N の＋ついでに": {
+    "title": "〜ついでに の接続",
+    "rows": [
+      {
+        "label": "形",
+        "body": "V る形／V た形＋ついでに　N の＋ついでに",
+        "id": "Bentuk kamus/た kata kerja + ついでに / N の + ついでに",
+        "ex": "行くついでに　行ったついでに　散歩のついでに"
+      },
+      {
+        "label": "意味",
+        "body": "主な行動のついでに、別の行動もする",
+        "id": "Melakukan tindakan lain sambil/setelah melakukan tindakan utama",
+        "ex": ""
+      }
+    ]
+  },
+  "V る・N の＋たびに": {
+    "title": "〜たびに の接続",
+    "rows": [
+      {
+        "label": "形",
+        "body": "V る形＋たびに　N の＋たびに",
+        "id": "Bentuk kamus kata kerja + たびに / N の + たびに",
+        "ex": "会うたびに　試験のたびに"
+      },
+      {
+        "label": "意味",
+        "body": "〜するたびに必ず〜する（反復）",
+        "id": "Setiap kali... selalu... (berulang setiap terjadi)",
+        "ex": ""
+      }
+    ]
+  },
+  "Vた＋とたんに": {
+    "title": "〜たとたん（に）の接続",
+    "rows": [
+      {
+        "label": "形",
+        "body": "V た形＋とたん（に）",
+        "id": "Bentuk -た kata kerja + とたん(に)",
+        "ex": "開けたとたん　乗ったとたんに"
+      },
+      {
+        "label": "意味",
+        "body": "〜した瞬間に、すぐ次のことが起きた",
+        "id": "Tepat saat... langsung terjadi... (kejadian yang sangat cepat beruntun)",
+        "ex": ""
+      }
+    ]
+  },
+  "V る/た・N の＋とおりに": {
+    "title": "〜とおりに の接続",
+    "rows": [
+      {
+        "label": "形",
+        "body": "V る形／V た形＋とおりに　N の＋とおりに",
+        "id": "Bentuk kamus/た + とおりに / N の + とおりに",
+        "ex": "言ったとおりに　地図のとおりに"
+      },
+      {
+        "label": "意味",
+        "body": "〜と完全に同じように・〜に従って",
+        "id": "Persis sesuai dengan... / Mengikuti... apa adanya",
+        "ex": ""
+      }
+    ]
+  },
+  "Vた/ない＋まま": {
+    "title": "〜たまま / 〜ないまま の接続",
+    "rows": [
+      {
+        "label": "〜たまま",
+        "body": "V た形＋まま＝〜した状態が変わらず続く",
+        "id": "Bentuk -た + まま = tetap dalam keadaan setelah melakukan...",
+        "ex": "テレビをつけたまま寝た　靴をはいたまま入った"
+      },
+      {
+        "label": "〜ないまま",
+        "body": "V ない形＋まま＝〜しない状態が続く",
+        "id": "Bentuk ない + まま = tetap dalam keadaan tidak melakukan...",
+        "ex": "宿題をしないまま学校へ行った"
+      }
+    ]
+  },
+  "Vます形＋っぱなし": {
+    "title": "〜っぱなし の接続",
+    "rows": [
+      {
+        "label": "形",
+        "body": "V ます形（ます を取る）＋っぱなし",
+        "id": "Bentuk ます kata kerja (hapus ます) + っぱなし",
+        "ex": "つける→つけっぱなし　開ける→開けっぱなし　出す→出しっぱなし"
+      },
+      {
+        "label": "ニュアンス",
+        "body": "本来やめるべき状態が続いている（否定的）",
+        "id": "Keadaan yang seharusnya diubah/dihentikan tapi terus dibiarkan (nuansa negatif)",
+        "ex": ""
+      }
+    ]
+  },
+  "Vて＋ほしい": {
+    "title": "〜てほしい の接続",
+    "rows": [
+      {
+        "label": "形",
+        "body": "V て形＋ほしい",
+        "id": "Bentuk て kata kerja + ほしい",
+        "ex": "来てほしい　助けてほしい"
+      },
+      {
+        "label": "否定",
+        "body": "V て形＋ほしくない / V ないで＋ほしい",
+        "id": "Bentuk て + ほしくない / bentuk ないで + ほしい = tidak ingin orang lain melakukan...",
+        "ex": "来てほしくない　怒らないでほしい"
+      },
+      {
+        "label": "てもらいたい",
+        "body": "〜てほしい の丁寧な言い方",
+        "id": "Bentuk yang lebih sopan dari 〜てほしい",
+        "ex": "もう少し待ってもらいたいのですが"
+      }
+    ]
+  },
+  "A/V＋がる": {
+    "title": "〜がる / たがる の接続",
+    "rows": [
+      {
+        "label": "がる",
+        "body": "A い（い→）＋がる　例：怖い→怖がる",
+        "id": "Kata sifat -i (hapus い) + がる",
+        "ex": "怖がる　痛がる　珍しがる"
+      },
+      {
+        "label": "たがる",
+        "body": "V たい（たい→）＋がる",
+        "id": "Kata kerja + たい (hapus たい) + がる",
+        "ex": "食べたがる　行きたがる　欲しがる"
+      },
+      {
+        "label": "意味",
+        "body": "第三者が〜という感情を外から見て表す",
+        "id": "Menunjukkan perasaan atau keinginan orang ketiga yang terlihat dari luar (bukan diri sendiri)",
+        "ex": ""
+      }
+    ]
+  },
+  "V/N の＋ふりをする": {
+    "title": "〜ふりをする の接続",
+    "rows": [
+      {
+        "label": "動詞",
+        "body": "V 普通形＋ふりをする",
+        "id": "Bentuk biasa kata kerja + ふりをする",
+        "ex": "知っているふりをする　寝ているふりをする"
+      },
+      {
+        "label": "名詞",
+        "body": "N の＋ふりをする",
+        "id": "N の + ふりをする",
+        "ex": "学生のふりをする　病気のふりをする"
+      }
+    ]
+  },
+  "S＋っけ": {
+    "title": "〜だっけ / っけ の接続",
+    "rows": [
+      {
+        "label": "動詞・形容詞",
+        "body": "普通形＋っけ",
+        "id": "Bentuk biasa + っけ",
+        "ex": "来るんだっけ？　行ったっけ？"
+      },
+      {
+        "label": "名詞・な形容詞",
+        "body": "N／A な＋だっけ",
+        "id": "N / Kata sifat -na + だっけ",
+        "ex": "来週だっけ？　元気だっけ？"
+      },
+      {
+        "label": "場面",
+        "body": "忘れたことを確認・思い出そうとする（インフォーマル）",
+        "id": "Digunakan untuk mengkonfirmasi atau mencoba mengingat sesuatu (informal)",
+        "ex": ""
+      }
+    ]
+  },
+  "V る＋しかない": {
+    "title": "〜しかない の接続",
+    "rows": [
+      {
+        "label": "形",
+        "body": "V る形＋しかない",
+        "id": "Bentuk kamus kata kerja + しかない",
+        "ex": "行くしかない　待つしかない"
+      },
+      {
+        "label": "名詞",
+        "body": "N＋しかない＝〜だけしかない（量が少ない）",
+        "id": "N + しかない = hanya ada... (jumlah yang sedikit)",
+        "ex": "100円しかない"
+      },
+      {
+        "label": "意味",
+        "body": "他に選択肢がない（諦め・決意）",
+        "id": "Tidak ada pilihan lain (pasrah atau tekad)",
+        "ex": ""
+      }
+    ]
+  },
+  "S＋んだって": {
+    "title": "〜んだって / だって の接続",
+    "rows": [
+      {
+        "label": "形",
+        "body": "S 普通形＋んだって（＝〜んだそうだ）",
+        "id": "S bentuk biasa + んだって = katanya... (dari orang lain, informal)",
+        "ex": "行くんだって　結婚したんだって"
+      },
+      {
+        "label": "名詞・な形容詞",
+        "body": "N／A な＋なんだって",
+        "id": "N / Kata sifat -na + なんだって",
+        "ex": "休みなんだって　元気なんだって"
+      }
+    ]
+  },
+  "V使役受身形": {
+    "title": "使役受身形の作り方 / Cara Membuat Bentuk Kausatif-Pasif",
+    "rows": [
+      {
+        "label": "グループ1",
+        "body": "語尾をあ段に変えて＋される",
+        "id": "Ubah akhiran ke baris -a lalu tambah される",
+        "ex": "飲む → 飲まされる　書く → 書かされる"
+      },
+      {
+        "label": "グループ1（短縮形）",
+        "body": "〜させられる → 〜される（す動詞を除く）",
+        "id": "Bentuk pendek (kecuali kata kerja berakhiran す)",
+        "ex": "待たされる（待たせられる）　飲まされる"
+      },
+      {
+        "label": "グループ2",
+        "body": "語尾のる を取って＋させられる",
+        "id": "Hapus る lalu tambah させられる",
+        "ex": "食べる → 食べさせられる"
+      },
+      {
+        "label": "不規則",
+        "body": "する → させられる　くる → こさせられる",
+        "id": "Tidak beraturan",
+        "ex": "練習させられる　来させられる"
+      },
+      {
+        "label": "意味",
+        "body": "他の人に〜することを強制された（迷惑感）",
+        "id": "Dipaksa oleh orang lain untuk melakukan... (nuansa terpaksa/tidak enak)",
+        "ex": ""
+      }
+    ]
+  },
+  "Vて＋くる/いく": {
+    "title": "〜てくる / 〜ていく の意味",
+    "rows": [
+      {
+        "label": "移動①てくる",
+        "body": "〜してから戻ってくる",
+        "id": "Pergi melakukan... lalu kembali",
+        "ex": "コンビニに行って買ってきた"
+      },
+      {
+        "label": "移動②ていく",
+        "body": "〜してからその場を離れる",
+        "id": "Pergi melakukan... tanpa kembali ke sini",
+        "ex": "弁当を持っていく"
+      },
+      {
+        "label": "変化①てくる",
+        "body": "変化が今に向かって進んでいる",
+        "id": "Perubahan yang menuju ke sekarang (semakin...)",
+        "ex": "寒くなってきた　わかってきた"
+      },
+      {
+        "label": "変化②ていく",
+        "body": "変化がこれから先に向かって進む",
+        "id": "Perubahan yang akan terus berlanjut ke depan",
+        "ex": "暖かくなっていく　増えていく"
+      }
+    ]
+  },
+  "Vて/A くて＋たまらない": {
+    "title": "〜てたまらない の接続",
+    "rows": [
+      {
+        "label": "動詞",
+        "body": "V て形＋たまらない",
+        "id": "Bentuk て kata kerja + たまらない",
+        "ex": "心配でたまらない"
+      },
+      {
+        "label": "い形容詞",
+        "body": "A く＋てたまらない",
+        "id": "Bentuk く kata sifat -i + てたまらない",
+        "ex": "眠くてたまらない　嬉しくてたまらない"
+      },
+      {
+        "label": "な形容詞",
+        "body": "A な で＋たまらない",
+        "id": "Kata sifat -na + でたまらない",
+        "ex": "不安でたまらない"
+      },
+      {
+        "label": "意味",
+        "body": "感情や感覚が非常に強くて我慢できない",
+        "id": "Perasaan atau sensasi yang sangat kuat dan tidak tertahankan",
+        "ex": ""
+      }
+    ]
+  },
+  "Vて/A くて＋ならない": {
+    "title": "〜てならない の接続",
+    "rows": [
+      {
+        "label": "形",
+        "body": "V て形／A く＋てならない（たまらない と同形）",
+        "id": "Bentuk て kata kerja / bentuk く kata sifat + てならない",
+        "ex": "悲しくてならない　気になってならない"
+      },
+      {
+        "label": "違い（たまらないとの）",
+        "body": "ならない＝自然に湧いてくる感情\nたまらない＝意識的に強く感じる感情",
+        "id": "ならない = perasaan yang muncul secara alami\nたまらない = perasaan yang sangat kuat dan disadari",
+        "ex": ""
+      }
+    ]
+  },
+  "N さえ＋V ば": {
+    "title": "〜さえ〜ば の接続",
+    "rows": [
+      {
+        "label": "形",
+        "body": "N さえ＋V ば形",
+        "id": "N さえ + bentuk -ば kata kerja",
+        "ex": "お金さえあれば　あなたさえいれば"
+      },
+      {
+        "label": "ば形の作り方",
+        "body": "V る形の語尾を え段に変えて＋ば",
+        "id": "Ubah akhiran kata kerja ke baris -e lalu tambah ば",
+        "ex": "ある→あれば　いる→いれば　できる→できれば"
+      }
+    ]
+  },
+  "どうせ＋S": {
+    "title": "どうせ の使い方",
+    "rows": [
+      {
+        "label": "形",
+        "body": "どうせ＋（否定的な結論）",
+        "id": "どうせ + (kesimpulan negatif)",
+        "ex": "どうせ無理だ　どうせ失敗する"
+      },
+      {
+        "label": "どうせなら",
+        "body": "どうせなら＝〜するなら、せめて〜",
+        "id": "どうせなら = kalau memang begitu, sekalian saja...",
+        "ex": "どうせなら最初からやり直そう"
+      }
+    ]
+  },
+  "S わけだ": {
+    "title": "〜わけだ / わけがない の接続",
+    "rows": [
+      {
+        "label": "形",
+        "body": "S 普通形＋わけだ",
+        "id": "S bentuk biasa + わけだ = pantas saja / berarti...",
+        "ex": "毎日練習しているわけだ"
+      },
+      {
+        "label": "わけがない",
+        "body": "S 普通形＋わけがない＝絶対〜ない",
+        "id": "S bentuk biasa + わけがない = tidak mungkin...",
+        "ex": "そんなことがあるわけがない"
+      },
+      {
+        "label": "わけではない",
+        "body": "S 普通形＋わけではない＝必ずしも〜ではない",
+        "id": "S + わけではない = bukan berarti...",
+        "ex": "嫌いなわけではない"
+      }
+    ]
+  },
+  "V ば＋よかった": {
+    "title": "〜ばよかった の接続",
+    "rows": [
+      {
+        "label": "形",
+        "body": "V ば形＋よかった",
+        "id": "Bentuk -ば kata kerja + よかった",
+        "ex": "勉強すればよかった　言えばよかった"
+      },
+      {
+        "label": "ば形の作り方",
+        "body": "グループ1：語尾を え段＋ば　グループ2：る→れば",
+        "id": "Grup 1: ubah akhiran ke え段 + ば / Grup 2: る → れば",
+        "ex": "行く→行けば　食べる→食べれば　する→すれば"
+      }
+    ]
+  },
+  "どうりで＋S": {
+    "title": "どうりで の使い方",
+    "rows": [
+      {
+        "label": "形",
+        "body": "どうりで＋（驚き・納得の内容）＋はずだ／わけだ",
+        "id": "どうりで + isi yang mengejutkan/menyadarkan + はずだ/わけだ",
+        "ex": "どうりで上手なわけだ　どうりで静かだと思ったら"
+      },
+      {
+        "label": "意味",
+        "body": "原因・理由を知って納得する（「なるほど！」）",
+        "id": "Menyadari alasan sesuatu dan merasa 'oh pantas saja!'",
+        "ex": ""
+      }
+    ]
+  },
+  "副詞": {
+    "title": "やっと / ようやく / なかなか〜ない",
+    "rows": [
+      {
+        "label": "やっと",
+        "body": "長い時間や努力の後、ついに実現（日常会話）",
+        "id": "Setelah waktu lama atau usaha keras, akhirnya terwujud (percakapan)",
+        "ex": "やっと合格した　やっと終わった"
+      },
+      {
+        "label": "ようやく",
+        "body": "やっと と同義だが、やや書き言葉・丁寧",
+        "id": "Sama dengan やっと, tapi lebih formal/tulisan",
+        "ex": "ようやく完成した"
+      },
+      {
+        "label": "なかなか〜ない",
+        "body": "期待しているのに、なかなか〜しない（歯がゆさ）",
+        "id": "Diharapkan terjadi tapi tidak kunjung terjadi (rasa tidak sabar)",
+        "ex": "なかなか来ない　なかなか覚えられない"
+      }
+    ]
+  },
+  "N/V る＋まで(に)": {
+    "title": "〜まで / 〜までに の違い",
+    "rows": [
+      {
+        "label": "〜まで",
+        "body": "V る形／N＋まで＝〜が終わるまで（継続）",
+        "id": "Bentuk kamus/N + まで = sampai (titik berakhir, tindakan berlanjut)",
+        "ex": "雨が止むまで待つ　12時まで働く"
+      },
+      {
+        "label": "〜までに",
+        "body": "V る形／N＋までに＝〜の前に（期限）",
+        "id": "Bentuk kamus/N + までに = paling lambat sebelum... (batas waktu)",
+        "ex": "3時までに来てください　明日までに出す"
+      }
+    ]
+  },
+  "N から N にかけて": {
+    "title": "〜から〜にかけて の接続",
+    "rows": [
+      {
+        "label": "形",
+        "body": "N（開始）から＋N（終了）にかけて",
+        "id": "N (awal) から + N (akhir) にかけて = dari... hingga...",
+        "ex": "朝から昼にかけて　北海道から東北にかけて"
+      },
+      {
+        "label": "〜から〜までとの違い",
+        "body": "にかけて＝幅・範囲のイメージ（境界が曖昧）\nまで＝明確な終点",
+        "id": "にかけて = rentang/gradasi (batas tidak jelas)\nまで = titik akhir yang jelas",
+        "ex": ""
+      }
+    ]
+  },
+  "V/A＋すぎる": {
+    "title": "〜すぎる の接続",
+    "rows": [
+      {
+        "label": "動詞",
+        "body": "V ます形（ます を取る）＋すぎる",
+        "id": "Bentuk ます kata kerja (hapus ます) + すぎる",
+        "ex": "食べすぎる　飲みすぎる　働きすぎる"
+      },
+      {
+        "label": "い形容詞",
+        "body": "A い（い を取る）＋すぎる",
+        "id": "Kata sifat -i (hapus い) + すぎる",
+        "ex": "高すぎる　難しすぎる"
+      },
+      {
+        "label": "な形容詞",
+        "body": "A な（な を取る）＋すぎる",
+        "id": "Kata sifat -na (hapus な) + すぎる",
+        "ex": "元気すぎる　静かすぎる"
+      }
+    ]
+  },
+  "あまりにも": {
+    "title": "あまりにも〜 の使い方",
+    "rows": [
+      {
+        "label": "形",
+        "body": "あまりにも＋形容詞／副詞（強調）",
+        "id": "あまりにも + kata sifat/keterangan = terlalu... (penekanan kuat)",
+        "ex": "あまりにも高すぎる　あまりにもひどい"
+      },
+      {
+        "label": "あまり〜ない",
+        "body": "あまり＋否定＝それほど〜ない（部分否定）",
+        "id": "あまり + negatif = tidak terlalu... (negasi sebagian)",
+        "ex": "あまり好きじゃない　あまり来ない"
+      }
+    ]
+  },
+  "V ば＋V ほど": {
+    "title": "〜ば〜ほど の接続",
+    "rows": [
+      {
+        "label": "形",
+        "body": "V ば形＋同じV 辞書形＋ほど",
+        "id": "Bentuk -ば kata kerja + kata kerja bentuk kamus yang sama + ほど",
+        "ex": "読めば読むほど　練習すればするほど"
+      },
+      {
+        "label": "形容詞",
+        "body": "A ければ＋同じA ＋ほど",
+        "id": "Bentuk -ければ kata sifat + kata sifat yang sama + ほど",
+        "ex": "早ければ早いほど　多ければ多いほど"
+      },
+      {
+        "label": "意味",
+        "body": "〜するにつれて、さらに〜になる（比例関係）",
+        "id": "Semakin... semakin... (hubungan berbanding lurus)",
+        "ex": ""
+      }
+    ]
+  },
+  "N まで(も)": {
+    "title": "〜まで（も）〔強調〕の使い方",
+    "rows": [
+      {
+        "label": "形",
+        "body": "N＋まで（も）＝意外なものも含む（強調）",
+        "id": "N + まで(も) = bahkan... pun (penekanan, sesuatu yang tidak terduga juga termasuk)",
+        "ex": "ネコまで喜んでいる　子どもまで知っている"
+      }
+    ]
+  },
+  "V る/ない＋ことにする": {
+    "title": "〜ことにする / ことになる の違い",
+    "rows": [
+      {
+        "label": "ことにする",
+        "body": "V る形／ない形＋ことにする＝自分の意志で決める",
+        "id": "Bentuk kamus/ない + ことにする = memutuskan sendiri atas kemauan sendiri",
+        "ex": "毎朝走ることにした　お酒を飲まないことにした"
+      },
+      {
+        "label": "ことになる",
+        "body": "V る形／ない形＋ことになる＝外の力で決まった",
+        "id": "Bentuk kamus/ない + ことになる = diputuskan oleh situasi atau pihak luar",
+        "ex": "転勤することになった　会議が変わることになった"
+      }
+    ]
+  },
+  "V る/ない＋ことになる": {
+    "title": "〜ことになる の接続",
+    "rows": [
+      {
+        "label": "形",
+        "body": "V る形／ない形＋ことになる（なった）",
+        "id": "Bentuk kamus/ない + ことになる(なった)",
+        "ex": "参加することになった　使わないことになった"
+      },
+      {
+        "label": "意味",
+        "body": "自分の意志でなく、状況・規則・他者の決定により",
+        "id": "Bukan atas kemauan sendiri, tapi karena situasi, aturan, atau keputusan pihak lain",
+        "ex": ""
+      }
+    ]
+  },
+  "Vて＋からでないと": {
+    "title": "〜てからでないと の接続",
+    "rows": [
+      {
+        "label": "形",
+        "body": "V て形＋からでないと／でなければ＋〜できない",
+        "id": "Bentuk て kata kerja + からでないと/でなければ + tidak bisa...",
+        "ex": "見てからでないと決められない"
+      },
+      {
+        "label": "意味",
+        "body": "前の行動が完了しないと、次の行動ができない",
+        "id": "Tindakan berikutnya tidak bisa dilakukan sebelum tindakan sebelumnya selesai",
+        "ex": ""
+      }
+    ]
+  },
+  "Vた＋ところ": {
+    "title": "〜たところ の接続",
+    "rows": [
+      {
+        "label": "形",
+        "body": "V た形＋ところ（だ）",
+        "id": "Bentuk -た kata kerja + ところ(だ)",
+        "ex": "聞いたところ〜だった　今着いたところです"
+      },
+      {
+        "label": "①〜した直後",
+        "body": "今まさに〜が終わった（現在完了的）",
+        "id": "Baru saja selesai melakukan... (tepat selesai)",
+        "ex": "今、帰ってきたところです"
+      },
+      {
+        "label": "②〜してみたら",
+        "body": "試みた結果、〜とわかった",
+        "id": "Setelah mencoba, ternyata...",
+        "ex": "電話したところ、留守だった"
+      }
+    ]
+  },
+  "もう少しで＋V るところだった": {
+    "title": "〜ところだった の接続",
+    "rows": [
+      {
+        "label": "形",
+        "body": "もう少しで／あと少しで＋V 辞書形＋ところだった",
+        "id": "もう少しで/あと少しで + bentuk kamus kata kerja + ところだった",
+        "ex": "もう少しで遅刻するところだった"
+      },
+      {
+        "label": "意味",
+        "body": "危険・問題な状況が起きそうだったが、実際は起きなかった",
+        "id": "Situasi berbahaya atau bermasalah hampir terjadi, tapi akhirnya tidak terjadi",
+        "ex": ""
+      }
+    ]
+  },
+  "Vて＋はじめて": {
+    "title": "〜てはじめて の接続",
+    "rows": [
+      {
+        "label": "形",
+        "body": "V て形＋はじめて＋（結果・気づき）",
+        "id": "Bentuk て kata kerja + はじめて + (hasil/kesadaran)",
+        "ex": "失って初めてわかる　病気になって初めて気づいた"
+      },
+      {
+        "label": "意味",
+        "body": "〜するまでは不可能・不明だったが、〜してようやく可能・明確になった",
+        "id": "Sebelum melakukan tidak bisa/tidak tahu, baru setelah melakukan menjadi bisa/tahu",
+        "ex": ""
+      }
+    ]
+  },
+  "S としても": {
+    "title": "〜としても の接続",
+    "rows": [
+      {
+        "label": "形",
+        "body": "S 普通形＋としても（＝たとえ〜でも）",
+        "id": "S bentuk biasa + としても = sekalipun... / meskipun...",
+        "ex": "合格したとしても　失敗したとしても"
+      },
+      {
+        "label": "にしても との違い",
+        "body": "としても＝仮定条件（仮に〜だとしても）\nにしても＝実際の状況（〜の場合でも）",
+        "id": "としても = kondisi hipotetis　にしても = situasi nyata",
+        "ex": ""
+      }
+    ]
+  },
+  "V た/N の＋あげく": {
+    "title": "〜あげく（に）の接続",
+    "rows": [
+      {
+        "label": "形",
+        "body": "V た形＋あげく（に）　N の＋あげく（に）",
+        "id": "Bentuk -た kata kerja + あげく(に) / N の + あげく(に)",
+        "ex": "迷ったあげく　長い議論のあげく"
+      },
+      {
+        "label": "意味・ニュアンス",
+        "body": "長い過程の末、（望まない・否定的な）結果になった",
+        "id": "Setelah proses panjang, ujung-ujungnya... (biasanya hasil yang tidak diinginkan/negatif)",
+        "ex": ""
+      }
+    ]
+  },
+  "S にしろ": {
+    "title": "〜にしろ / にせよ / にしても の接続",
+    "rows": [
+      {
+        "label": "形",
+        "body": "S 普通形＋にしろ／にせよ／にしても",
+        "id": "S bentuk biasa + にしろ/にせよ/にしても = apapun kondisinya...",
+        "ex": "行くにしろ行かないにしろ"
+      },
+      {
+        "label": "使い分け",
+        "body": "にしろ＝口語寄り　にせよ＝書き言葉寄り　にしても＝両方OK",
+        "id": "にしろ = lebih lisan　にせよ = lebih tulisan　にしても = keduanya OK",
+        "ex": ""
+      }
+    ]
+  },
+  "V/A/N どころか": {
+    "title": "〜どころか の接続",
+    "rows": [
+      {
+        "label": "形",
+        "body": "V 普通形／A い／A な／N＋どころか",
+        "id": "Bentuk biasa kata kerja / kata sifat / kata benda + どころか",
+        "ex": "やめるどころか　上手どころか　冗談どころか"
+      },
+      {
+        "label": "意味",
+        "body": "〜は全然なくて、むしろ正反対・それ以上",
+        "id": "Bukannya... malah sebaliknya / jauh melampaui perkiraan (positif atau negatif)",
+        "ex": ""
+      }
+    ]
+  },
+  "V/N どころではない": {
+    "title": "〜どころではない の接続",
+    "rows": [
+      {
+        "label": "形",
+        "body": "V 辞書形／N＋どころではない（じゃない）",
+        "id": "Bentuk kamus kata kerja / N + どころではない(じゃない)",
+        "ex": "旅行どころではない　食事どころじゃない"
+      },
+      {
+        "label": "意味",
+        "body": "今の状況では〜する余裕・可能性が全くない",
+        "id": "Dalam situasi sekarang, tidak ada kesempatan / tidak memungkinkan sama sekali untuk...",
+        "ex": ""
+      }
+    ]
+  }
+}
