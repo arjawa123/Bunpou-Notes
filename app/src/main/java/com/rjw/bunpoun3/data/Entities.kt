@@ -67,6 +67,16 @@ data class LessonProgressEntity(
     val isDone: Boolean,
 )
 
+@Entity(tableName = "quiz_progress")
+data class QuizProgressEntity(
+    @PrimaryKey val dayId: Int,
+    val attempts: Int,
+    val bestPercentage: Int,
+    val lastPercentage: Int,
+    val passed: Boolean,
+    val updatedAt: Long,
+)
+
 @Entity(tableName = "settings")
 data class SettingEntity(
     @PrimaryKey val key: String,

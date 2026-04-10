@@ -7,6 +7,7 @@ import com.rjw.bunpoun3.model.WeekSeed
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.serialization.json.Json
+import kotlin.math.max
 
 class AppRepository private constructor(
     private val context: Context,
@@ -20,6 +21,20 @@ class AppRepository private constructor(
 
     fun observeSettings(): Flow<Map<String, String>> =
         dao.observeSettings().map { items -> items.associate { it.key to it.value } }
+
+    fun observeQuizProgress(): Flow<Map<Int, DayQuizProgress>> =
+        dao.observeQuizProgress().map { items ->
+            items.associate { entity ->
+                entity.dayId to DayQuizProgress(
+                    dayId = entity.dayId,
+                    attempts = entity.attempts,
+                    bestPercentage = entity.bestPercentage,
+                    lastPercentage = entity.lastPercentage,
+                    passed = entity.passed,
+                    updatedAt = entity.updatedAt,
+                )
+            }
+        }
 
     suspend fun ensureSeeded() {
         if (dao.weekCount() > 0) return
@@ -169,6 +184,27 @@ class AppRepository private constructor(
         if (done) dao.upsertProgress(LessonProgressEntity(dayId, true)) else dao.deleteProgress(dayId)
     }
 
+    suspend fun recordDayQuizResult(
+        dayId: Int,
+        percentage: Int,
+        passed: Boolean,
+    ) {
+        val current = dao.getQuizProgress(dayId)
+        dao.upsertQuizProgress(
+            QuizProgressEntity(
+                dayId = dayId,
+                attempts = (current?.attempts ?: 0) + 1,
+                bestPercentage = max(current?.bestPercentage ?: 0, percentage),
+                lastPercentage = percentage,
+                passed = current?.passed == true || passed,
+                updatedAt = System.currentTimeMillis(),
+            ),
+        )
+        if (passed) {
+            dao.upsertProgress(LessonProgressEntity(dayId = dayId, isDone = true))
+        }
+    }
+
     suspend fun setSetting(key: String, value: String) {
         dao.upsertSetting(SettingEntity(key, value))
     }
@@ -182,7 +218,7 @@ class AppRepository private constructor(
                 context,
                 AppDatabase::class.java,
                 "bunpou_n3.db",
-            ).build()
+            ).addMigrations(MIGRATION_1_2).build()
             return AppRepository(context.applicationContext, db)
         }
 
@@ -239,4 +275,13 @@ data class CatalogVerbFormRow(
     val body: String,
     val bodyId: String,
     val example: String,
+)
+
+data class DayQuizProgress(
+    val dayId: Int,
+    val attempts: Int,
+    val bestPercentage: Int,
+    val lastPercentage: Int,
+    val passed: Boolean,
+    val updatedAt: Long,
 )

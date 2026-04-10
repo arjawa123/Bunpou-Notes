@@ -56,6 +56,15 @@ interface AppDao {
     @Query("DELETE FROM lesson_progress WHERE dayId = :dayId")
     suspend fun deleteProgress(dayId: Int)
 
+    @Query("SELECT * FROM quiz_progress")
+    fun observeQuizProgress(): Flow<List<QuizProgressEntity>>
+
+    @Query("SELECT * FROM quiz_progress WHERE dayId = :dayId LIMIT 1")
+    suspend fun getQuizProgress(dayId: Int): QuizProgressEntity?
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun upsertQuizProgress(item: QuizProgressEntity)
+
     @Query("SELECT * FROM settings")
     fun observeSettings(): Flow<List<SettingEntity>>
 
