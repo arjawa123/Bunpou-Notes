@@ -5,6 +5,7 @@ import android.app.Application
 import android.content.Context
 import android.content.ContextWrapper
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -20,6 +21,7 @@ import androidx.compose.animation.scaleOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.animation.togetherWith
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -59,7 +61,6 @@ import androidx.compose.material.icons.filled.Quiz
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.TextFields
 import androidx.compose.material.icons.filled.Translate
-import androidx.compose.material3.AssistChip
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -68,8 +69,6 @@ import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FilledIconButton
-import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.HorizontalDivider
@@ -94,16 +93,23 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.PathEffect
+import androidx.compose.ui.graphics.drawscope.Fill
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.lerp
-import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.Placeable
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -123,6 +129,8 @@ import com.rjw.bunpoun3.data.Catalog
 import com.rjw.bunpoun3.data.CatalogDay
 import com.rjw.bunpoun3.data.CatalogExample
 import com.rjw.bunpoun3.data.CatalogGrammar
+import com.rjw.bunpoun3.data.CatalogVerbForm
+import com.rjw.bunpoun3.data.CatalogVerbFormRow
 import com.rjw.bunpoun3.data.CatalogWeek
 import com.rjw.bunpoun3.data.DayQuizProgress
 import com.rjw.bunpoun3.ui.theme.BunpouTheme
@@ -136,6 +144,16 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlin.math.max
 import kotlin.random.Random
+
+private val JapaneseTitleFontFamily = FontFamily(
+    Font(R.font.noto_sans_cjk_black_subset, weight = FontWeight.Black),
+)
+
+private val ExampleItalicFontFamily = FontFamily(
+    Font(R.font.open_sans_italic, weight = FontWeight.Normal, style = FontStyle.Italic),
+)
+
+private val BottomNavContentPadding = 124.dp
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -539,7 +557,7 @@ private fun AppRoot(
                     val statusBarInset = with(density) { WindowInsets.statusBars.getTop(this).toDp() }
                     val navigationBarInset = with(density) { WindowInsets.navigationBars.getBottom(this).toDp() }
                     val contentTopPadding = statusBarInset + 66.dp
-                    val contentBottomPadding = if (showBottomBar) navigationBarInset + 92.dp else navigationBarInset
+                    val contentBottomPadding = navigationBarInset
 
                     Box(modifier = Modifier.fillMaxSize()) {
                         AnimatedContent(
@@ -557,6 +575,7 @@ private fun AppRoot(
                                 Screen.Home -> HomeScreen(
                                     weeks = catalog.weeks,
                                     completedDayIds = state.completedDayIds,
+                                    onOpenLesson = vm::openLesson,
                                     onOpenWeek = vm::openWeek,
                                 )
                                 is Screen.Week -> WeekScreen(
@@ -773,107 +792,93 @@ private fun completionContainerColor(strong: Boolean = false): Color =
 private fun completionContentColor(): Color =
     lerp(MaterialTheme.colorScheme.primary, MaterialTheme.colorScheme.secondary, 0.32f)
 
+@Composable
+private fun doneGreenContainerColor(): Color =
+    lerp(MaterialTheme.colorScheme.surface, Color(0xFFCFEFDB), 0.82f)
+
+@Composable
+private fun doneGreenContentColor(): Color =
+    Color(0xFF2F7D4F)
+
+@Composable
+private fun grammarAccentContainerColor(): Color =
+    lerp(MaterialTheme.colorScheme.primaryContainer, MaterialTheme.colorScheme.secondaryContainer, 0.68f)
+
+@Composable
+private fun grammarAccentContentColor(): Color =
+    completionContentColor()
+
+@Composable
+private fun sentenceHighlightColor(): Color =
+    MaterialTheme.colorScheme.tertiary
+
+private fun Modifier.dashedRoundBorder(color: Color): Modifier = drawBehind {
+    val strokeWidth = 1.2.dp.toPx()
+    val radius = 22.dp.toPx()
+    val borderSize = Size(size.width - strokeWidth, size.height - strokeWidth)
+    drawRoundRect(
+        color = color,
+        topLeft = Offset(strokeWidth / 2f, strokeWidth / 2f),
+        size = borderSize,
+        cornerRadius = CornerRadius(radius, radius),
+        style = Stroke(
+            width = strokeWidth,
+            pathEffect = PathEffect.dashPathEffect(floatArrayOf(10.dp.toPx(), 7.dp.toPx())),
+        ),
+    )
+}
+
 private fun lessonStateText(
     completed: Boolean,
     quizProgress: DayQuizProgress?,
 ): String = when {
     completed && quizProgress?.passed == true -> "Lulus latihan ${quizProgress.bestPercentage}%"
-    completed -> "Pelajaran selesai"
     quizProgress != null -> "Latihan ${quizProgress.attempts}x • terbaik ${quizProgress.bestPercentage}%"
-    else -> "Sedang dipelajari"
+    completed -> "Pelajaran selesai"
+    else -> ""
 }
 
 @Composable
-private fun LessonQuickActionDock(
+private fun LessonCompleteButton(
     completed: Boolean,
     onToggleComplete: () -> Unit,
-    onStartQuiz: () -> Unit,
 ) {
-    Column(
-        verticalArrangement = Arrangement.spacedBy(10.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
+    FilledTonalIconButton(
+        onClick = onToggleComplete,
+        colors = androidx.compose.material3.IconButtonDefaults.filledTonalIconButtonColors(
+            containerColor = if (completed) {
+                doneGreenContainerColor()
+            } else {
+                lerp(MaterialTheme.colorScheme.surface, MaterialTheme.colorScheme.surfaceVariant, 0.68f)
+            },
+            contentColor = if (completed) {
+                doneGreenContentColor()
+            } else {
+                MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.72f)
+            },
+        ),
     ) {
-        FilledTonalIconButton(
-            onClick = onToggleComplete,
-            colors = androidx.compose.material3.IconButtonDefaults.filledTonalIconButtonColors(
-                containerColor = if (completed) {
-                    completionContainerColor(strong = true)
-                } else {
-                    lerp(MaterialTheme.colorScheme.surface, MaterialTheme.colorScheme.surfaceVariant, 0.6f)
-                },
-                contentColor = if (completed) {
-                    completionContentColor()
-                } else {
-                    MaterialTheme.colorScheme.onSurfaceVariant
-                },
-            ),
-        ) {
-            Icon(
-                Icons.Default.CheckCircle,
-                contentDescription = if (completed) "Batalkan selesai" else "Tandai selesai",
-            )
-        }
-        FilledIconButton(onClick = onStartQuiz) {
-            Icon(Icons.Default.Quiz, contentDescription = "Mulai kuis")
-        }
+        Icon(
+            Icons.Default.CheckCircle,
+            contentDescription = if (completed) "Batalkan selesai" else "Tandai selesai",
+        )
     }
 }
 
 @Composable
-private fun LessonStatusBadge(
-    completed: Boolean,
-    quizProgress: DayQuizProgress?,
+private fun StartQuizCta(
+    onStartQuiz: () -> Unit,
 ) {
-    val container = if (completed) {
-        completionContainerColor(strong = true)
-    } else {
-        lerp(MaterialTheme.colorScheme.surface, MaterialTheme.colorScheme.secondaryContainer, 0.45f)
-    }
-    val content = if (completed) completionContentColor() else MaterialTheme.colorScheme.onSecondaryContainer
-    val title = if (completed) "Pelajaran selesai" else "Sedang dipelajari"
-    val subtitle = when {
-        completed && quizProgress?.passed == true -> "Lulus mode latihan dengan skor terbaik ${quizProgress.bestPercentage}%."
-        completed -> "Materi ini sudah ditandai selesai dan tersimpan offline."
-        quizProgress != null -> "Sudah latihan ${quizProgress.attempts}x, skor terbaik ${quizProgress.bestPercentage}%."
-        else -> "Materi ini masih aktif untuk sesi belajar."
-    }
-
-    Row(
-        modifier = Modifier
-            .clip(RoundedCornerShape(999.dp))
-            .background(container)
-            .border(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.7f), RoundedCornerShape(999.dp))
-            .padding(horizontal = 14.dp, vertical = 10.dp),
-        horizontalArrangement = Arrangement.spacedBy(10.dp),
-        verticalAlignment = Alignment.CenterVertically,
+    Button(
+        onClick = onStartQuiz,
+        modifier = Modifier.fillMaxWidth(),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = MaterialTheme.colorScheme.primary,
+            contentColor = MaterialTheme.colorScheme.onPrimary,
+        ),
     ) {
-        Box(
-            modifier = Modifier
-                .size(28.dp)
-                .clip(CircleShape)
-                .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.82f)),
-            contentAlignment = Alignment.Center,
-        ) {
-            Icon(
-                Icons.Default.CheckCircle,
-                contentDescription = null,
-                tint = content,
-                modifier = Modifier.size(18.dp),
-            )
-        }
-        Column(verticalArrangement = Arrangement.spacedBy(1.dp)) {
-            Text(
-                title,
-                color = content,
-                style = MaterialTheme.typography.labelLarge,
-                fontWeight = FontWeight.Bold,
-            )
-            Text(
-                subtitle,
-                color = content.copy(alpha = 0.82f),
-                style = MaterialTheme.typography.bodySmall,
-            )
-        }
+        Icon(Icons.Default.Quiz, contentDescription = null, modifier = Modifier.size(18.dp))
+        Text("Start Quiz", modifier = Modifier.padding(start = 8.dp))
     }
 }
 
@@ -911,42 +916,44 @@ private fun RowScope.FloatingBottomTab(
     enabled: Boolean = true,
     onClick: () -> Unit,
 ) {
-    val iconTint = when {
-        !enabled -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.35f)
-        selected -> MaterialTheme.colorScheme.primary
-        else -> MaterialTheme.colorScheme.onSurfaceVariant
-    }
-    val labelTint = when {
+    val contentTint = when {
         !enabled -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.45f)
-        selected -> MaterialTheme.colorScheme.primary
-        else -> MaterialTheme.colorScheme.onSurfaceVariant
+        selected -> MaterialTheme.colorScheme.onPrimary
+        else -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.88f)
     }
+    val tabContainer = if (selected) {
+        lerp(MaterialTheme.colorScheme.primary, MaterialTheme.colorScheme.secondary, 0.12f)
+    } else {
+        Color.Transparent
+    }
+    val tabShape = RoundedCornerShape(22.dp)
 
-    Column(
+    Row(
         modifier = Modifier
             .weight(1f)
-            .clip(RoundedCornerShape(24.dp))
+            .height(48.dp)
+            .clip(tabShape)
+            .background(tabContainer)
             .clickable(enabled = enabled, onClick = onClick)
-            .padding(vertical = 8.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(6.dp),
+            .padding(horizontal = 10.dp),
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically,
     ) {
-        Box(
-            modifier = Modifier
-                .clip(RoundedCornerShape(18.dp))
-                .background(
-                    if (selected) {
-                        lerp(MaterialTheme.colorScheme.primaryContainer, MaterialTheme.colorScheme.secondaryContainer, 0.16f)
-                    } else {
-                        Color.Transparent
-                    },
-                )
-                .padding(horizontal = 16.dp, vertical = 10.dp),
-            contentAlignment = Alignment.Center,
-        ) {
-            Icon(icon, contentDescription = null, tint = iconTint)
-        }
-        Text(text, color = labelTint, style = MaterialTheme.typography.labelLarge)
+        Icon(
+            icon,
+            contentDescription = null,
+            tint = contentTint,
+            modifier = Modifier.size(20.dp),
+        )
+        Text(
+            text,
+            modifier = Modifier.padding(start = 7.dp),
+            color = contentTint,
+            style = MaterialTheme.typography.labelMedium,
+            fontWeight = if (selected) FontWeight.Bold else FontWeight.SemiBold,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+        )
     }
 }
 
@@ -970,7 +977,7 @@ private fun ThemeSettingsScreen(
 
     LazyColumn(
         modifier = modifier.fillMaxSize(),
-        contentPadding = PaddingValues(start = 16.dp, top = 16.dp, end = 16.dp, bottom = 28.dp),
+        contentPadding = PaddingValues(start = 16.dp, top = 16.dp, end = 16.dp, bottom = BottomNavContentPadding),
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
         item {
@@ -1242,25 +1249,41 @@ private fun ThemePreset.description(): String =
         ThemePreset.Sunset -> "Oranye hangat dengan aksen senja."
     }
 
+private fun nextStudyDay(
+    weeks: List<CatalogWeek>,
+    completedDayIds: Set<Int>,
+): CatalogDay? {
+    val days = weeks.flatMap { it.days }.sortedWith(compareBy<CatalogDay> { it.weekNum }.thenBy { it.dayNum })
+    if (days.isEmpty()) return null
+    val lastCompletedIndex = days.indexOfLast { it.dayId in completedDayIds }
+    return when {
+        lastCompletedIndex < 0 -> days.first()
+        lastCompletedIndex + 1 < days.size -> days[lastCompletedIndex + 1]
+        else -> days.firstOrNull { it.dayId !in completedDayIds }
+    }
+}
+
 @Composable
 private fun HomeScreen(
     weeks: List<CatalogWeek>,
     completedDayIds: Set<Int>,
+    onOpenLesson: (Int) -> Unit,
     onOpenWeek: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val totalDays = weeks.sumOf { it.days.size }
     val done = completedDayIds.size
-    val currentWeek = weeks.firstOrNull { week -> week.days.any { it.dayId !in completedDayIds } } ?: weeks.lastOrNull()
+    val continueDay = remember(weeks, completedDayIds) {
+        nextStudyDay(weeks = weeks, completedDayIds = completedDayIds)
+    }
     LazyColumn(
         modifier = modifier.fillMaxSize(),
-        contentPadding = PaddingValues(start = 16.dp, top = 16.dp, end = 16.dp, bottom = 32.dp),
+        contentPadding = PaddingValues(start = 16.dp, top = 16.dp, end = 16.dp, bottom = BottomNavContentPadding),
         verticalArrangement = Arrangement.spacedBy(18.dp),
     ) {
         item {
             BlendedHeaderCard {
                 Column(modifier = Modifier.padding(22.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                    SummaryPill("Belajar bertahap")
                     Text("日本語総まとめ N3 文法", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
                     Text(
                         "Belajar tata bahasa Jepang N3 dengan alur mingguan, progress yang jelas, dan latihan kuis cepat.",
@@ -1279,8 +1302,19 @@ private fun HomeScreen(
                         verticalArrangement = Arrangement.spacedBy(8.dp),
                     ) {
                         SummaryPill("$done / $totalDays selesai")
-                        currentWeek?.let { SummaryPill("Lanjut: Minggu ${it.weekNum}") }
                         SummaryPill("${totalDays - done} pelajaran tersisa")
+                    }
+                    continueDay?.let { day ->
+                        Button(
+                            onClick = { onOpenLesson(day.dayId) },
+                            modifier = Modifier.fillMaxWidth(),
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = completionContentColor(),
+                                contentColor = MaterialTheme.colorScheme.onPrimary,
+                            ),
+                        ) {
+                            Text("Lanjutkan belajar: Week ${day.weekNum} Day ${day.dayNum}")
+                        }
                     }
                 }
             }
@@ -1361,20 +1395,19 @@ private fun WeekScreen(
 ) {
     LazyColumn(
         modifier = modifier.fillMaxSize(),
-        contentPadding = PaddingValues(start = 16.dp, top = 16.dp, end = 16.dp, bottom = 30.dp),
+        contentPadding = PaddingValues(start = 16.dp, top = 16.dp, end = 16.dp, bottom = BottomNavContentPadding),
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
         item {
             BlendedHeaderCard {
-                Column(modifier = Modifier.padding(22.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                    SummaryPill("Minggu ${week.weekNum}")
-                    Text("第${week.weekNum}週", color = MaterialTheme.colorScheme.primary)
+                Column(modifier = Modifier.padding(22.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                    LessonBreadcrumb(weekNum = week.weekNum)
                     StrongJapaneseTitleText(
                         text = week.title,
                         style = MaterialTheme.typography.headlineSmall,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer,
                     )
                     Text(week.titleId, color = MaterialTheme.colorScheme.onPrimaryContainer)
-                    SummaryPill("${completedDayIds.count { id -> week.days.any { it.dayId == id } }}/${week.days.size} selesai")
                 }
             }
         }
@@ -1384,60 +1417,118 @@ private fun WeekScreen(
         items(week.days) { day ->
             val completed = completedDayIds.contains(day.dayId)
             val quizProgress = quizProgressByDay[day.dayId]
+            val cardColor = if (completed) {
+                lerp(MaterialTheme.colorScheme.surface, completionContainerColor(strong = true), 0.34f)
+            } else {
+                MaterialTheme.colorScheme.surface
+            }
             ElevatedCard(
                 onClick = { onOpenLesson(day.dayId) },
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(24.dp),
-                colors = CardDefaults.elevatedCardColors(containerColor = MaterialTheme.colorScheme.surface),
+                colors = CardDefaults.elevatedCardColors(containerColor = cardColor),
             ) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(18.dp),
-                    horizontalArrangement = Arrangement.spacedBy(14.dp),
+                        .padding(horizontal = 18.dp, vertical = 16.dp),
+                    horizontalArrangement = Arrangement.spacedBy(16.dp),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Box(
                         modifier = Modifier
-                            .size(48.dp)
-                            .clip(RoundedCornerShape(16.dp))
-                            .background(if (completed) completionContainerColor(strong = true) else MaterialTheme.colorScheme.surfaceVariant),
+                            .size(54.dp)
+                            .clip(RoundedCornerShape(18.dp))
+                            .background(
+                                if (completed) {
+                                    completionContainerColor(strong = true)
+                                } else {
+                                    lerp(MaterialTheme.colorScheme.surface, MaterialTheme.colorScheme.surfaceVariant, 0.58f)
+                                },
+                            ),
                         contentAlignment = Alignment.Center,
                     ) {
                         Text(
                             if (completed) "✓" else day.dayNum.toString(),
-                            fontWeight = FontWeight.Bold,
+                            fontWeight = FontWeight.ExtraBold,
+                            style = MaterialTheme.typography.titleMedium,
                             color = if (completed) completionContentColor() else MaterialTheme.colorScheme.onSurfaceVariant,
                         )
                     }
                     Column(
                         modifier = Modifier.weight(1f),
-                        verticalArrangement = Arrangement.spacedBy(6.dp),
+                        verticalArrangement = Arrangement.spacedBy(8.dp),
                     ) {
-                        Text("${day.dayNum}日目", color = MaterialTheme.colorScheme.primary)
                         Text(
-                            day.title,
-                            style = MaterialTheme.typography.titleMedium.copy(
-                                fontFamily = FontFamily.Default,
-                                fontWeight = FontWeight.Bold,
-                            ),
+                            "第${week.weekNum}週 › ${day.dayNum}日目",
+                            color = MaterialTheme.colorScheme.primary,
+                            style = MaterialTheme.typography.labelLarge,
+                            fontWeight = FontWeight.SemiBold,
                         )
-                        Text(
-                            day.grammarPoints.joinToString("・") { it.pattern },
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            maxLines = 2,
-                            overflow = TextOverflow.Ellipsis,
+                        StrongJapaneseTitleText(
+                            text = day.title,
+                            style = MaterialTheme.typography.titleMedium,
                         )
-                        Text(
-                            lessonStateText(completed = completed, quizProgress = quizProgress),
-                            style = MaterialTheme.typography.labelMedium,
-                            color = if (completed) completionContentColor() else MaterialTheme.colorScheme.onSurfaceVariant,
-                        )
+                        Surface(
+                            color = lerp(MaterialTheme.colorScheme.surface, MaterialTheme.colorScheme.surfaceVariant, 0.42f),
+                            shape = RoundedCornerShape(14.dp),
+                        ) {
+                            Text(
+                                day.grammarPoints.joinToString(" ・ ") { it.pattern },
+                                modifier = Modifier.padding(horizontal = 10.dp, vertical = 7.dp),
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                maxLines = 2,
+                                overflow = TextOverflow.Ellipsis,
+                            )
+                        }
+                        if (quizProgress != null) {
+                            Text(
+                                lessonStateText(completed = completed, quizProgress = quizProgress),
+                                style = MaterialTheme.typography.labelMedium,
+                                color = if (completed) completionContentColor() else MaterialTheme.colorScheme.onSurfaceVariant,
+                            )
+                        }
                     }
-                    Icon(Icons.AutoMirrored.Filled.NavigateNext, contentDescription = null, tint = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Icon(
+                        Icons.AutoMirrored.Filled.NavigateNext,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.72f),
+                    )
                 }
             }
+        }
+    }
+}
+
+@Composable
+private fun LessonBreadcrumb(
+    weekNum: Int,
+    dayNum: Int? = null,
+) {
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(7.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text(
+            "第${weekNum}週",
+            color = MaterialTheme.colorScheme.primary,
+            style = MaterialTheme.typography.labelLarge,
+            fontWeight = FontWeight.Bold,
+        )
+        dayNum?.let {
+            Text(
+                "›",
+                color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.56f),
+                style = MaterialTheme.typography.labelLarge,
+                fontWeight = FontWeight.Bold,
+            )
+            Text(
+                "${it}日目",
+                color = MaterialTheme.colorScheme.primary,
+                style = MaterialTheme.typography.labelLarge,
+                fontWeight = FontWeight.Bold,
+            )
         }
     }
 }
@@ -1459,11 +1550,12 @@ private fun LessonScreen(
     hasNext: Boolean,
     modifier: Modifier = Modifier,
 ) {
+    val context = LocalContext.current
     Column(
         modifier = modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .padding(start = 16.dp, top = 16.dp, end = 16.dp, bottom = 28.dp),
+            .padding(start = 16.dp, top = 16.dp, end = 16.dp, bottom = BottomNavContentPadding),
         verticalArrangement = Arrangement.spacedBy(18.dp),
     ) {
         BlendedHeaderCard {
@@ -1477,23 +1569,27 @@ private fun LessonScreen(
                         modifier = Modifier.weight(1f),
                         verticalArrangement = Arrangement.spacedBy(12.dp),
                     ) {
-                        LessonStatusBadge(completed = completed, quizProgress = quizProgress)
-                        Text("第${day.weekNum}週 › ${day.dayNum}日目", color = MaterialTheme.colorScheme.primary)
-                        Text(day.title, style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
+                        LessonBreadcrumb(weekNum = day.weekNum, dayNum = day.dayNum)
+                        StrongJapaneseTitleText(
+                            text = day.title,
+                            style = MaterialTheme.typography.headlineSmall,
+                            color = MaterialTheme.colorScheme.onPrimaryContainer,
+                        )
                         Text(day.titleId, color = MaterialTheme.colorScheme.onPrimaryContainer)
                     }
-                    LessonQuickActionDock(
+                    LessonCompleteButton(
                         completed = completed,
-                        onToggleComplete = onToggleComplete,
-                        onStartQuiz = onStartQuiz,
+                        onToggleComplete = {
+                            onToggleComplete()
+                            Toast.makeText(
+                                context,
+                                if (completed) "Pelajaran ditandai belum selesai" else "Pelajaran ditandai selesai",
+                                Toast.LENGTH_SHORT,
+                            ).show()
+                        },
                     )
                 }
-                FlowRow(
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    verticalArrangement = Arrangement.spacedBy(8.dp),
-                ) {
-                    SummaryPill("${day.grammarPoints.size} pola grammar")
-                }
+                StartQuizCta(onStartQuiz = onStartQuiz)
             }
         }
         SectionTitle("Materi pelajaran")
@@ -1559,49 +1655,49 @@ private fun GrammarCard(
                 .animateContentSize(),
             verticalArrangement = Arrangement.spacedBy(14.dp),
         ) {
-            FlowRow(
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp),
-            ) {
-                Text(grammar.pattern, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
-                AssistChip(onClick = {}, label = { Text(grammar.badge) })
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Text(
+                        grammar.pattern,
+                        modifier = Modifier.weight(1f),
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold,
+                        color = sentenceHighlightColor(),
+                    )
+                    Surface(
+                        color = grammarAccentContainerColor(),
+                        contentColor = grammarAccentContentColor(),
+                        shape = RoundedCornerShape(999.dp),
+                    ) {
+                        Text(
+                            grammar.badge,
+                            modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp),
+                            style = MaterialTheme.typography.labelSmall,
+                            fontWeight = FontWeight.SemiBold,
+                        )
+                    }
+                }
+                HorizontalDivider(color = grammarAccentContainerColor().copy(alpha = 0.82f))
             }
             Text(grammar.meaning, color = MaterialTheme.colorScheme.onSurfaceVariant, style = MaterialTheme.typography.bodyLarge)
-            Card(
-                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.85f)),
-                shape = RoundedCornerShape(22.dp),
-            ) {
-                Text(
-                    grammar.meaningId,
-                    modifier = Modifier.padding(14.dp),
-                    style = MaterialTheme.typography.bodyLarge,
-                    fontWeight = FontWeight.SemiBold,
-                )
-            }
+            BunpouNoteCard(grammar.meaningId)
             grammar.verbForm?.let { verbForm ->
-                FilledTonalButton(onClick = { showVerbForm = !showVerbForm }) {
-                    Text(if (showVerbForm) "Tutup cara pembentukan" else "Lihat cara pembentukan")
-                }
+                AccordionActionButton(
+                    expanded = showVerbForm,
+                    collapsedText = "Lihat pembentukan bunpou",
+                    expandedText = "Sembunyikan pembentukan bunpou",
+                    onClick = { showVerbForm = !showVerbForm },
+                )
                 AnimatedVisibility(
                     visible = showVerbForm,
                     enter = expandVertically(animationSpec = tween(240)) + fadeIn(animationSpec = tween(240)),
                     exit = shrinkVertically(animationSpec = tween(180)) + fadeOut(animationSpec = tween(180)),
                 ) {
-                    OutlinedCard {
-                        Column(modifier = Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                            Text(verbForm.title, fontWeight = FontWeight.Bold)
-                            verbForm.rows.forEach { row ->
-                                Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
-                                    Text(row.label, color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.SemiBold)
-                                    Text(row.body)
-                                    Text(row.bodyId, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                                    if (row.example.isNotBlank()) {
-                                        Text("例: ${row.example}", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.tertiary)
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    VerbFormTable(verbForm)
                 }
             }
             SectionTitle("Contoh kalimat / 例文")
@@ -1609,9 +1705,12 @@ private fun GrammarCard(
                 ExampleCard(example, furiganaOn, romajiOn, readings, romajiMap, false)
             }
             if (grammar.extraExamples.isNotEmpty()) {
-                OutlinedButton(onClick = { showExtras = !showExtras }) {
-                    Text(if (showExtras) "Sembunyikan contoh tambahan" else "Lihat ${grammar.extraExamples.size} contoh tambahan")
-                }
+                AccordionActionButton(
+                    expanded = showExtras,
+                    collapsedText = "Lihat ${grammar.extraExamples.size} contoh tambahan",
+                    expandedText = "Sembunyikan contoh tambahan",
+                    onClick = { showExtras = !showExtras },
+                )
                 AnimatedVisibility(
                     visible = showExtras,
                     enter = expandVertically(animationSpec = tween(240)) + fadeIn(animationSpec = tween(240)),
@@ -1629,6 +1728,183 @@ private fun GrammarCard(
 }
 
 @Composable
+private fun BunpouNoteCard(text: String) {
+    Card(
+        colors = CardDefaults.cardColors(
+            containerColor = lerp(MaterialTheme.colorScheme.surface, grammarAccentContainerColor(), 0.34f),
+        ),
+        shape = RoundedCornerShape(8.dp),
+    ) {
+        Row(
+            modifier = Modifier.padding(end = 14.dp),
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(width = 3.dp, height = 54.dp)
+                    .background(MaterialTheme.colorScheme.primary),
+            )
+            Text(
+                text,
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(vertical = 10.dp),
+                style = MaterialTheme.typography.bodyMedium,
+                fontWeight = FontWeight.Bold,
+                lineHeight = 21.sp,
+                color = MaterialTheme.colorScheme.onSurface,
+            )
+        }
+    }
+}
+
+@Composable
+private fun AccordionActionButton(
+    expanded: Boolean,
+    collapsedText: String,
+    expandedText: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val shape = RoundedCornerShape(22.dp)
+    val contentColor = grammarAccentContentColor()
+    val containerColor = grammarAccentContainerColor()
+    val stateModifier = if (expanded) {
+        Modifier.background(containerColor)
+    } else {
+        Modifier.dashedRoundBorder(contentColor.copy(alpha = 0.52f))
+    }
+
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .clip(shape)
+            .then(stateModifier)
+            .clickable(onClick = onClick)
+            .padding(horizontal = 14.dp, vertical = 12.dp),
+        horizontalArrangement = Arrangement.spacedBy(10.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text(
+            if (expanded) "▲" else "▼",
+            color = contentColor,
+            style = MaterialTheme.typography.labelLarge,
+            fontWeight = FontWeight.Bold,
+        )
+        Text(
+            if (expanded) expandedText else collapsedText,
+            modifier = Modifier.weight(1f),
+            color = contentColor,
+            style = MaterialTheme.typography.labelLarge,
+            fontWeight = FontWeight.SemiBold,
+        )
+    }
+}
+
+@Composable
+private fun VerbFormTable(verbForm: CatalogVerbForm) {
+    val tableContainerColor = lerp(
+        MaterialTheme.colorScheme.surfaceVariant,
+        MaterialTheme.colorScheme.secondaryContainer,
+        0.36f,
+    )
+    OutlinedCard(
+        shape = RoundedCornerShape(12.dp),
+        colors = CardDefaults.outlinedCardColors(
+            containerColor = tableContainerColor,
+        ),
+    ) {
+        Column(modifier = Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+            Text(
+                verbForm.title,
+                color = grammarAccentContentColor(),
+                style = MaterialTheme.typography.titleSmall,
+                fontWeight = FontWeight.Bold,
+            )
+            verbForm.rows.forEach { row ->
+                VerbFormRowCard(row)
+            }
+        }
+    }
+}
+
+@Composable
+private fun VerbFormRowCard(row: CatalogVerbFormRow) {
+    val rowShape = RoundedCornerShape(10.dp)
+    val rowContainerColor = lerp(
+        MaterialTheme.colorScheme.surface,
+        MaterialTheme.colorScheme.secondaryContainer,
+        0.3f,
+    )
+    val badgeContainerColor = lerp(
+        MaterialTheme.colorScheme.primary,
+        MaterialTheme.colorScheme.secondary,
+        0.38f,
+    )
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .border(
+                width = 1.dp,
+                color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.24f),
+                shape = rowShape,
+            ),
+        colors = CardDefaults.cardColors(
+            containerColor = rowContainerColor,
+        ),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
+        shape = rowShape,
+    ) {
+        Column(modifier = Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(7.dp)) {
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Surface(
+                    color = badgeContainerColor,
+                    contentColor = MaterialTheme.colorScheme.onPrimary,
+                    shape = RoundedCornerShape(6.dp),
+                ) {
+                    Text(
+                        row.label,
+                        modifier = Modifier.padding(horizontal = 7.dp, vertical = 3.dp),
+                        style = MaterialTheme.typography.labelSmall,
+                        fontWeight = FontWeight.Bold,
+                    )
+                }
+                Text(
+                    row.body,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    style = MaterialTheme.typography.bodyMedium,
+                    fontWeight = FontWeight.SemiBold,
+                )
+            }
+            Text(
+                row.bodyId,
+                style = MaterialTheme.typography.bodySmall,
+                fontStyle = FontStyle.Italic,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+            if (row.example.isNotBlank()) {
+                Surface(
+                    color = lerp(MaterialTheme.colorScheme.surface, MaterialTheme.colorScheme.errorContainer, 0.28f),
+                    contentColor = sentenceHighlightColor(),
+                    shape = RoundedCornerShape(14.dp),
+                ) {
+                    Text(
+                        "例: ${row.example}",
+                        modifier = Modifier.padding(horizontal = 10.dp, vertical = 7.dp),
+                        style = MaterialTheme.typography.bodySmall,
+                        fontWeight = FontWeight.SemiBold,
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
 private fun ExampleCard(
     example: CatalogExample,
     furiganaOn: Boolean,
@@ -1637,29 +1913,45 @@ private fun ExampleCard(
     romajiMap: Map<String, String>,
     isExtra: Boolean,
 ) {
+    val containerColor = if (isExtra) {
+        lerp(MaterialTheme.colorScheme.surface, grammarAccentContainerColor(), 0.46f)
+    } else {
+        lerp(MaterialTheme.colorScheme.surface, MaterialTheme.colorScheme.surfaceVariant, 0.46f)
+    }
     Card(
         modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(
-            containerColor = if (isExtra) {
-                lerp(MaterialTheme.colorScheme.surface, MaterialTheme.colorScheme.tertiaryContainer, 0.5f)
-            } else {
-                lerp(MaterialTheme.colorScheme.surface, MaterialTheme.colorScheme.surfaceVariant, 0.58f)
-            },
-        ),
+        colors = CardDefaults.cardColors(containerColor = containerColor),
         shape = RoundedCornerShape(22.dp),
     ) {
-        Column(modifier = Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-            RubyText(example.japaneseHtml, furiganaOn, readings)
+        Column(modifier = Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+            RubyText(
+                html = example.japaneseHtml,
+                showFurigana = furiganaOn,
+                readings = readings,
+                surfaceFontSize = 17.sp,
+                surfaceLineHeight = 23.sp,
+                readingFontSize = 8.sp,
+                readingLineHeight = 9.sp,
+            )
             if (romajiOn) {
                 Text(
                     toRomaji(example.japaneseHtml, readings, romajiMap),
-                    fontStyle = FontStyle.Italic,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.64f),
+                    style = MaterialTheme.typography.bodySmall.copy(
+                        fontFamily = ExampleItalicFontFamily,
+                        fontStyle = FontStyle.Italic,
+                    ),
                 )
             }
-            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
-            Text(example.indonesian, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Text(
+                example.indonesian,
+                color = MaterialTheme.colorScheme.onSurface,
+                style = MaterialTheme.typography.bodyMedium.copy(
+                    fontFamily = ExampleItalicFontFamily,
+                    fontStyle = FontStyle.Italic,
+                ),
+                lineHeight = 21.sp,
+            )
         }
     }
 }
@@ -1739,19 +2031,21 @@ private fun QuizScreen(
     val isCorrect = quizState.selectedAnswer == question.correctPattern
     LazyColumn(
         modifier = modifier.fillMaxSize(),
-        contentPadding = PaddingValues(start = 16.dp, top = 16.dp, end = 16.dp, bottom = 28.dp),
+        contentPadding = PaddingValues(start = 16.dp, top = 16.dp, end = 16.dp, bottom = BottomNavContentPadding),
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
         item {
             BlendedHeaderCard {
-                Column(modifier = Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                    SummaryPill("Mode latihan")
-                    Text(quizState.title, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
-                    FlowRow(
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                        verticalArrangement = Arrangement.spacedBy(8.dp),
+                Column(modifier = Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        SummaryPill("Soal ${quizState.index + 1}/${quizState.questions.size}")
+                        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                            Text("Mode latihan", color = MaterialTheme.colorScheme.primary, style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.Bold)
+                            Text(quizState.title, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onPrimaryContainer)
+                        }
                         SummaryPill("Skor ${quizState.score}")
                     }
                     LinearProgressIndicator(
@@ -1761,6 +2055,11 @@ private fun QuizScreen(
                             .height(8.dp)
                             .clip(RoundedCornerShape(999.dp)),
                     )
+                    Text(
+                        "Soal ${quizState.index + 1} dari ${quizState.questions.size}",
+                        color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.76f),
+                        style = MaterialTheme.typography.bodySmall,
+                    )
                 }
             }
         }
@@ -1768,25 +2067,45 @@ private fun QuizScreen(
             ElevatedCard(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(28.dp),
-                colors = CardDefaults.elevatedCardColors(containerColor = MaterialTheme.colorScheme.surface),
+                colors = CardDefaults.elevatedCardColors(
+                    containerColor = lerp(MaterialTheme.colorScheme.surface, MaterialTheme.colorScheme.surfaceVariant, 0.24f),
+                ),
             ) {
                 Column(modifier = Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                    Text("Pilih pola grammar yang paling tepat", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
-                    RubyText(question.promptHtml, furiganaOn, readings)
+                    Text("Pilih pola grammar yang paling tepat", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurface, fontWeight = FontWeight.Bold)
                     Card(
                         modifier = Modifier.fillMaxWidth(),
                         colors = CardDefaults.cardColors(
-                            containerColor = lerp(MaterialTheme.colorScheme.surface, MaterialTheme.colorScheme.secondaryContainer, 0.5f),
+                            containerColor = lerp(MaterialTheme.colorScheme.surface, MaterialTheme.colorScheme.surfaceVariant, 0.42f),
                         ),
-                        shape = RoundedCornerShape(22.dp),
+                        shape = RoundedCornerShape(20.dp),
                     ) {
-                        Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                            Text(question.promptId, color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.SemiBold)
+                        Column(modifier = Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                            RubyText(
+                                html = question.promptHtml,
+                                showFurigana = furiganaOn,
+                                readings = readings,
+                                surfaceFontSize = 17.sp,
+                                surfaceLineHeight = 23.sp,
+                                readingFontSize = 8.sp,
+                                readingLineHeight = 9.sp,
+                            )
                             Text(
                                 toRomaji(question.promptHtml, readings, romajiMap),
-                                fontStyle = FontStyle.Italic,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.64f),
+                                style = MaterialTheme.typography.bodySmall.copy(
+                                    fontFamily = ExampleItalicFontFamily,
+                                    fontStyle = FontStyle.Italic,
+                                ),
+                            )
+                            Text(
+                                question.promptId,
+                                color = MaterialTheme.colorScheme.onSurface,
+                                style = MaterialTheme.typography.bodyMedium.copy(
+                                    fontFamily = ExampleItalicFontFamily,
+                                    fontStyle = FontStyle.Italic,
+                                ),
+                                lineHeight = 21.sp,
                             )
                         }
                     }
@@ -1799,16 +2118,16 @@ private fun QuizScreen(
             val correct = option == question.correctPattern
             val colors = when {
                 !answered -> CardDefaults.elevatedCardColors(
-                    containerColor = lerp(MaterialTheme.colorScheme.surface, MaterialTheme.colorScheme.surfaceVariant, 0.24f),
+                    containerColor = MaterialTheme.colorScheme.surface,
                 )
                 correct -> CardDefaults.elevatedCardColors(
-                    containerColor = lerp(MaterialTheme.colorScheme.surface, MaterialTheme.colorScheme.tertiaryContainer, 0.72f),
+                    containerColor = doneGreenContainerColor(),
                 )
                 selected -> CardDefaults.elevatedCardColors(
-                    containerColor = lerp(MaterialTheme.colorScheme.surface, MaterialTheme.colorScheme.errorContainer, 0.68f),
+                    containerColor = lerp(MaterialTheme.colorScheme.surface, MaterialTheme.colorScheme.errorContainer, 0.52f),
                 )
                 else -> CardDefaults.elevatedCardColors(
-                    containerColor = lerp(MaterialTheme.colorScheme.surface, MaterialTheme.colorScheme.surfaceVariant, 0.16f),
+                    containerColor = lerp(MaterialTheme.colorScheme.surface, MaterialTheme.colorScheme.surfaceVariant, 0.18f),
                 )
             }
             ElevatedCard(
@@ -1816,25 +2135,39 @@ private fun QuizScreen(
                 enabled = !answered,
                 modifier = Modifier.fillMaxWidth(),
                 colors = colors,
-                shape = RoundedCornerShape(22.dp),
+                shape = RoundedCornerShape(20.dp),
+                elevation = CardDefaults.elevatedCardElevation(defaultElevation = if (answered) 1.dp else 2.dp),
             ) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(16.dp),
+                        .padding(horizontal = 16.dp, vertical = 15.dp),
                     horizontalArrangement = Arrangement.spacedBy(12.dp),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
+                    val optionBadgeColor = when {
+                        correct && answered -> doneGreenContentColor()
+                        selected && answered -> MaterialTheme.colorScheme.error
+                        else -> MaterialTheme.colorScheme.surfaceVariant
+                    }
                     Box(
                         modifier = Modifier
                             .size(32.dp)
                             .clip(CircleShape)
-                            .background(lerp(MaterialTheme.colorScheme.surface, MaterialTheme.colorScheme.surfaceVariant, 0.72f)),
+                            .background(optionBadgeColor),
                         contentAlignment = Alignment.Center,
                     ) {
-                        Text(('A' + indexed.index).toString(), fontWeight = FontWeight.Bold)
+                        Text(
+                            ('A' + indexed.index).toString(),
+                            fontWeight = FontWeight.Bold,
+                            color = if (answered && (correct || selected)) {
+                                Color.White
+                            } else {
+                                MaterialTheme.colorScheme.onSurfaceVariant
+                            },
+                        )
                     }
-                    Text(option, fontWeight = FontWeight.Medium, modifier = Modifier.weight(1f))
+                    Text(option, fontWeight = FontWeight.SemiBold, modifier = Modifier.weight(1f), color = MaterialTheme.colorScheme.onSurface)
                 }
             }
         }
@@ -1844,17 +2177,21 @@ private fun QuizScreen(
                     modifier = Modifier.fillMaxWidth(),
                     colors = CardDefaults.cardColors(
                         containerColor = if (isCorrect) {
-                            lerp(MaterialTheme.colorScheme.surface, MaterialTheme.colorScheme.tertiaryContainer, 0.65f)
+                            doneGreenContainerColor()
                         } else {
-                            lerp(MaterialTheme.colorScheme.surface, MaterialTheme.colorScheme.errorContainer, 0.62f)
+                            lerp(MaterialTheme.colorScheme.surface, MaterialTheme.colorScheme.errorContainer, 0.52f)
                         },
                     ),
                     shape = RoundedCornerShape(20.dp),
                 ) {
-                    Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                        Text(if (isCorrect) "正解！ Benar! ✓" else "不正解 Salah. ✗", fontWeight = FontWeight.Bold)
+                    Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Text(
+                            if (isCorrect) "正解！ Benar! ✓" else "不正解 Salah. ✗",
+                            fontWeight = FontWeight.Bold,
+                            color = if (isCorrect) doneGreenContentColor() else MaterialTheme.colorScheme.error,
+                        )
                         if (!isCorrect) Text("正解: ${question.correctPattern}", fontWeight = FontWeight.SemiBold)
-                        Text(question.meaningId)
+                        Text(question.meaningId, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
                 }
             }
@@ -1904,20 +2241,30 @@ private fun StrongJapaneseTitleText(
     maxLines: Int = Int.MAX_VALUE,
     overflow: TextOverflow = TextOverflow.Clip,
 ) {
-    Text(
-        text = text,
-        modifier = modifier.drawWithContent {
-            drawContent()
-            translate(left = 0.65f) { this@drawWithContent.drawContent() }
-        },
-        style = style.copy(
-            fontFamily = FontFamily.Default,
-            fontWeight = FontWeight.Black,
-        ),
-        color = color,
-        maxLines = maxLines,
-        overflow = overflow,
+    val titleStyle = style.copy(
+        fontFamily = JapaneseTitleFontFamily,
+        fontWeight = FontWeight.Black,
     )
+    Box(modifier = modifier) {
+        Text(
+            text = text,
+            style = titleStyle.copy(
+                drawStyle = Stroke(width = 0.28f),
+            ),
+            color = color,
+            maxLines = maxLines,
+            overflow = overflow,
+        )
+        Text(
+            text = text,
+            style = titleStyle.copy(
+                drawStyle = Fill,
+            ),
+            color = color,
+            maxLines = maxLines,
+            overflow = overflow,
+        )
+    }
 }
 
 private enum class AppTab {
@@ -1974,16 +2321,22 @@ private fun AppBottomBar(
         contentAlignment = Alignment.Center,
     ) {
         Surface(
+            modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(30.dp),
-            color = MaterialTheme.colorScheme.surface,
+            color = lerp(MaterialTheme.colorScheme.surface, MaterialTheme.colorScheme.surfaceVariant, 0.28f),
+            contentColor = MaterialTheme.colorScheme.onSurface,
             tonalElevation = 6.dp,
-            shadowElevation = 10.dp,
+            shadowElevation = 18.dp,
+            border = BorderStroke(
+                width = 1.dp,
+                color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.46f),
+            ),
         ) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 10.dp, vertical = 8.dp),
-                horizontalArrangement = Arrangement.spacedBy(4.dp),
+                    .padding(horizontal = 8.dp, vertical = 7.dp),
+                horizontalArrangement = Arrangement.spacedBy(6.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 FloatingBottomTab(
@@ -2047,6 +2400,10 @@ private fun RubyText(
     html: String,
     showFurigana: Boolean,
     readings: Map<String, String>,
+    surfaceFontSize: androidx.compose.ui.unit.TextUnit = 18.sp,
+    surfaceLineHeight: androidx.compose.ui.unit.TextUnit = 24.sp,
+    readingFontSize: androidx.compose.ui.unit.TextUnit = 9.sp,
+    readingLineHeight: androidx.compose.ui.unit.TextUnit = 10.sp,
 ) {
     val segments = remember(html) { parseStrongSegments(stripTagsExceptStrong(html)) }
     val sorted = remember(readings) { readings.entries.sortedByDescending { it.key.length } }
@@ -2057,6 +2414,10 @@ private fun RubyText(
             RubyTokenView(
                 token = token,
                 showFurigana = showFurigana,
+                surfaceFontSize = surfaceFontSize,
+                surfaceLineHeight = surfaceLineHeight,
+                readingFontSize = readingFontSize,
+                readingLineHeight = readingLineHeight,
             )
         }
     }
@@ -2165,14 +2526,20 @@ private fun RubyWrapLayout(
 private fun RubyTokenView(
     token: RubyToken,
     showFurigana: Boolean,
+    surfaceFontSize: androidx.compose.ui.unit.TextUnit,
+    surfaceLineHeight: androidx.compose.ui.unit.TextUnit,
+    readingFontSize: androidx.compose.ui.unit.TextUnit,
+    readingLineHeight: androidx.compose.ui.unit.TextUnit,
 ) {
     val weight = if (token.bold) FontWeight.Bold else FontWeight.Normal
+    val tokenColor = if (token.bold) sentenceHighlightColor() else MaterialTheme.colorScheme.onSurface
     if (!showFurigana || token.reading == null || !token.surface.any(::isKanji)) {
         Text(
             token.surface,
-            fontSize = 18.sp,
-            lineHeight = 24.sp,
+            fontSize = surfaceFontSize,
+            lineHeight = surfaceLineHeight,
             fontWeight = weight,
+            color = tokenColor,
         )
         return
     }
@@ -2184,16 +2551,17 @@ private fun RubyTokenView(
         content = {
             Text(
                 token.reading,
-                fontSize = 9.sp,
-                lineHeight = 10.sp,
+                fontSize = readingFontSize,
+                lineHeight = readingLineHeight,
                 fontWeight = FontWeight.Medium,
-                color = MaterialTheme.colorScheme.primary,
+                color = if (token.bold) sentenceHighlightColor() else MaterialTheme.colorScheme.primary,
             )
             Text(
                 token.surface,
-                fontSize = 18.sp,
-                lineHeight = 24.sp,
+                fontSize = surfaceFontSize,
+                lineHeight = surfaceLineHeight,
                 fontWeight = weight,
+                color = tokenColor,
             )
         },
     ) { measurables, constraints ->
