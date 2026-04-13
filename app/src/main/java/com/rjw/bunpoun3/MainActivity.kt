@@ -1101,7 +1101,7 @@ private fun LoginScreen(
     var password by rememberSaveable { mutableStateOf("") }
     AuthScaffoldCard(
         eyebrow = "Supabase Auth",
-        title = "Masuk ke Bunpou N3",
+        title = "Masuk ke Bunpou Notes",
         description = "Login untuk membuka materi, menyimpan session offline, dan nanti siap disinkronkan ke Supabase.",
         error = error,
         notice = notice,
@@ -2279,7 +2279,7 @@ private fun HomeScreen(
         item {
             BlendedHeaderCard {
                 Column(modifier = Modifier.padding(22.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                    Text("日本語総まとめ N3 文法", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
+                    Text("Bunpou Notes", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
                     Text(
                         "Belajar tata bahasa Jepang N3 dengan alur mingguan, progress yang jelas, dan latihan kuis cepat.",
                         color = MaterialTheme.colorScheme.onPrimaryContainer,

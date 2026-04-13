@@ -1,4 +1,4 @@
-# Bunpou N3 (Android)
+# Bunpou Notes (Android)
 
 Aplikasi belajar tata bahasa Jepang N3 berbasis Android, fokus ke pengalaman belajar yang rapi, offline-first, dan UI modern. Proyek ini memakai Jetpack Compose, Room (SQLite), dan Supabase Auth untuk login.
 

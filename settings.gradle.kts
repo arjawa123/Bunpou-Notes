@@ -14,5 +14,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "bunpou-app-n3"
+rootProject.name = "bunpou-notes"
 include(":app")

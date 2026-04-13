@@ -50,17 +50,8 @@ jobs:
         run: |
           keytool -list -v -keystore app/keystore.jks -storepass "${{ secrets.RELEASE_STORE_PASSWORD }}" | sed -n '/SHA1:/p'
 
-      - name: Build debug APK
-        run: gradle :app:assembleDebug --no-daemon --stacktrace
-
       - name: Build signed release APK
         run: gradle :app:assembleRelease --no-daemon --stacktrace
-
-      - name: Upload debug APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: app-debug
-          path: app/build/outputs/apk/debug/app-debug.apk
 
       - name: Upload release APK
         uses: actions/upload-artifact@v4
@@ -73,11 +64,9 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            app/build/outputs/apk/debug/app-debug.apk
             app/build/outputs/apk/release/app-release.apk
           body: |
             Build otomatis dari GitHub Actions.
 
-            - app-debug.apk untuk testing
             - app-release.apk sudah signed
           token: ${{ secrets.GITHUB_TOKEN }}
