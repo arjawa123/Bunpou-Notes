@@ -337,6 +337,16 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    fun showForgotPassword() {
+        _uiState.update {
+            it.copy(
+                authMode = AuthMode.ForgotPassword,
+                authError = null,
+                authNotice = null,
+            )
+        }
+    }
+
     fun signIn(email: String, password: String) {
         runAuthAction {
             val session = authRepository.signIn(email, password)
@@ -806,6 +816,7 @@ data class UiState(
 enum class AuthMode {
     Login,
     Register,
+    ForgotPassword,
 }
 
 sealed interface Screen {
@@ -850,7 +861,7 @@ private fun AppRoot(
         onBack = vm::handleBack,
     )
     BackHandler(
-        enabled = !state.accessGranted && state.authMode == AuthMode.Register,
+        enabled = !state.accessGranted && (state.authMode == AuthMode.Register || state.authMode == AuthMode.ForgotPassword),
         onBack = vm::showLogin,
     )
     Surface(
@@ -886,6 +897,7 @@ private fun AppRoot(
                     onGoogleSignInError = vm::showAuthError,
                     onShowLogin = vm::showLogin,
                     onShowRegister = vm::showRegister,
+                    onShowForgotPassword = vm::showForgotPassword,
                 )
                 else -> {
                     val title = when (val screen = state.screen) {
@@ -978,6 +990,7 @@ private fun AppRoot(
                                     session = state.authSession,
                                     loading = state.authLoading,
                                     error = state.authError,
+                                    vm = vm,
                                     onLogout = vm::signOut,
                                 )
                                 Screen.ResetPassword -> ResetPasswordScreen(
@@ -1049,6 +1062,7 @@ private fun AuthGatewayScreen(
     onGoogleSignInError: (String) -> Unit,
     onShowLogin: () -> Unit,
     onShowRegister: () -> Unit,
+    onShowForgotPassword: () -> Unit,
 ) {
     Box(
         modifier = Modifier
@@ -1063,7 +1077,7 @@ private fun AuthGatewayScreen(
                 error = error,
                 notice = notice,
                 onLogin = onLogin,
-                onRequestPasswordReset = onRequestPasswordReset,
+                onShowForgotPassword = onShowForgotPassword,
                 googleWebClientId = googleWebClientId,
                 onGoogleSignIn = onGoogleSignIn,
                 onGoogleSignInError = onGoogleSignInError,
@@ -1079,6 +1093,13 @@ private fun AuthGatewayScreen(
                 onGoogleSignInError = onGoogleSignInError,
                 onShowLogin = onShowLogin,
             )
+            AuthMode.ForgotPassword -> ForgotPasswordScreen(
+                loading = loading,
+                error = error,
+                notice = notice,
+                onRequestPasswordReset = onRequestPasswordReset,
+                onShowLogin = onShowLogin,
+            )
         }
     }
 }
@@ -1089,7 +1110,7 @@ private fun LoginScreen(
     error: String?,
     notice: String?,
     onLogin: (String, String) -> Unit,
-    onRequestPasswordReset: (String) -> Unit,
+    onShowForgotPassword: () -> Unit,
     googleWebClientId: String,
     onGoogleSignIn: (String, String) -> Unit,
     onGoogleSignInError: (String) -> Unit,
@@ -1143,12 +1164,12 @@ private fun LoginScreen(
             },
         )
         OutlinedButton(
-            onClick = { onRequestPasswordReset(email) },
+            onClick = onShowForgotPassword,
             modifier = Modifier.fillMaxWidth(),
-            enabled = !loading && email.isNotBlank(),
+            enabled = !loading,
         ) {
             Icon(Icons.Default.RestartAlt, contentDescription = null, modifier = Modifier.size(18.dp))
-            Text("Reset password via email", modifier = Modifier.padding(start = 8.dp))
+            Text("Lupa password?", modifier = Modifier.padding(start = 8.dp))
         }
         OutlinedButton(
             onClick = onShowRegister,
@@ -1157,6 +1178,56 @@ private fun LoginScreen(
         ) {
             Icon(Icons.Default.PersonAdd, contentDescription = null, modifier = Modifier.size(18.dp))
             Text("Buat akun baru", modifier = Modifier.padding(start = 8.dp))
+        }
+    }
+}
+
+@Composable
+private fun ForgotPasswordScreen(
+    loading: Boolean,
+    error: String?,
+    notice: String?,
+    onRequestPasswordReset: (String) -> Unit,
+    onShowLogin: () -> Unit,
+) {
+    var email by rememberSaveable { mutableStateOf("") }
+    AuthScaffoldCard(
+        eyebrow = "Recovery",
+        title = "Lupa Password",
+        description = "Masukkan email akun kamu. Kami akan mengirimkan link untuk mereset password melalui email.",
+        error = error,
+        notice = notice,
+    ) {
+        OutlinedTextField(
+            value = email,
+            onValueChange = { email = it },
+            modifier = Modifier.fillMaxWidth(),
+            enabled = !loading,
+            label = { Text("Email") },
+            leadingIcon = { Icon(Icons.Default.Email, contentDescription = null) },
+            singleLine = true,
+        )
+        Button(
+            onClick = { onRequestPasswordReset(email) },
+            modifier = Modifier.fillMaxWidth(),
+            enabled = !loading && email.isNotBlank(),
+        ) {
+            if (loading) {
+                CircularProgressIndicator(
+                    modifier = Modifier.size(18.dp),
+                    strokeWidth = 2.dp,
+                    color = MaterialTheme.colorScheme.onPrimary,
+                )
+            } else {
+                Text("Kirim link reset")
+            }
+        }
+        OutlinedButton(
+            onClick = onShowLogin,
+            modifier = Modifier.fillMaxWidth(),
+            enabled = !loading,
+        ) {
+            Text("Kembali ke Login")
         }
     }
 }
@@ -1922,6 +1993,7 @@ private fun ProfileScreen(
     session: AuthSession?,
     loading: Boolean,
     error: String?,
+    vm: MainViewModel,
     onLogout: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -1971,17 +2043,29 @@ private fun ProfileScreen(
             }
         }
         item {
-            OutlinedButton(
-                onClick = onLogout,
-                modifier = Modifier.fillMaxWidth(),
-                enabled = !loading,
-                colors = ButtonDefaults.outlinedButtonColors(
-                    contentColor = MaterialTheme.colorScheme.error,
-                ),
-                border = BorderStroke(1.dp, MaterialTheme.colorScheme.error.copy(alpha = 0.5f)),
-            ) {
-                Icon(Icons.Default.Logout, contentDescription = null, modifier = Modifier.size(18.dp))
-                Text(if (loading) "Logout..." else "Logout", modifier = Modifier.padding(start = 8.dp))
+            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                if (!session?.email.isNullOrBlank()) {
+                    OutlinedButton(
+                        onClick = { vm.requestPasswordReset(session!!.email) },
+                        modifier = Modifier.fillMaxWidth(),
+                        enabled = !loading,
+                    ) {
+                        Icon(Icons.Default.RestartAlt, contentDescription = null, modifier = Modifier.size(18.dp))
+                        Text("Reset Password", modifier = Modifier.padding(start = 8.dp))
+                    }
+                }
+                Button(
+                    onClick = onLogout,
+                    modifier = Modifier.fillMaxWidth(),
+                    enabled = !loading,
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.error,
+                        contentColor = MaterialTheme.colorScheme.onError,
+                    ),
+                ) {
+                    Icon(Icons.Default.Logout, contentDescription = null, modifier = Modifier.size(18.dp))
+                    Text(if (loading) "Logout..." else "Logout", modifier = Modifier.padding(start = 8.dp))
+                }
             }
         }
     }
