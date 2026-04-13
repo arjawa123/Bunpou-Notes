@@ -59,12 +59,12 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.MenuBook
 import androidx.compose.material.icons.automirrored.filled.NavigateNext
+import androidx.compose.material.icons.automirrored.filled.Logout
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Logout
-import androidx.compose.material.icons.filled.PersonAdd
+import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Quiz
 import androidx.compose.material.icons.filled.RestartAlt
 import androidx.compose.material.icons.filled.Settings
@@ -93,6 +93,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -129,6 +130,7 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Constraints
@@ -153,6 +155,7 @@ import com.rjw.bunpoun3.data.CatalogVerbForm
 import com.rjw.bunpoun3.data.CatalogVerbFormRow
 import com.rjw.bunpoun3.data.CatalogWeek
 import com.rjw.bunpoun3.data.DayQuizProgress
+import com.rjw.bunpoun3.data.SignUpResult
 import com.rjw.bunpoun3.data.SupabaseAuthRepository
 import com.rjw.bunpoun3.ui.theme.BunpouTheme
 import com.rjw.bunpoun3.ui.theme.ThemeMode
@@ -273,7 +276,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch {
             repository.observeSettings().collect { settings ->
                 val authSession = settings.toAuthSession()
-                if (authSession != null && authSession.email.isBlank()) {
+                if (authSession != null && (authSession.email.isBlank() || authSession.authProvider.isBlank())) {
                     viewModelScope.launch {
                         runCatching { authRepository.enrichSession(authSession) }
                             .onSuccess { session -> saveAuthSession(session) }
@@ -364,24 +367,37 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun register(email: String, password: String) {
         runAuthAction {
-            val session = authRepository.signUp(email, password)
-            if (session != null) {
-                saveAuthSession(session)
-                _uiState.update {
-                    it.copy(
-                        screen = Screen.Home,
-                        authMode = AuthMode.Login,
-                        authError = null,
-                        authNotice = "Akun dibuat dan sudah masuk.",
-                    )
+            when (val result = authRepository.signUp(email, password)) {
+                is SignUpResult.SignedIn -> {
+                    saveAuthSession(result.session)
+                    _uiState.update {
+                        it.copy(
+                            screen = Screen.Home,
+                            authMode = AuthMode.Login,
+                            authError = null,
+                            authNotice = "Akun dibuat dan sudah masuk.",
+                        )
+                    }
                 }
-            } else {
-                _uiState.update {
-                    it.copy(
-                        authMode = AuthMode.Login,
-                        authError = null,
-                        authNotice = "Registrasi berhasil. Cek email kamu untuk konfirmasi, lalu login.",
-                    )
+
+                SignUpResult.ConfirmationRequired -> {
+                    _uiState.update {
+                        it.copy(
+                            authMode = AuthMode.Login,
+                            authError = null,
+                            authNotice = "Registrasi berhasil. Cek email kamu untuk konfirmasi, lalu login.",
+                        )
+                    }
+                }
+
+                SignUpResult.AlreadyRegistered -> {
+                    _uiState.update {
+                        it.copy(
+                            authMode = AuthMode.Register,
+                            authError = "Email ini sudah terdaftar. Silakan login atau reset password.",
+                            authNotice = null,
+                        )
+                    }
                 }
             }
         }
@@ -390,14 +406,14 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     fun requestPasswordReset(email: String) {
         runAuthAction {
             authRepository.sendPasswordReset(email)
-            _uiState.update {
-                it.copy(
-                    authMode = AuthMode.Login,
-                    authError = null,
-                    authNotice = "Link reset password sudah dikirim. Buka dari email agar kembali ke app.",
-                )
+                _uiState.update {
+                    it.copy(
+                        authMode = AuthMode.Login,
+                        authError = null,
+                        authNotice = "Cek email kamu. Link reset password sudah dikirim. Buka dari email agar kembali ke app.",
+                    )
+                }
             }
-        }
     }
 
     fun googleWebClientId(): String =
@@ -702,6 +718,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         repository.setSetting(SETTING_AUTH_EXPIRES_AT, session.expiresAtMillis.toString())
         repository.setSetting(SETTING_AUTH_USER_ID, session.userId)
         repository.setSetting(SETTING_AUTH_EMAIL, session.email)
+        repository.setSetting(SETTING_AUTH_PROVIDER, session.authProvider)
     }
 
     private suspend fun clearAuthSession() {
@@ -710,6 +727,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         repository.setSetting(SETTING_AUTH_EXPIRES_AT, "")
         repository.setSetting(SETTING_AUTH_USER_ID, "")
         repository.setSetting(SETTING_AUTH_EMAIL, "")
+        repository.setSetting(SETTING_AUTH_PROVIDER, "")
     }
 
     private fun buildQuiz(source: List<Pair<CatalogGrammar, Int>>): List<QuizQuestion> {
@@ -750,6 +768,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         private const val SETTING_AUTH_EXPIRES_AT = "auth_expires_at"
         private const val SETTING_AUTH_USER_ID = "auth_user_id"
         private const val SETTING_AUTH_EMAIL = "auth_email"
+        private const val SETTING_AUTH_PROVIDER = "auth_provider"
         private const val DAILY_QUIZ_PASS_PERCENTAGE = 80
     }
 }
@@ -762,6 +781,7 @@ private fun Map<String, String>.toAuthSession(): AuthSession? {
         expiresAtMillis = this["auth_expires_at"]?.toLongOrNull() ?: 0L,
         userId = this["auth_user_id"].orEmpty(),
         email = this["auth_email"].orEmpty(),
+        authProvider = this["auth_provider"].orEmpty(),
     )
 }
 
@@ -773,6 +793,7 @@ private fun Map<String, String>.toAuthSessionFromCallback(): AuthSession? {
         expiresAtMillis = System.currentTimeMillis() + ((this["expires_in"]?.toLongOrNull() ?: 3_600L) * 1_000L),
         userId = this["user_id"].orEmpty(),
         email = this["email"].orEmpty(),
+        authProvider = this["provider"].orEmpty(),
     )
 }
 
@@ -990,6 +1011,7 @@ private fun AppRoot(
                                     session = state.authSession,
                                     loading = state.authLoading,
                                     error = state.authError,
+                                    notice = state.authNotice,
                                     vm = vm,
                                     onLogout = vm::signOut,
                                 )
@@ -1121,9 +1143,9 @@ private fun LoginScreen(
     var email by rememberSaveable { mutableStateOf("") }
     var password by rememberSaveable { mutableStateOf("") }
     AuthScaffoldCard(
-        eyebrow = "Supabase Auth",
+        eyebrow = "Authentication",
         title = "Masuk ke Bunpou Notes",
-        description = "Login untuk membuka materi, menyimpan session offline, dan nanti siap disinkronkan ke Supabase.",
+        description = "Login untuk membuka materi, menyimpan session offline, dan nanti siap disinkronkan ke cloud.",
         error = error,
         notice = notice,
     ) {
@@ -1134,6 +1156,16 @@ private fun LoginScreen(
             onEmailChange = { email = it },
             onPasswordChange = { password = it },
         )
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.End,
+        ) {
+            AuthTextLink(
+                text = "Lupa password?",
+                enabled = !loading,
+                onClick = onShowForgotPassword,
+            )
+        }
         Button(
             onClick = { onLogin(email, password) },
             modifier = Modifier.fillMaxWidth(),
@@ -1149,6 +1181,7 @@ private fun LoginScreen(
                 Text("Login")
             }
         }
+        AuthDividerLabel(text = "OR")
         GoogleSignInButton(
             enabled = !loading,
             onClick = {
@@ -1163,22 +1196,12 @@ private fun LoginScreen(
                 }
             },
         )
-        OutlinedButton(
-            onClick = onShowForgotPassword,
-            modifier = Modifier.fillMaxWidth(),
+        AuthModeSwitchRow(
+            prompt = "Belum punya akun?",
+            actionText = "Buat akun baru",
             enabled = !loading,
-        ) {
-            Icon(Icons.Default.RestartAlt, contentDescription = null, modifier = Modifier.size(18.dp))
-            Text("Lupa password?", modifier = Modifier.padding(start = 8.dp))
-        }
-        OutlinedButton(
             onClick = onShowRegister,
-            modifier = Modifier.fillMaxWidth(),
-            enabled = !loading,
-        ) {
-            Icon(Icons.Default.PersonAdd, contentDescription = null, modifier = Modifier.size(18.dp))
-            Text("Buat akun baru", modifier = Modifier.padding(start = 8.dp))
-        }
+        )
     }
 }
 
@@ -1293,6 +1316,7 @@ private fun RegisterScreen(
                 Text("Register")
             }
         }
+        AuthDividerLabel(text = "OR")
         GoogleSignInButton(
             enabled = !loading,
             onClick = {
@@ -1307,13 +1331,12 @@ private fun RegisterScreen(
                 }
             },
         )
-        OutlinedButton(
-            onClick = onShowLogin,
-            modifier = Modifier.fillMaxWidth(),
+        AuthModeSwitchRow(
+            prompt = "Sudah punya akun?",
+            actionText = "Login",
             enabled = !loading,
-        ) {
-            Text("Sudah punya akun? Login")
-        }
+            onClick = onShowLogin,
+        )
     }
 }
 
@@ -1406,6 +1429,7 @@ private fun PasswordTextField(
         modifier = modifier,
         enabled = enabled,
         label = { Text(label) },
+        leadingIcon = { Icon(Icons.Default.Lock, contentDescription = null) },
         visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
         trailingIcon = {
             IconButton(onClick = { passwordVisible = !passwordVisible }, enabled = enabled) {
@@ -1417,6 +1441,73 @@ private fun PasswordTextField(
         },
         singleLine = true,
     )
+}
+
+@Composable
+private fun AuthTextLink(
+    text: String,
+    enabled: Boolean,
+    onClick: () -> Unit,
+) {
+    TextButton(
+        onClick = onClick,
+        enabled = enabled,
+        contentPadding = PaddingValues(horizontal = 4.dp, vertical = 0.dp),
+    ) {
+        Text(
+            text = text,
+            color = Color(0xFF1565C0),
+            textDecoration = TextDecoration.Underline,
+        )
+    }
+}
+
+@Composable
+private fun AuthDividerLabel(text: String) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
+    ) {
+        HorizontalDivider(
+            modifier = Modifier.weight(1f),
+            color = MaterialTheme.colorScheme.outlineVariant,
+        )
+        Text(
+            text = text,
+            style = MaterialTheme.typography.labelLarge,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+        HorizontalDivider(
+            modifier = Modifier.weight(1f),
+            color = MaterialTheme.colorScheme.outlineVariant,
+        )
+    }
+}
+
+@Composable
+private fun AuthModeSwitchRow(
+    prompt: String,
+    actionText: String,
+    enabled: Boolean,
+    onClick: () -> Unit,
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text(
+            prompt,
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+        AuthTextLink(
+            text = actionText,
+            enabled = enabled,
+            onClick = onClick,
+        )
+    }
 }
 
 @Composable
@@ -1993,6 +2084,7 @@ private fun ProfileScreen(
     session: AuthSession?,
     loading: Boolean,
     error: String?,
+    notice: String?,
     vm: MainViewModel,
     onLogout: () -> Unit,
     modifier: Modifier = Modifier,
@@ -2042,9 +2134,14 @@ private fun ProfileScreen(
                 AuthMessageCard(text = error, error = true)
             }
         }
+        if (!notice.isNullOrBlank()) {
+            item {
+                AuthMessageCard(text = notice, error = false)
+            }
+        }
         item {
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                if (!session?.email.isNullOrBlank()) {
+                if (!session?.email.isNullOrBlank() && session.supportsPasswordReset()) {
                     OutlinedButton(
                         onClick = { vm.requestPasswordReset(session!!.email) },
                         modifier = Modifier.fillMaxWidth(),
@@ -2063,7 +2160,7 @@ private fun ProfileScreen(
                         contentColor = MaterialTheme.colorScheme.onError,
                     ),
                 ) {
-                    Icon(Icons.Default.Logout, contentDescription = null, modifier = Modifier.size(18.dp))
+                    Icon(Icons.AutoMirrored.Filled.Logout, contentDescription = null, modifier = Modifier.size(18.dp))
                     Text(if (loading) "Logout..." else "Logout", modifier = Modifier.padding(start = 8.dp))
                 }
             }
@@ -2130,6 +2227,9 @@ private fun ResetPasswordScreen(
         }
     }
 }
+
+private fun AuthSession.supportsPasswordReset(): Boolean =
+    authProvider.equals("email", ignoreCase = true)
 
 @Composable
 private fun ProfileInfoRow(label: String, value: String) {

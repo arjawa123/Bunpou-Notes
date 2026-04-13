@@ -20,7 +20,14 @@ data class AuthSession(
     val expiresAtMillis: Long,
     val userId: String,
     val email: String,
+    val authProvider: String,
 )
+
+sealed interface SignUpResult {
+    data class SignedIn(val session: AuthSession) : SignUpResult
+    data object ConfirmationRequired : SignUpResult
+    data object AlreadyRegistered : SignUpResult
+}
 
 class SupabaseAuthRepository(
     private val supabaseUrl: String,
@@ -39,13 +46,16 @@ class SupabaseAuthRepository(
         authRequest(
             endpoint = "/auth/v1/token?grant_type=password",
             body = credentialPayload(email, password),
-        ).requireSession(email)
+        ).requireSession(
+            fallbackEmail = email,
+            fallbackProvider = "email",
+        )
 
-    suspend fun signUp(email: String, password: String): AuthSession? =
+    suspend fun signUp(email: String, password: String): SignUpResult =
         authRequest(
             endpoint = "/auth/v1/signup?redirect_to=${callbackUrl.encoded()}",
             body = credentialPayload(email, password),
-        ).toSession(fallbackEmail = email)
+        ).toSignUpResult(email)
 
     suspend fun signInWithGoogleIdToken(
         idToken: String,
@@ -54,7 +64,10 @@ class SupabaseAuthRepository(
         authRequest(
             endpoint = "/auth/v1/token?grant_type=id_token",
             body = googleIdTokenPayload(idToken, nonce),
-        ).requireSession(fallbackEmail = "")
+        ).requireSession(
+            fallbackEmail = "",
+            fallbackProvider = "google",
+        )
 
     suspend fun sendPasswordReset(email: String) {
         request(
@@ -76,6 +89,7 @@ class SupabaseAuthRepository(
         return session.copy(
             userId = user.id ?: session.userId,
             email = user.email ?: session.email,
+            authProvider = user.provider ?: session.authProvider,
         )
     }
 
@@ -198,13 +212,37 @@ private data class AuthResponse(
 private data class AuthUserResponse(
     val id: String? = null,
     val email: String? = null,
+    @SerialName("app_metadata") val appMetadata: AuthAppMetadata? = null,
+    val identities: List<AuthIdentityResponse>? = null,
 )
 
-private fun AuthResponse.requireSession(fallbackEmail: String): AuthSession =
-    toSession(fallbackEmail)
+@Serializable
+private data class AuthAppMetadata(
+    val provider: String? = null,
+)
+
+@Serializable
+private data class AuthIdentityResponse(
+    val provider: String? = null,
+)
+
+private val AuthUserResponse.provider: String?
+    get() = appMetadata?.provider ?: identities?.firstOrNull { !it.provider.isNullOrBlank() }?.provider
+
+private fun AuthResponse.requireSession(
+    fallbackEmail: String,
+    fallbackProvider: String,
+): AuthSession =
+    toSession(
+        fallbackEmail = fallbackEmail,
+        fallbackProvider = fallbackProvider,
+    )
         ?: throw IllegalStateException("Login berhasil, tapi session Supabase tidak dikembalikan.")
 
-private fun AuthResponse.toSession(fallbackEmail: String): AuthSession? {
+private fun AuthResponse.toSession(
+    fallbackEmail: String,
+    fallbackProvider: String,
+): AuthSession? {
     val token = accessToken ?: return null
     val refresh = refreshToken.orEmpty()
     val expiresInMillis = (expiresIn ?: 3_600L) * 1_000L
@@ -214,5 +252,28 @@ private fun AuthResponse.toSession(fallbackEmail: String): AuthSession? {
         expiresAtMillis = System.currentTimeMillis() + expiresInMillis,
         userId = user?.id.orEmpty(),
         email = user?.email ?: fallbackEmail.trim(),
+        authProvider = user?.provider ?: fallbackProvider,
     )
+}
+
+private fun AuthResponse.toSignUpResult(fallbackEmail: String): SignUpResult {
+    val session = toSession(
+        fallbackEmail = fallbackEmail,
+        fallbackProvider = "email",
+    )
+    if (session != null) {
+        return SignUpResult.SignedIn(session)
+    }
+
+    if (user.isExistingUserPlaceholder()) {
+        return SignUpResult.AlreadyRegistered
+    }
+
+    return SignUpResult.ConfirmationRequired
+}
+
+private fun AuthUserResponse?.isExistingUserPlaceholder(): Boolean {
+    if (this == null) return false
+    val emailIdentityMissing = identities?.none { it.provider.equals("email", ignoreCase = true) } != false
+    return !id.isNullOrBlank() && emailIdentityMissing
 }
