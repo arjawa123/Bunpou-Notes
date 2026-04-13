@@ -1777,7 +1777,6 @@ private fun ThemeSettingsScreen(
                     modifier = Modifier.padding(22.dp),
                     verticalArrangement = Arrangement.spacedBy(12.dp),
                 ) {
-                    SummaryPill("Pengaturan aplikasi")
                     Text("Atur cara belajar dan tampilan app dari satu tempat.", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
                     Text(
                         "Kontrol furigana, romaji, mode light/dark, dan preset warna sekarang dikumpulkan di menu ini supaya layar belajar tetap fokus ke materi.",
@@ -1900,7 +1899,7 @@ private fun AccountSettingsCard(
                 modifier = Modifier.weight(1f),
                 verticalArrangement = Arrangement.spacedBy(4.dp),
             ) {
-                Text("Profile Supabase", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+                Text("User Profile", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
                 Text(
                     session?.email?.takeIf { it.isNotBlank() } ?: "Session tersimpan di perangkat ini",
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -1937,7 +1936,6 @@ private fun ProfileScreen(
                     modifier = Modifier.padding(22.dp),
                     verticalArrangement = Arrangement.spacedBy(14.dp),
                 ) {
-                    SummaryPill("Supabase profile")
                     Icon(
                         Icons.Default.AccountCircle,
                         contentDescription = null,
@@ -1961,8 +1959,6 @@ private fun ProfileScreen(
             SettingsSectionCard {
                 ProfileInfoRow(label = "Email", value = session?.email.orEmpty().ifBlank { "Tidak tersedia" })
                 HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
-                ProfileInfoRow(label = "User ID", value = session?.userId.orEmpty().ifBlank { "Tidak tersedia" })
-                HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
                 ProfileInfoRow(
                     label = "Session",
                     value = if ((session?.accessToken).isNullOrBlank()) "Tidak aktif" else "Aktif di perangkat ini",
@@ -1979,6 +1975,10 @@ private fun ProfileScreen(
                 onClick = onLogout,
                 modifier = Modifier.fillMaxWidth(),
                 enabled = !loading,
+                colors = ButtonDefaults.outlinedButtonColors(
+                    contentColor = MaterialTheme.colorScheme.error,
+                ),
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.error.copy(alpha = 0.5f)),
             ) {
                 Icon(Icons.Default.Logout, contentDescription = null, modifier = Modifier.size(18.dp))
                 Text(if (loading) "Logout..." else "Logout", modifier = Modifier.padding(start = 8.dp))
