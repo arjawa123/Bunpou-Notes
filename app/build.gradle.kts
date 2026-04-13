@@ -67,11 +67,18 @@ android {
                 "proguard-rules.pro",
             )
             val releaseConfig = signingConfigs.getByName("release")
-            signingConfig = if (releaseConfig.storeFile?.exists() == true) {
-                releaseConfig
-            } else {
-                signingConfigs.getByName("debug")
+            val isCi = System.getenv("CI") == "true"
+            val isReleaseTask = gradle.startParameter.taskNames.any { task ->
+                task.contains("Release", ignoreCase = true)
             }
+            val hasReleaseKeystore = releaseConfig.storeFile?.exists() == true &&
+                !releaseConfig.storePassword.isNullOrBlank() &&
+                !releaseConfig.keyAlias.isNullOrBlank() &&
+                !releaseConfig.keyPassword.isNullOrBlank()
+            if (isCi && isReleaseTask && !hasReleaseKeystore) {
+                throw GradleException("Release keystore missing or incomplete in CI.")
+            }
+            signingConfig = if (hasReleaseKeystore) releaseConfig else signingConfigs.getByName("debug")
         }
     }
 

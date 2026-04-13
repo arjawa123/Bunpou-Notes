@@ -16,3 +16,4 @@ generated-assets/
 index.html
 local.properties
 keystore.jks
+keystore.base64
