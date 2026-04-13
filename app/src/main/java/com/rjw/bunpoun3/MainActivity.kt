@@ -954,6 +954,7 @@ private fun AppRoot(
                                 Screen.Quiz -> QuizScreen(
                                     quizState = state.quizState,
                                     furiganaOn = state.furiganaOn,
+                                    romajiOn = state.romajiOn,
                                     readings = catalog.readings,
                                     romajiMap = catalog.romajiMap,
                                     onAnswer = vm::answerQuiz,
@@ -2954,6 +2955,7 @@ private fun ExampleCard(
 private fun QuizScreen(
     quizState: QuizState?,
     furiganaOn: Boolean,
+    romajiOn: Boolean,
     readings: Map<String, String>,
     romajiMap: Map<String, String>,
     onAnswer: (String) -> Unit,
@@ -3084,14 +3086,16 @@ private fun QuizScreen(
                                 readingFontSize = 8.sp,
                                 readingLineHeight = 9.sp,
                             )
-                            Text(
-                                toRomaji(question.promptHtml, readings, romajiMap),
-                                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.64f),
-                                style = MaterialTheme.typography.bodySmall.copy(
-                                    fontFamily = ExampleItalicFontFamily,
-                                    fontStyle = FontStyle.Italic,
-                                ),
-                            )
+                            if (romajiOn) {
+                                Text(
+                                    toRomaji(question.promptHtml, readings, romajiMap),
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.64f),
+                                    style = MaterialTheme.typography.bodySmall.copy(
+                                        fontFamily = ExampleItalicFontFamily,
+                                        fontStyle = FontStyle.Italic,
+                                    ),
+                                )
+                            }
                             Text(
                                 question.promptId,
                                 color = MaterialTheme.colorScheme.onSurface,
