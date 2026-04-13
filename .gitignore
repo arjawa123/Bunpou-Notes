@@ -15,3 +15,4 @@ server/stderr.log
 generated-assets/
 index.html
 local.properties
+keystore.jks

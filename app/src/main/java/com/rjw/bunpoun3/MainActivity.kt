@@ -4,7 +4,10 @@ import android.app.Activity
 import android.app.Application
 import android.content.Context
 import android.content.ContextWrapper
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.util.Base64
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.activity.ComponentActivity
@@ -22,6 +25,7 @@ import androidx.compose.animation.shrinkVertically
 import androidx.compose.animation.togetherWith
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -55,12 +59,19 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.MenuBook
 import androidx.compose.material.icons.automirrored.filled.NavigateNext
+import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Logout
+import androidx.compose.material.icons.filled.PersonAdd
 import androidx.compose.material.icons.filled.Quiz
+import androidx.compose.material.icons.filled.RestartAlt
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.TextFields
 import androidx.compose.material.icons.filled.Translate
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -84,10 +95,12 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -100,6 +113,7 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathEffect
+import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.lerp
@@ -113,6 +127,8 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Constraints
@@ -124,7 +140,11 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.viewModelScope
 import androidx.core.view.WindowCompat
+import androidx.credentials.CustomCredential
+import androidx.credentials.CredentialManager
+import androidx.credentials.GetCredentialRequest
 import com.rjw.bunpoun3.data.AppRepository
+import com.rjw.bunpoun3.data.AuthSession
 import com.rjw.bunpoun3.data.Catalog
 import com.rjw.bunpoun3.data.CatalogDay
 import com.rjw.bunpoun3.data.CatalogExample
@@ -133,6 +153,7 @@ import com.rjw.bunpoun3.data.CatalogVerbForm
 import com.rjw.bunpoun3.data.CatalogVerbFormRow
 import com.rjw.bunpoun3.data.CatalogWeek
 import com.rjw.bunpoun3.data.DayQuizProgress
+import com.rjw.bunpoun3.data.SupabaseAuthRepository
 import com.rjw.bunpoun3.ui.theme.BunpouTheme
 import com.rjw.bunpoun3.ui.theme.ThemeMode
 import com.rjw.bunpoun3.ui.theme.ThemePreset
@@ -142,6 +163,10 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import com.google.android.libraries.identity.googleid.GetSignInWithGoogleOption
+import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
+import java.security.MessageDigest
+import java.security.SecureRandom
 import kotlin.math.max
 import kotlin.random.Random
 
@@ -156,8 +181,11 @@ private val ExampleItalicFontFamily = FontFamily(
 private val BottomNavContentPadding = 124.dp
 
 class MainActivity : ComponentActivity() {
+    private var authCallbackUri by mutableStateOf<Uri?>(null)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        authCallbackUri = intent?.data
         enableEdgeToEdge()
         setContent {
             val vm: MainViewModel = viewModel(
@@ -186,9 +214,21 @@ class MainActivity : ComponentActivity() {
                         isAppearanceLightNavigationBars = !isDarkTheme
                     }
                 }
+                LaunchedEffect(authCallbackUri) {
+                    authCallbackUri?.let { uri ->
+                        vm.handleAuthCallback(uri)
+                        authCallbackUri = null
+                    }
+                }
                 AppRoot(state = state, vm = vm)
             }
         }
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        authCallbackUri = intent.data
     }
 }
 
@@ -201,6 +241,10 @@ private tailrec fun Context.findActivity(): Activity =
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val repository = AppRepository.create(application)
+    private val authRepository = SupabaseAuthRepository(
+        supabaseUrl = BuildConfig.SUPABASE_URL,
+        anonKey = BuildConfig.SUPABASE_ANON_KEY,
+    )
     private val _uiState = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
     private val random = Random(System.currentTimeMillis())
@@ -228,9 +272,17 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
         viewModelScope.launch {
             repository.observeSettings().collect { settings ->
+                val authSession = settings.toAuthSession()
+                if (authSession != null && authSession.email.isBlank()) {
+                    viewModelScope.launch {
+                        runCatching { authRepository.enrichSession(authSession) }
+                            .onSuccess { session -> saveAuthSession(session) }
+                    }
+                }
                 _uiState.update { state ->
                     state.copy(
-                        accessGranted = settings[SETTING_ACCESS] == "true",
+                        accessGranted = authSession != null,
+                        authSession = authSession,
                         furiganaOn = settings[SETTING_FURIGANA] != "false",
                         romajiOn = settings[SETTING_ROMAJI] != "false",
                         themeMode = settings[SETTING_THEME_MODE]
@@ -261,15 +313,188 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         _uiState.update { it.copy(settingsReturnScreen = it.screen, screen = Screen.Settings) }
     }
 
-    fun submitAccess(input: String) {
-        val code = uiState.value.catalog?.accessCode ?: return
-        if (input.trim() == code) {
-            viewModelScope.launch {
-                repository.setSetting(SETTING_ACCESS, "true")
+    fun openProfile() {
+        _uiState.update { it.copy(profileReturnScreen = it.screen, screen = Screen.Profile) }
+    }
+
+    fun showLogin() {
+        _uiState.update {
+            it.copy(
+                authMode = AuthMode.Login,
+                authError = null,
+                authNotice = null,
+            )
+        }
+    }
+
+    fun showRegister() {
+        _uiState.update {
+            it.copy(
+                authMode = AuthMode.Register,
+                authError = null,
+                authNotice = null,
+            )
+        }
+    }
+
+    fun signIn(email: String, password: String) {
+        runAuthAction {
+            val session = authRepository.signIn(email, password)
+            saveAuthSession(session)
+            _uiState.update {
+                it.copy(
+                    screen = Screen.Home,
+                    authMode = AuthMode.Login,
+                    authError = null,
+                    authNotice = "Login berhasil. Selamat belajar lagi.",
+                )
             }
-            _uiState.update { it.copy(accessError = null) }
-        } else {
-            _uiState.update { it.copy(accessError = "Kode salah / コードが違います。") }
+        }
+    }
+
+    fun register(email: String, password: String) {
+        runAuthAction {
+            val session = authRepository.signUp(email, password)
+            if (session != null) {
+                saveAuthSession(session)
+                _uiState.update {
+                    it.copy(
+                        screen = Screen.Home,
+                        authMode = AuthMode.Login,
+                        authError = null,
+                        authNotice = "Akun dibuat dan sudah masuk.",
+                    )
+                }
+            } else {
+                _uiState.update {
+                    it.copy(
+                        authMode = AuthMode.Login,
+                        authError = null,
+                        authNotice = "Registrasi berhasil. Cek email kamu untuk konfirmasi, lalu login.",
+                    )
+                }
+            }
+        }
+    }
+
+    fun requestPasswordReset(email: String) {
+        runAuthAction {
+            authRepository.sendPasswordReset(email)
+            _uiState.update {
+                it.copy(
+                    authMode = AuthMode.Login,
+                    authError = null,
+                    authNotice = "Link reset password sudah dikirim. Buka dari email agar kembali ke app.",
+                )
+            }
+        }
+    }
+
+    fun googleWebClientId(): String =
+        BuildConfig.GOOGLE_WEB_CLIENT_ID
+
+    fun signInWithGoogleIdToken(
+        idToken: String,
+        nonce: String,
+    ) {
+        runAuthAction {
+            val session = authRepository.signInWithGoogleIdToken(idToken, nonce)
+            val profileSession = runCatching { authRepository.enrichSession(session) }.getOrElse { session }
+            saveAuthSession(profileSession)
+            _uiState.update {
+                it.copy(
+                    screen = Screen.Home,
+                    authMode = AuthMode.Login,
+                    authError = null,
+                    authNotice = "Login Google berhasil. Selamat belajar lagi.",
+                )
+            }
+        }
+    }
+
+    fun showAuthError(message: String) {
+        _uiState.update { it.copy(authError = message, authNotice = null) }
+    }
+
+    fun updatePassword(password: String) {
+        val session = uiState.value.authSession
+        if (session == null) {
+            _uiState.update { it.copy(authError = "Session reset tidak ditemukan. Buka ulang link dari email.") }
+            return
+        }
+        runAuthAction {
+            authRepository.updatePassword(session.accessToken, password)
+            _uiState.update {
+                it.copy(
+                    screen = Screen.Profile,
+                    authError = null,
+                    authNotice = "Password berhasil diperbarui.",
+                )
+            }
+        }
+    }
+
+    fun handleAuthCallback(uri: Uri) {
+        val params = uri.authCallbackParams()
+        val error = params["error_description"] ?: params["error"] ?: params["message"]
+        if (!error.isNullOrBlank()) {
+            _uiState.update {
+                it.copy(
+                    authMode = AuthMode.Login,
+                    authError = error,
+                    authNotice = null,
+                )
+            }
+            return
+        }
+
+        val session = params.toAuthSessionFromCallback()
+        if (session == null) {
+            _uiState.update {
+                it.copy(
+                    authMode = AuthMode.Login,
+                    authNotice = "Email berhasil dikonfirmasi. Silakan login untuk melanjutkan.",
+                )
+            }
+            return
+        }
+
+        viewModelScope.launch {
+            val profileSession = runCatching { authRepository.enrichSession(session) }.getOrElse { session }
+            saveAuthSession(profileSession)
+            _uiState.update {
+                it.copy(
+                    screen = if (params["type"] == "recovery") Screen.ResetPassword else Screen.Home,
+                    authMode = AuthMode.Login,
+                    authError = null,
+                    authNotice = if (params["type"] == "recovery") {
+                        "Masukkan password baru untuk menyelesaikan reset."
+                    } else {
+                        "Email berhasil dikonfirmasi. Kamu sudah masuk."
+                    },
+                )
+            }
+        }
+    }
+
+    fun signOut() {
+        _uiState.update { it.copy(authLoading = true, authError = null, authNotice = null) }
+        viewModelScope.launch {
+            uiState.value.authSession?.accessToken?.takeIf { it.isNotBlank() }?.let { token ->
+                if (authRepository.isConfigured) {
+                    runCatching { authRepository.signOut(token) }
+                }
+            }
+            clearAuthSession()
+            _uiState.update {
+                it.copy(
+                    screen = Screen.Home,
+                    authMode = AuthMode.Login,
+                    authError = null,
+                    authNotice = "Kamu sudah logout.",
+                )
+            }
+            _uiState.update { it.copy(authLoading = false) }
         }
     }
 
@@ -328,7 +553,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             it.copy(
                 screen = Screen.Quiz,
                 quizReturnScreen = when (val current = it.screen) {
-                    Screen.Settings, Screen.Quiz -> Screen.Home
+                    Screen.Settings, Screen.Quiz, Screen.Profile, Screen.ResetPassword -> Screen.Home
                     else -> current
                 },
                 quizState = QuizState(
@@ -410,6 +635,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             is Screen.Lesson -> openWeek(screen.weekNum())
             Screen.Quiz -> backFromQuiz()
             Screen.Settings -> closeThemeSettings()
+            Screen.Profile -> closeProfile()
+            Screen.ResetPassword -> goHome()
         }
     }
 
@@ -425,6 +652,54 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 screen = it.settingsReturnScreen,
             )
         }
+    }
+
+    private fun closeProfile() {
+        _uiState.update {
+            it.copy(
+                screen = it.profileReturnScreen,
+            )
+        }
+    }
+
+    private fun runAuthAction(action: suspend () -> Unit) {
+        if (!authRepository.isConfigured) {
+            _uiState.update {
+                it.copy(
+                    authLoading = false,
+                    authError = "SUPABASE_URL dan SUPABASE_ANON_KEY belum terbaca dari local.properties.",
+                )
+            }
+            return
+        }
+        _uiState.update { it.copy(authLoading = true, authError = null, authNotice = null) }
+        viewModelScope.launch {
+            runCatching { action() }
+                .onFailure { throwable ->
+                    _uiState.update {
+                        it.copy(
+                            authError = throwable.message ?: "Autentikasi gagal. Coba lagi.",
+                        )
+                    }
+                }
+            _uiState.update { it.copy(authLoading = false) }
+        }
+    }
+
+    private suspend fun saveAuthSession(session: AuthSession) {
+        repository.setSetting(SETTING_AUTH_ACCESS_TOKEN, session.accessToken)
+        repository.setSetting(SETTING_AUTH_REFRESH_TOKEN, session.refreshToken)
+        repository.setSetting(SETTING_AUTH_EXPIRES_AT, session.expiresAtMillis.toString())
+        repository.setSetting(SETTING_AUTH_USER_ID, session.userId)
+        repository.setSetting(SETTING_AUTH_EMAIL, session.email)
+    }
+
+    private suspend fun clearAuthSession() {
+        repository.setSetting(SETTING_AUTH_ACCESS_TOKEN, "")
+        repository.setSetting(SETTING_AUTH_REFRESH_TOKEN, "")
+        repository.setSetting(SETTING_AUTH_EXPIRES_AT, "")
+        repository.setSetting(SETTING_AUTH_USER_ID, "")
+        repository.setSetting(SETTING_AUTH_EMAIL, "")
     }
 
     private fun buildQuiz(source: List<Pair<CatalogGrammar, Int>>): List<QuizQuestion> {
@@ -456,14 +731,55 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         uiState.value.catalog?.weeks?.firstOrNull { it.weekNum == weekNum }?.days?.firstOrNull { it.dayNum == dayNum }
 
     companion object {
-        private const val SETTING_ACCESS = "access_granted"
         private const val SETTING_FURIGANA = "furigana_on"
         private const val SETTING_ROMAJI = "romaji_on"
         private const val SETTING_THEME_MODE = "theme_mode"
         private const val SETTING_THEME_PRESET = "theme_preset"
+        private const val SETTING_AUTH_ACCESS_TOKEN = "auth_access_token"
+        private const val SETTING_AUTH_REFRESH_TOKEN = "auth_refresh_token"
+        private const val SETTING_AUTH_EXPIRES_AT = "auth_expires_at"
+        private const val SETTING_AUTH_USER_ID = "auth_user_id"
+        private const val SETTING_AUTH_EMAIL = "auth_email"
         private const val DAILY_QUIZ_PASS_PERCENTAGE = 80
     }
 }
+
+private fun Map<String, String>.toAuthSession(): AuthSession? {
+    val token = this["auth_access_token"]?.takeIf { it.isNotBlank() } ?: return null
+    return AuthSession(
+        accessToken = token,
+        refreshToken = this["auth_refresh_token"].orEmpty(),
+        expiresAtMillis = this["auth_expires_at"]?.toLongOrNull() ?: 0L,
+        userId = this["auth_user_id"].orEmpty(),
+        email = this["auth_email"].orEmpty(),
+    )
+}
+
+private fun Map<String, String>.toAuthSessionFromCallback(): AuthSession? {
+    val token = this["access_token"]?.takeIf { it.isNotBlank() } ?: return null
+    return AuthSession(
+        accessToken = token,
+        refreshToken = this["refresh_token"].orEmpty(),
+        expiresAtMillis = System.currentTimeMillis() + ((this["expires_in"]?.toLongOrNull() ?: 3_600L) * 1_000L),
+        userId = this["user_id"].orEmpty(),
+        email = this["email"].orEmpty(),
+    )
+}
+
+private fun Uri.authCallbackParams(): Map<String, String> =
+    buildMap {
+        queryParameterNames.forEach { key ->
+            getQueryParameter(key)?.let { value -> put(key, value) }
+        }
+        encodedFragment
+            ?.split("&")
+            .orEmpty()
+            .mapNotNull { pair ->
+                val parts = pair.split("=", limit = 2)
+                if (parts.size == 2) Uri.decode(parts[0]) to Uri.decode(parts[1]) else null
+            }
+            .forEach { (key, value) -> put(key, value) }
+    }
 
 data class UiState(
     val isLoading: Boolean = true,
@@ -471,16 +787,26 @@ data class UiState(
     val completedDayIds: Set<Int> = emptySet(),
     val quizProgressByDay: Map<Int, DayQuizProgress> = emptyMap(),
     val accessGranted: Boolean = false,
+    val authSession: AuthSession? = null,
+    val authMode: AuthMode = AuthMode.Login,
+    val authLoading: Boolean = false,
+    val authError: String? = null,
+    val authNotice: String? = null,
     val furiganaOn: Boolean = true,
     val romajiOn: Boolean = true,
     val themeMode: ThemeMode = ThemeMode.Light,
     val themePreset: ThemePreset = ThemePreset.Classic,
-    val accessError: String? = null,
     val screen: Screen = Screen.Home,
     val quizReturnScreen: Screen = Screen.Home,
     val settingsReturnScreen: Screen = Screen.Home,
+    val profileReturnScreen: Screen = Screen.Settings,
     val quizState: QuizState? = null,
 )
+
+enum class AuthMode {
+    Login,
+    Register,
+}
 
 sealed interface Screen {
     data object Home : Screen
@@ -488,6 +814,8 @@ sealed interface Screen {
     data class Lesson(val dayId: Int) : Screen
     data object Quiz : Screen
     data object Settings : Screen
+    data object Profile : Screen
+    data object ResetPassword : Screen
 }
 
 data class QuizState(
@@ -521,6 +849,10 @@ private fun AppRoot(
         enabled = state.accessGranted && state.screen != Screen.Home,
         onBack = vm::handleBack,
     )
+    BackHandler(
+        enabled = !state.accessGranted && state.authMode == AuthMode.Register,
+        onBack = vm::showLogin,
+    )
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background,
@@ -541,7 +873,20 @@ private fun AppRoot(
             AppBackdrop()
             when {
                 state.isLoading || catalog == null -> LoadingScreen()
-                !state.accessGranted -> AccessScreen(state.accessError, vm::submitAccess)
+                !state.accessGranted -> AuthGatewayScreen(
+                    mode = state.authMode,
+                    loading = state.authLoading,
+                    error = state.authError,
+                    notice = state.authNotice,
+                    onLogin = vm::signIn,
+                    onRegister = vm::register,
+                    onRequestPasswordReset = vm::requestPasswordReset,
+                    googleWebClientId = vm.googleWebClientId(),
+                    onGoogleSignIn = vm::signInWithGoogleIdToken,
+                    onGoogleSignInError = vm::showAuthError,
+                    onShowLogin = vm::showLogin,
+                    onShowRegister = vm::showRegister,
+                )
                 else -> {
                     val title = when (val screen = state.screen) {
                         Screen.Home -> "日本語N3 文法"
@@ -551,8 +896,12 @@ private fun AppRoot(
                         }
                         Screen.Quiz -> state.quizState?.title ?: "Quiz"
                         Screen.Settings -> "Pengaturan"
+                        Screen.Profile -> "Profil"
+                        Screen.ResetPassword -> "Reset Password"
                     }
-                    val showBottomBar = state.screen != Screen.Settings
+                    val showBottomBar = state.screen != Screen.Settings &&
+                        state.screen != Screen.Profile &&
+                        state.screen != Screen.ResetPassword
                     val density = LocalDensity.current
                     val statusBarInset = with(density) { WindowInsets.statusBars.getTop(this).toDp() }
                     val navigationBarInset = with(density) { WindowInsets.navigationBars.getBottom(this).toDp() }
@@ -613,14 +962,28 @@ private fun AppRoot(
                                     onHome = vm::goHome,
                                 )
                                 Screen.Settings -> ThemeSettingsScreen(
+                                    authSession = state.authSession,
                                     furiganaOn = state.furiganaOn,
                                     romajiOn = state.romajiOn,
                                     themeMode = state.themeMode,
                                     themePreset = state.themePreset,
+                                    onOpenProfile = vm::openProfile,
                                     onToggleFurigana = vm::toggleFurigana,
                                     onToggleRomaji = vm::toggleRomaji,
                                     onSelectMode = vm::updateThemeMode,
                                     onSelectPreset = vm::updateThemePreset,
+                                )
+                                Screen.Profile -> ProfileScreen(
+                                    session = state.authSession,
+                                    loading = state.authLoading,
+                                    error = state.authError,
+                                    onLogout = vm::signOut,
+                                )
+                                Screen.ResetPassword -> ResetPasswordScreen(
+                                    loading = state.authLoading,
+                                    error = state.authError,
+                                    notice = state.authNotice,
+                                    onUpdatePassword = vm::updatePassword,
                                 )
                             }
                         }
@@ -630,7 +993,9 @@ private fun AppRoot(
                             canGoBack = state.screen != Screen.Home,
                             onBack = vm::handleBack,
                             onOpenThemeSettings = vm::openThemeSettings,
-                            showThemeAction = state.screen != Screen.Settings,
+                            showThemeAction = state.screen != Screen.Settings &&
+                                state.screen != Screen.Profile &&
+                                state.screen != Screen.ResetPassword,
                         )
 
                         if (showBottomBar) {
@@ -670,49 +1035,472 @@ private fun LoadingScreen() {
 }
 
 @Composable
-private fun AccessScreen(error: String?, onSubmit: (String) -> Unit) {
-    var value by rememberSaveable { mutableStateOf("") }
+private fun AuthGatewayScreen(
+    mode: AuthMode,
+    loading: Boolean,
+    error: String?,
+    notice: String?,
+    onLogin: (String, String) -> Unit,
+    onRegister: (String, String) -> Unit,
+    onRequestPasswordReset: (String) -> Unit,
+    googleWebClientId: String,
+    onGoogleSignIn: (String, String) -> Unit,
+    onGoogleSignInError: (String) -> Unit,
+    onShowLogin: () -> Unit,
+    onShowRegister: () -> Unit,
+) {
     Box(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+            .padding(vertical = 24.dp),
         contentAlignment = Alignment.Center,
     ) {
-        ElevatedCard(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(24.dp),
-            shape = RoundedCornerShape(32.dp),
-            colors = CardDefaults.elevatedCardColors(
-                containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.96f),
-            ),
+        when (mode) {
+            AuthMode.Login -> LoginScreen(
+                loading = loading,
+                error = error,
+                notice = notice,
+                onLogin = onLogin,
+                onRequestPasswordReset = onRequestPasswordReset,
+                googleWebClientId = googleWebClientId,
+                onGoogleSignIn = onGoogleSignIn,
+                onGoogleSignInError = onGoogleSignInError,
+                onShowRegister = onShowRegister,
+            )
+            AuthMode.Register -> RegisterScreen(
+                loading = loading,
+                error = error,
+                notice = notice,
+                onRegister = onRegister,
+                googleWebClientId = googleWebClientId,
+                onGoogleSignIn = onGoogleSignIn,
+                onGoogleSignInError = onGoogleSignInError,
+                onShowLogin = onShowLogin,
+            )
+        }
+    }
+}
+
+@Composable
+private fun LoginScreen(
+    loading: Boolean,
+    error: String?,
+    notice: String?,
+    onLogin: (String, String) -> Unit,
+    onRequestPasswordReset: (String) -> Unit,
+    googleWebClientId: String,
+    onGoogleSignIn: (String, String) -> Unit,
+    onGoogleSignInError: (String) -> Unit,
+    onShowRegister: () -> Unit,
+) {
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+    var email by rememberSaveable { mutableStateOf("") }
+    var password by rememberSaveable { mutableStateOf("") }
+    AuthScaffoldCard(
+        eyebrow = "Supabase Auth",
+        title = "Masuk ke Bunpou N3",
+        description = "Login untuk membuka materi, menyimpan session offline, dan nanti siap disinkronkan ke Supabase.",
+        error = error,
+        notice = notice,
+    ) {
+        AuthFields(
+            email = email,
+            password = password,
+            enabled = !loading,
+            onEmailChange = { email = it },
+            onPasswordChange = { password = it },
+        )
+        Button(
+            onClick = { onLogin(email, password) },
+            modifier = Modifier.fillMaxWidth(),
+            enabled = !loading && email.isNotBlank() && password.isNotBlank(),
         ) {
-            Column(
-                modifier = Modifier.padding(24.dp),
-                verticalArrangement = Arrangement.spacedBy(14.dp),
-            ) {
-                SummaryPill("Akses privat")
-                Text("日本語N3 文法アプリ", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
-                Text(
-                    "Masukkan kode akses untuk membuka materi belajar, kuis, dan progress mingguan.",
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+            if (loading) {
+                CircularProgressIndicator(
+                    modifier = Modifier.size(18.dp),
+                    strokeWidth = 2.dp,
+                    color = MaterialTheme.colorScheme.onPrimary,
                 )
-                OutlinedTextField(
-                    value = value,
-                    onValueChange = { value = it },
-                    modifier = Modifier.fillMaxWidth(),
-                    label = { Text("アクセスコード / Kode Akses") },
-                    singleLine = true,
-                )
-                Button(
-                    onClick = { onSubmit(value) },
-                    modifier = Modifier.fillMaxWidth(),
-                ) {
-                    Text("Masuk")
-                }
-                if (!error.isNullOrBlank()) {
-                    Text(error, color = MaterialTheme.colorScheme.error)
-                }
+            } else {
+                Text("Login")
             }
         }
+        GoogleSignInButton(
+            enabled = !loading,
+            onClick = {
+                scope.launch {
+                    runCatching {
+                        requestNativeGoogleCredential(context, googleWebClientId)
+                    }.onSuccess { credential ->
+                        onGoogleSignIn(credential.idToken, credential.nonce)
+                    }.onFailure { throwable ->
+                        onGoogleSignInError(throwable.toGoogleSignInMessage())
+                    }
+                }
+            },
+        )
+        OutlinedButton(
+            onClick = { onRequestPasswordReset(email) },
+            modifier = Modifier.fillMaxWidth(),
+            enabled = !loading && email.isNotBlank(),
+        ) {
+            Icon(Icons.Default.RestartAlt, contentDescription = null, modifier = Modifier.size(18.dp))
+            Text("Reset password via email", modifier = Modifier.padding(start = 8.dp))
+        }
+        OutlinedButton(
+            onClick = onShowRegister,
+            modifier = Modifier.fillMaxWidth(),
+            enabled = !loading,
+        ) {
+            Icon(Icons.Default.PersonAdd, contentDescription = null, modifier = Modifier.size(18.dp))
+            Text("Buat akun baru", modifier = Modifier.padding(start = 8.dp))
+        }
+    }
+}
+
+@Composable
+private fun RegisterScreen(
+    loading: Boolean,
+    error: String?,
+    notice: String?,
+    onRegister: (String, String) -> Unit,
+    googleWebClientId: String,
+    onGoogleSignIn: (String, String) -> Unit,
+    onGoogleSignInError: (String) -> Unit,
+    onShowLogin: () -> Unit,
+) {
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+    var email by rememberSaveable { mutableStateOf("") }
+    var password by rememberSaveable { mutableStateOf("") }
+    var confirmPassword by rememberSaveable { mutableStateOf("") }
+    val localError = when {
+        password.isNotBlank() && password.length < 6 -> "Password minimal 6 karakter."
+        confirmPassword.isNotBlank() && password != confirmPassword -> "Konfirmasi password belum sama."
+        else -> null
+    }
+    AuthScaffoldCard(
+        eyebrow = "Daftar akun",
+        title = "Buat akun belajar",
+        description = "Gunakan email dan password Supabase. Kalau email confirmation aktif, kamu perlu konfirmasi email sebelum login.",
+        error = localError ?: error,
+        notice = notice,
+    ) {
+        AuthFields(
+            email = email,
+            password = password,
+            enabled = !loading,
+            onEmailChange = { email = it },
+            onPasswordChange = { password = it },
+        )
+        PasswordTextField(
+            value = confirmPassword,
+            onValueChange = { confirmPassword = it },
+            modifier = Modifier.fillMaxWidth(),
+            enabled = !loading,
+            label = "Confirm password",
+        )
+        Button(
+            onClick = { onRegister(email, password) },
+            modifier = Modifier.fillMaxWidth(),
+            enabled = !loading &&
+                localError == null &&
+                email.isNotBlank() &&
+                password.isNotBlank() &&
+                confirmPassword.isNotBlank(),
+        ) {
+            if (loading) {
+                CircularProgressIndicator(
+                    modifier = Modifier.size(18.dp),
+                    strokeWidth = 2.dp,
+                    color = MaterialTheme.colorScheme.onPrimary,
+                )
+            } else {
+                Text("Register")
+            }
+        }
+        GoogleSignInButton(
+            enabled = !loading,
+            onClick = {
+                scope.launch {
+                    runCatching {
+                        requestNativeGoogleCredential(context, googleWebClientId)
+                    }.onSuccess { credential ->
+                        onGoogleSignIn(credential.idToken, credential.nonce)
+                    }.onFailure { throwable ->
+                        onGoogleSignInError(throwable.toGoogleSignInMessage())
+                    }
+                }
+            },
+        )
+        OutlinedButton(
+            onClick = onShowLogin,
+            modifier = Modifier.fillMaxWidth(),
+            enabled = !loading,
+        ) {
+            Text("Sudah punya akun? Login")
+        }
+    }
+}
+
+@Composable
+private fun AuthScaffoldCard(
+    eyebrow: String,
+    title: String,
+    description: String,
+    error: String?,
+    notice: String?,
+    content: @Composable ColumnScope.() -> Unit,
+) {
+    ElevatedCard(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(24.dp),
+        shape = RoundedCornerShape(34.dp),
+        colors = CardDefaults.elevatedCardColors(containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.97f)),
+        elevation = CardDefaults.elevatedCardElevation(defaultElevation = 10.dp),
+    ) {
+        Column(
+            modifier = Modifier
+                .background(
+                    Brush.linearGradient(
+                        colors = listOf(
+                            lerp(MaterialTheme.colorScheme.primaryContainer, MaterialTheme.colorScheme.surface, 0.18f),
+                            MaterialTheme.colorScheme.surface,
+                        ),
+                    ),
+                )
+                .padding(24.dp),
+            verticalArrangement = Arrangement.spacedBy(14.dp),
+        ) {
+            SummaryPill(eyebrow)
+            Text(title, style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
+            Text(
+                description,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                style = MaterialTheme.typography.bodyMedium,
+            )
+            if (!notice.isNullOrBlank()) {
+                AuthMessageCard(text = notice, error = false)
+            }
+            if (!error.isNullOrBlank()) {
+                AuthMessageCard(text = error, error = true)
+            }
+            content()
+        }
+    }
+}
+
+@Composable
+private fun AuthFields(
+    email: String,
+    password: String,
+    enabled: Boolean,
+    onEmailChange: (String) -> Unit,
+    onPasswordChange: (String) -> Unit,
+) {
+    OutlinedTextField(
+        value = email,
+        onValueChange = onEmailChange,
+        modifier = Modifier.fillMaxWidth(),
+        enabled = enabled,
+        label = { Text("Email") },
+        leadingIcon = { Icon(Icons.Default.Email, contentDescription = null) },
+        singleLine = true,
+    )
+    PasswordTextField(
+        value = password,
+        onValueChange = onPasswordChange,
+        modifier = Modifier.fillMaxWidth(),
+        enabled = enabled,
+        label = "Password",
+    )
+}
+
+@Composable
+private fun PasswordTextField(
+    value: String,
+    onValueChange: (String) -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    label: String,
+) {
+    var passwordVisible by rememberSaveable { mutableStateOf(false) }
+    OutlinedTextField(
+        value = value,
+        onValueChange = onValueChange,
+        modifier = modifier,
+        enabled = enabled,
+        label = { Text(label) },
+        visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+        trailingIcon = {
+            IconButton(onClick = { passwordVisible = !passwordVisible }, enabled = enabled) {
+                Icon(
+                    imageVector = if (passwordVisible) Icons.Default.VisibilityOff else Icons.Default.Visibility,
+                    contentDescription = if (passwordVisible) "Sembunyikan password" else "Tampilkan password",
+                )
+            }
+        },
+        singleLine = true,
+    )
+}
+
+@Composable
+private fun GoogleSignInButton(
+    enabled: Boolean,
+    onClick: () -> Unit,
+) {
+    OutlinedButton(
+        onClick = onClick,
+        modifier = Modifier.fillMaxWidth(),
+        enabled = enabled,
+    ) {
+        GoogleIcon()
+        Text("Sign in with Google", modifier = Modifier.padding(start = 10.dp))
+    }
+}
+
+@Composable
+private fun GoogleIcon() {
+    Canvas(
+        modifier = Modifier
+            .size(20.dp)
+            .clip(CircleShape)
+            .background(Color.White)
+            .border(1.dp, Color(0xFFE0E3EB), CircleShape),
+    ) {
+        val strokeWidth = 2.6.dp.toPx()
+        val inset = strokeWidth + 1.dp.toPx()
+        val arcSize = Size(size.width - inset * 2, size.height - inset * 2)
+        drawArc(
+            color = Color(0xFF4285F4),
+            startAngle = -28f,
+            sweepAngle = 88f,
+            useCenter = false,
+            topLeft = Offset(inset, inset),
+            size = arcSize,
+            style = Stroke(width = strokeWidth, cap = StrokeCap.Round),
+        )
+        drawArc(
+            color = Color(0xFF34A853),
+            startAngle = 54f,
+            sweepAngle = 82f,
+            useCenter = false,
+            topLeft = Offset(inset, inset),
+            size = arcSize,
+            style = Stroke(width = strokeWidth, cap = StrokeCap.Round),
+        )
+        drawArc(
+            color = Color(0xFFFBBC05),
+            startAngle = 138f,
+            sweepAngle = 70f,
+            useCenter = false,
+            topLeft = Offset(inset, inset),
+            size = arcSize,
+            style = Stroke(width = strokeWidth, cap = StrokeCap.Round),
+        )
+        drawArc(
+            color = Color(0xFFEA4335),
+            startAngle = 206f,
+            sweepAngle = 126f,
+            useCenter = false,
+            topLeft = Offset(inset, inset),
+            size = arcSize,
+            style = Stroke(width = strokeWidth, cap = StrokeCap.Round),
+        )
+        drawLine(
+            color = Color(0xFF4285F4),
+            start = Offset(size.width * 0.52f, size.height * 0.5f),
+            end = Offset(size.width * 0.82f, size.height * 0.5f),
+            strokeWidth = strokeWidth,
+            cap = StrokeCap.Square,
+        )
+    }
+}
+
+private data class NativeGoogleCredential(
+    val idToken: String,
+    val nonce: String,
+)
+
+private suspend fun requestNativeGoogleCredential(
+    context: Context,
+    webClientId: String,
+): NativeGoogleCredential {
+    if (webClientId.isBlank()) {
+        error("GOOGLE_WEB_CLIENT_ID belum terbaca dari local.properties.")
+    }
+
+    val nonce = generateRawNonce()
+    val credentialManager = CredentialManager.create(context)
+    val googleIdOption = GetSignInWithGoogleOption.Builder(webClientId)
+        .setNonce(nonce.sha256())
+        .build()
+    val request = GetCredentialRequest.Builder()
+        .addCredentialOption(googleIdOption)
+        .build()
+    val result = credentialManager.getCredential(
+        context = context.findActivity(),
+        request = request,
+    )
+    val credential = result.credential
+    if (credential is CustomCredential &&
+        credential.type == GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL
+    ) {
+        return NativeGoogleCredential(
+            idToken = GoogleIdTokenCredential.createFrom(credential.data).idToken,
+            nonce = nonce,
+        )
+    }
+
+    error("Credential Google tidak valid.")
+}
+
+private fun generateRawNonce(): String {
+    val bytes = ByteArray(32)
+    SecureRandom().nextBytes(bytes)
+    return Base64.encodeToString(bytes, Base64.URL_SAFE or Base64.NO_WRAP or Base64.NO_PADDING)
+}
+
+private fun String.sha256(): String {
+    val digest = MessageDigest.getInstance("SHA-256").digest(toByteArray())
+    return digest.joinToString("") { byte -> "%02x".format(byte) }
+}
+
+private fun Throwable.toGoogleSignInMessage(): String {
+    val rawMessage = message.orEmpty()
+    return when {
+        rawMessage.contains("Account reauth failed", ignoreCase = true) ->
+            "Google sign in gagal karena Android OAuth client belum cocok. Cek Google Cloud: package com.rjw.bunpoun3 dan SHA-1 harus terdaftar di OAuth Client type Android."
+        rawMessage.contains("No credentials available", ignoreCase = true) ->
+            "Tidak ada credential Google yang tersedia di perangkat ini. Coba tambah akun Google di perangkat, atau cek konfigurasi Google OAuth."
+        rawMessage.isNotBlank() -> rawMessage
+        else -> "Google sign in dibatalkan."
+    }
+}
+
+@Composable
+private fun AuthMessageCard(text: String, error: Boolean) {
+    val container = if (error) {
+        lerp(MaterialTheme.colorScheme.surface, MaterialTheme.colorScheme.errorContainer, 0.76f)
+    } else {
+        doneGreenContainerColor()
+    }
+    val content = if (error) MaterialTheme.colorScheme.error else doneGreenContentColor()
+    Surface(
+        modifier = Modifier.fillMaxWidth(),
+        color = container,
+        contentColor = content,
+        shape = RoundedCornerShape(18.dp),
+    ) {
+        Text(
+            text,
+            modifier = Modifier.padding(horizontal = 14.dp, vertical = 12.dp),
+            style = MaterialTheme.typography.bodySmall,
+            fontWeight = FontWeight.SemiBold,
+        )
     }
 }
 
@@ -959,10 +1747,12 @@ private fun RowScope.FloatingBottomTab(
 
 @Composable
 private fun ThemeSettingsScreen(
+    authSession: AuthSession?,
     furiganaOn: Boolean,
     romajiOn: Boolean,
     themeMode: ThemeMode,
     themePreset: ThemePreset,
+    onOpenProfile: () -> Unit,
     onToggleFurigana: () -> Unit,
     onToggleRomaji: () -> Unit,
     onSelectMode: (ThemeMode) -> Unit,
@@ -1004,6 +1794,15 @@ private fun ThemeSettingsScreen(
                     }
                 }
             }
+        }
+        item {
+            SectionTitle("Akun")
+        }
+        item {
+            AccountSettingsCard(
+                session = authSession,
+                onOpenProfile = onOpenProfile,
+            )
         }
         item {
             SectionTitle("Preferensi belajar")
@@ -1066,6 +1865,201 @@ private fun ThemeSettingsScreen(
                 onClick = { onSelectPreset(preset) },
             )
         }
+    }
+}
+
+@Composable
+private fun AccountSettingsCard(
+    session: AuthSession?,
+    onOpenProfile: () -> Unit,
+) {
+    ElevatedCard(
+        onClick = onOpenProfile,
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(26.dp),
+        colors = CardDefaults.elevatedCardColors(containerColor = MaterialTheme.colorScheme.surface),
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(18.dp),
+            horizontalArrangement = Arrangement.spacedBy(14.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(48.dp)
+                    .clip(RoundedCornerShape(17.dp))
+                    .background(doneGreenContainerColor()),
+                contentAlignment = Alignment.Center,
+            ) {
+                Icon(Icons.Default.AccountCircle, contentDescription = null, tint = doneGreenContentColor())
+            }
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(4.dp),
+            ) {
+                Text("Profile Supabase", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+                Text(
+                    session?.email?.takeIf { it.isNotBlank() } ?: "Session tersimpan di perangkat ini",
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    style = MaterialTheme.typography.bodySmall,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+            }
+            Icon(
+                Icons.AutoMirrored.Filled.NavigateNext,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        }
+    }
+}
+
+@Composable
+private fun ProfileScreen(
+    session: AuthSession?,
+    loading: Boolean,
+    error: String?,
+    onLogout: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    LazyColumn(
+        modifier = modifier.fillMaxSize(),
+        contentPadding = PaddingValues(start = 16.dp, top = 16.dp, end = 16.dp, bottom = 32.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+    ) {
+        item {
+            BlendedHeaderCard {
+                Column(
+                    modifier = Modifier.padding(22.dp),
+                    verticalArrangement = Arrangement.spacedBy(14.dp),
+                ) {
+                    SummaryPill("Supabase profile")
+                    Icon(
+                        Icons.Default.AccountCircle,
+                        contentDescription = null,
+                        modifier = Modifier.size(56.dp),
+                        tint = MaterialTheme.colorScheme.primary,
+                    )
+                    Text(
+                        session?.email?.takeIf { it.isNotBlank() } ?: "Akun aktif",
+                        style = MaterialTheme.typography.headlineSmall,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer,
+                    )
+                    Text(
+                        "Session disimpan lokal agar akses materi tetap tersedia saat offline. Sync progress bisa dilanjutkan setelah endpoint tabel progress siap.",
+                        color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.78f),
+                    )
+                }
+            }
+        }
+        item {
+            SettingsSectionCard {
+                ProfileInfoRow(label = "Email", value = session?.email.orEmpty().ifBlank { "Tidak tersedia" })
+                HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+                ProfileInfoRow(label = "User ID", value = session?.userId.orEmpty().ifBlank { "Tidak tersedia" })
+                HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+                ProfileInfoRow(
+                    label = "Session",
+                    value = if ((session?.accessToken).isNullOrBlank()) "Tidak aktif" else "Aktif di perangkat ini",
+                )
+            }
+        }
+        if (!error.isNullOrBlank()) {
+            item {
+                AuthMessageCard(text = error, error = true)
+            }
+        }
+        item {
+            OutlinedButton(
+                onClick = onLogout,
+                modifier = Modifier.fillMaxWidth(),
+                enabled = !loading,
+            ) {
+                Icon(Icons.Default.Logout, contentDescription = null, modifier = Modifier.size(18.dp))
+                Text(if (loading) "Logout..." else "Logout", modifier = Modifier.padding(start = 8.dp))
+            }
+        }
+    }
+}
+
+@Composable
+private fun ResetPasswordScreen(
+    loading: Boolean,
+    error: String?,
+    notice: String?,
+    onUpdatePassword: (String) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    var password by rememberSaveable { mutableStateOf("") }
+    var confirmPassword by rememberSaveable { mutableStateOf("") }
+    val localError = when {
+        password.isNotBlank() && password.length < 6 -> "Password minimal 6 karakter."
+        confirmPassword.isNotBlank() && password != confirmPassword -> "Konfirmasi password belum sama."
+        else -> null
+    }
+
+    Box(
+        modifier = modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center,
+    ) {
+        AuthScaffoldCard(
+            eyebrow = "Recovery",
+            title = "Buat password baru",
+            description = "Link reset dari email sudah membuka app. Masukkan password baru untuk menyelesaikan proses recovery.",
+            error = localError ?: error,
+            notice = notice,
+        ) {
+            PasswordTextField(
+                value = password,
+                onValueChange = { password = it },
+                modifier = Modifier.fillMaxWidth(),
+                enabled = !loading,
+                label = "Password baru",
+            )
+            PasswordTextField(
+                value = confirmPassword,
+                onValueChange = { confirmPassword = it },
+                modifier = Modifier.fillMaxWidth(),
+                enabled = !loading,
+                label = "Ulangi password",
+            )
+            Button(
+                onClick = { onUpdatePassword(password) },
+                modifier = Modifier.fillMaxWidth(),
+                enabled = !loading && localError == null && password.isNotBlank() && confirmPassword.isNotBlank(),
+            ) {
+                if (loading) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(18.dp),
+                        strokeWidth = 2.dp,
+                        color = MaterialTheme.colorScheme.onPrimary,
+                    )
+                } else {
+                    Text("Simpan password baru")
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun ProfileInfoRow(label: String, value: String) {
+    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+        Text(
+            label,
+            style = MaterialTheme.typography.labelMedium,
+            color = MaterialTheme.colorScheme.primary,
+            fontWeight = FontWeight.Bold,
+        )
+        Text(
+            value,
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurface,
+        )
     }
 }
 
@@ -2381,7 +3375,16 @@ private fun UiState.activeTab(): AppTab =
             is Screen.Week, is Screen.Lesson -> AppTab.Learn
             Screen.Quiz -> AppTab.Quiz
             Screen.Settings -> AppTab.Home
+            Screen.Profile -> AppTab.Home
+            Screen.ResetPassword -> AppTab.Home
         }
+        Screen.Profile -> when (profileReturnScreen) {
+            Screen.Home -> AppTab.Home
+            is Screen.Week, is Screen.Lesson -> AppTab.Learn
+            Screen.Quiz -> AppTab.Quiz
+            Screen.Settings, Screen.Profile, Screen.ResetPassword -> AppTab.Home
+        }
+        Screen.ResetPassword -> AppTab.Home
     }
 
 private fun UiState.recommendedWeekNum(): Int? {
@@ -2389,6 +3392,10 @@ private fun UiState.recommendedWeekNum(): Int? {
     return when (val current = screen) {
         is Screen.Week -> current.weekNum
         is Screen.Lesson -> weeks.firstOrNull { week -> week.days.any { it.dayId == current.dayId } }?.weekNum
+        Screen.Profile -> weeks.firstOrNull { week -> week.days.any { it.dayId !in completedDayIds } }?.weekNum
+            ?: weeks.firstOrNull()?.weekNum
+        Screen.ResetPassword -> weeks.firstOrNull { week -> week.days.any { it.dayId !in completedDayIds } }?.weekNum
+            ?: weeks.firstOrNull()?.weekNum
         else -> weeks.firstOrNull { week -> week.days.any { it.dayId !in completedDayIds } }?.weekNum
             ?: weeks.firstOrNull()?.weekNum
     }
