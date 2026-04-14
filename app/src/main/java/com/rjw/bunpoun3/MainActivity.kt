@@ -383,9 +383,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 SignUpResult.ConfirmationRequired -> {
                     _uiState.update {
                         it.copy(
-                            authMode = AuthMode.Login,
+                            authMode = AuthMode.Register,
                             authError = null,
-                            authNotice = "Registrasi berhasil. Cek email kamu untuk konfirmasi, lalu login.",
+                            authNotice = "Kalau email ini belum terdaftar, cek email kamu untuk konfirmasi akun. Kalau akun sudah ada, silakan login atau reset password.",
                         )
                     }
                 }

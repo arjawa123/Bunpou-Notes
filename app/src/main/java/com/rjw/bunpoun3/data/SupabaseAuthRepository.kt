@@ -205,6 +205,10 @@ private data class AuthResponse(
     @SerialName("access_token") val accessToken: String? = null,
     @SerialName("refresh_token") val refreshToken: String? = null,
     @SerialName("expires_in") val expiresIn: Long? = null,
+    val id: String? = null,
+    val email: String? = null,
+    @SerialName("app_metadata") val appMetadata: AuthAppMetadata? = null,
+    val identities: List<AuthIdentityResponse>? = null,
     val user: AuthUserResponse? = null,
 )
 
@@ -229,6 +233,23 @@ private data class AuthIdentityResponse(
 private val AuthUserResponse.provider: String?
     get() = appMetadata?.provider ?: identities?.firstOrNull { !it.provider.isNullOrBlank() }?.provider
 
+private fun AuthResponse.authUser(): AuthUserResponse? =
+    user ?: if (
+        id != null ||
+        email != null ||
+        appMetadata != null ||
+        identities != null
+    ) {
+        AuthUserResponse(
+            id = id,
+            email = email,
+            appMetadata = appMetadata,
+            identities = identities,
+        )
+    } else {
+        null
+    }
+
 private fun AuthResponse.requireSession(
     fallbackEmail: String,
     fallbackProvider: String,
@@ -246,13 +267,14 @@ private fun AuthResponse.toSession(
     val token = accessToken ?: return null
     val refresh = refreshToken.orEmpty()
     val expiresInMillis = (expiresIn ?: 3_600L) * 1_000L
+    val authUser = authUser()
     return AuthSession(
         accessToken = token,
         refreshToken = refresh,
         expiresAtMillis = System.currentTimeMillis() + expiresInMillis,
-        userId = user?.id.orEmpty(),
-        email = user?.email ?: fallbackEmail.trim(),
-        authProvider = user?.provider ?: fallbackProvider,
+        userId = authUser?.id.orEmpty(),
+        email = authUser?.email ?: fallbackEmail.trim(),
+        authProvider = authUser?.provider ?: fallbackProvider,
     )
 }
 
@@ -265,15 +287,14 @@ private fun AuthResponse.toSignUpResult(fallbackEmail: String): SignUpResult {
         return SignUpResult.SignedIn(session)
     }
 
-    if (user.isExistingUserPlaceholder()) {
+    if (authUser().isAlreadyRegisteredSignUpResponse()) {
         return SignUpResult.AlreadyRegistered
     }
 
     return SignUpResult.ConfirmationRequired
 }
 
-private fun AuthUserResponse?.isExistingUserPlaceholder(): Boolean {
+private fun AuthUserResponse?.isAlreadyRegisteredSignUpResponse(): Boolean {
     if (this == null) return false
-    val emailIdentityMissing = identities?.none { it.provider.equals("email", ignoreCase = true) } != false
-    return !id.isNullOrBlank() && emailIdentityMissing
+    return !id.isNullOrBlank() && identities.isNullOrEmpty()
 }
