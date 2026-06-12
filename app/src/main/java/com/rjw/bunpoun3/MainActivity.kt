@@ -357,6 +357,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             _uiState.update {
                 it.copy(
                     screen = Screen.Home,
+                    authSession = session,
+                    accessGranted = true,
                     authMode = AuthMode.Login,
                     authError = null,
                     authNotice = "Login berhasil. Selamat belajar lagi.",
@@ -373,6 +375,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     _uiState.update {
                         it.copy(
                             screen = Screen.Home,
+                            authSession = result.session,
+                            accessGranted = true,
                             authMode = AuthMode.Login,
                             authError = null,
                             authNotice = "Akun dibuat dan sudah masuk.",
@@ -430,6 +434,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             _uiState.update {
                 it.copy(
                     screen = Screen.Home,
+                    authSession = profileSession,
+                    accessGranted = true,
                     authMode = AuthMode.Login,
                     authError = null,
                     authNotice = "Login Google berhasil. Selamat belajar lagi.",
@@ -490,6 +496,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             saveAuthSession(profileSession)
             _uiState.update {
                 it.copy(
+                    authSession = profileSession,
+                    accessGranted = true,
                     screen = if (params["type"] == "recovery") Screen.ResetPassword else Screen.Home,
                     authMode = AuthMode.Login,
                     authError = null,
@@ -2229,7 +2237,7 @@ private fun ResetPasswordScreen(
 }
 
 private fun AuthSession.supportsPasswordReset(): Boolean =
-    authProvider.equals("email", ignoreCase = true)
+    !authProvider.equals("google", ignoreCase = true)
 
 @Composable
 private fun ProfileInfoRow(label: String, value: String) {

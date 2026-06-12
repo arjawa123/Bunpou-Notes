@@ -49,7 +49,7 @@ class SupabaseAuthRepository(
         ).requireSession(
             fallbackEmail = email,
             fallbackProvider = "email",
-        )
+        ).copy(authProvider = "email")
 
     suspend fun signUp(email: String, password: String): SignUpResult =
         authRequest(
@@ -67,7 +67,7 @@ class SupabaseAuthRepository(
         ).requireSession(
             fallbackEmail = "",
             fallbackProvider = "google",
-        )
+        ).copy(authProvider = "google")
 
     suspend fun sendPasswordReset(email: String) {
         request(
@@ -89,7 +89,7 @@ class SupabaseAuthRepository(
         return session.copy(
             userId = user.id ?: session.userId,
             email = user.email ?: session.email,
-            authProvider = user.provider ?: session.authProvider,
+            authProvider = session.authProvider,
         )
     }
 
@@ -274,7 +274,7 @@ private fun AuthResponse.toSession(
         expiresAtMillis = System.currentTimeMillis() + expiresInMillis,
         userId = authUser?.id.orEmpty(),
         email = authUser?.email ?: fallbackEmail.trim(),
-        authProvider = authUser?.provider ?: fallbackProvider,
+        authProvider = fallbackProvider.ifBlank { authUser?.provider.orEmpty() },
     )
 }
 
